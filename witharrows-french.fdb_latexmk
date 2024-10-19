@@ -1,0 +1,22 @@
+# Fdb version 3
+["dvips"] 0 "witharrows-french.dvi" "witharrows-french.ps" "witharrows-french" 0
+  "witharrows-french.dvi" 0 -1 0 "latex"
+  (generated)
+  "witharrows-french.ps"
+["latex"] 1618653483 "witharrows-french.tex" "witharrows-french.dvi" "witharrows-french" 1618653483
+  "C:/Program Files/MiKTeX 2.9/tex/generic/iftex/ifluatex.sty" 1583527000 492 1994775aa15b0d1289725a0b1bbc2d4c ""
+  "C:/Program Files/MiKTeX 2.9/tex/generic/iftex/iftex.sty" 1583527000 6501 4011d89d9621e0b0901138815ba5ff29 ""
+  "C:/Program Files/MiKTeX 2.9/tex/generic/iftex/ifxetex.sty" 1583527000 488 4565444a3e75e59cb2702dc42e18f482 ""
+  "C:/Program Files/MiKTeX 2.9/tex/latex/base/article.cls" 1610124346 20145 aad8c3dd3bc36e260347b84002182bc2 ""
+  "C:/Program Files/MiKTeX 2.9/tex/latex/base/size10.clo" 1610124346 8449 a72d5d4e612221b46000c3d71724e0ef ""
+  "C:/Program Files/MiKTeX 2.9/tex/latex/xltxtra/xltxtra.sty" 1546513994 5871 8a29af4ad9d707b5280738995d050842 ""
+  "C:/Users/Pantigny/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/latex.fmt" 1618475989 9516490 7253a622fe4fede00346161fc44fb8c2 ""
+  "witharrows-french.aux" 1614870893 50523 dd2510015ae10f38c2f8b2e4b9887cb1 ""
+  "witharrows-french.tex" 1618653474 93131 1fc81c595c046927c1f3496e87f4be8a ""
+  (generated)
+  "witharrows-french.log"
+  "witharrows-french.dvi"
+["ps2pdf"] 0 "witharrows-french.ps" "witharrows-french.pdf" "witharrows-french" 0
+  "witharrows-french.ps" 0 -1 0 "dvips"
+  (generated)
+  "witharrows-french.pdf"

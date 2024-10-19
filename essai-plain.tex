@@ -1,0 +1,119 @@
+﻿
+
+%\def\pgfsysdriver{pgfsys-dvips.def}
+
+\input witharrows
+
+\usetikzlibrary{calc}
+
+\let\tiny\relax
+
+Essai de texte.
+
+
+\vskip1cm
+
+\WithArrowsOptions{up-and-down/width=3cm}
+
+$\WithArrows
+A & = B 
+\Arrow[up]{an arrow} \\
+  & = C + C + C + C + C + C + C + C  \\
+  & = C + C + C + C + C + C + C + C
+\Arrow[down]{an arrow}\\
+  & = E + E 
+\endWithArrows$
+
+
+
+
+
+
+$\WithArrows[code-after = { \MultiArrow{3,...,5}{essai} }]
+A & = B \\
+  & = C \\
+  & = C \\
+  & = E \\
+  & = F \\
+  & = G \\
+\endWithArrows$
+
+
+
+\WithArrowsOptions{up-and-down/width=min}
+
+$\WithArrows
+A & = B 
+\Arrow[up]{essai} \\
+  & = C + C + C + C + C + C + C + C  \\
+  & = C + C + C + C + C + C + C + C  
+ \Arrow[down]{essai} \\
+  & = E + E 
+\endWithArrows$
+
+
+
+\def\essai{avant}
+
+\tikzpicture
+\def\essai{modified}
+\draw (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle ;
+\endtikzpicture
+
+\essai
+
+
+\bigskip
+
+\WithArrowsOptions{replace-left-brace-by = [ }
+
+
+\DispWithArrows[left-brace]
+A & = B  \Arrow{essai} \\
+  & = C
+\endDispWithArrows
+
+\def\frac#1#2{{#1 \over #2}}
+
+\DispWithArrows[displaystyle,wrap-lines,fleqn,mathindent=3cm]
+S_n
+& = \frac1n \Re \left(\sum_{k=0}^{n-1}\bigl(e^{i\frac{\pi}{2n}}\bigr)^k\right)
+\Arrow{sum of terms of a geometric progression of ratio $e^{i\frac{2\pi}n}$}\\
+& = \frac1n \Re \left(
+\frac{1-\bigl(e^{i\frac{\pi}{2n}}\bigr)^n}{1-e^{i\frac{\pi}{2n}}} \right) 
+\Arrow{This line has been wrapped automatically.} \\
+& = \frac1n \Re \left(\frac{1-i}{1-e^{i\frac{\pi}{2n}}}\right) 
+\endDispWithArrows
+
+
+$$\WithArrows[ll,interline=5mm,xoffset=5mm,
+      tikz-code  = {\draw[rounded corners,
+                          every node/.style = {circle,
+                                               draw,
+                                               auto = false,
+                                               inner sep = 1pt,
+                                               fill = gray!50,
+                                               font = \tiny}] 
+                          let \p1 = (#1),
+                              \p2 = (#2)
+                          in \ifdim \x1 > \x2
+                               (\p1) -- node {#3} (\x1,\y2) -- (\p2)
+                             \else
+                               (\p1) -- (\x2,\y1) -- node {#3} (\p2)
+                             \fi ;}]
+E & \Longleftrightarrow \frac{(x+4)}3 + \frac{5x+3}5 = 7 
+\Arrow{$\times 15$}\\
+  & \Longleftrightarrow 5(x+4) + 3(5x+3) = 105 \\
+  & \Longleftrightarrow 5x+20 + 15x+9 = 105 \\
+  & \Longleftrightarrow 20x+29 = 105 
+\Arrow{$-29$}\\
+  & \Longleftrightarrow 20x = 76 
+\Arrow{$\div 20$}\\
+  & \Longleftrightarrow x = \frac{38}{10} 
+\endWithArrows$$
+
+
+
+\bye
+
+

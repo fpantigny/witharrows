@@ -1,0 +1,611 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdftex 2024.10.12)  12 OCT 2024 13:53
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**./essai-plain.tex
+(essai-plain.tex (witharrows.tex
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/frontendlayer\tikz.
+tex
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/basiclayer\pgf.tex
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/utilities\pgfrcs.te
+x
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-common.tex
+\pgfutil@everybye=\toks12
+\pgfutil@tempdima=\dimen16
+\pgfutil@tempdimb=\dimen17
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-plain.def
+\pgfutil@tempcnta=\count26
+\pgfutil@tempcntb=\count27
+\pgfutil@tempboxa=\box16
+\pgfutil@flushglue=\skip18
+\pgfutil@abb=\box17
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/atbegshi\atbegshi.sty
+Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+\AtBeginShipoutBox=\box18
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty)))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.
+code.tex
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.revision.tex)
+Loading package pgfrcs version 2023-01-15 v3.1.10 (3.1.10).
+))
+Loading package pgf version 2023-01-15 v3.1.10 (3.1.10).
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/basiclayer\pgfcore.
+tex
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/systemlayer\pgfsys.
+tex
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/utilities\pgfrcs.te
+x)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s.code.tex
+Loading package pgfsys version 2023-01-15 v3.1.10 (3.1.10).
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex
+\pgfkeys@pathtoks=\toks13
+\pgfkeys@temptoks=\toks14
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+libraryfiltered.code.tex
+\pgfkeys@tmptoks=\toks15
+))
+\pgf@x=\dimen18
+\pgf@y=\dimen19
+\pgf@xa=\dimen20
+\pgf@ya=\dimen21
+\pgf@xb=\dimen22
+\pgf@yb=\dimen23
+\pgf@xc=\dimen24
+\pgf@yc=\dimen25
+\pgf@xd=\dimen26
+\pgf@yd=\dimen27
+\w@pgf@writea=\write0
+\r@pgf@reada=\read0
+\c@pgf@counta=\count28
+\c@pgf@countb=\count29
+\c@pgf@countc=\count30
+\c@pgf@countd=\count31
+\t@pgf@toka=\toks16
+\t@pgf@tokb=\toks17
+\t@pgf@tokc=\toks18
+\pgf@sys@id@count=\count32
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.c
+fg
+Loading file pgf.cfg version 2023-01-15 v3.1.10 (3.1.10).
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s-pdftex.def
+Loading file pgfsys-pdftex.def version 2023-01-15 v3.1.10 (3.1.10).
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s-common-pdf.def
+Loading file pgfsys-common-pdf.def version 2023-01-15 v3.1.10 (3.1.10).
+)) (essai-plain.pgf)
+\pgfutil@auxout=\write1
+\openout1 = `essai-plain.pgf'.
+
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+ssoftpath.code.tex
+Loading file pgfsyssoftpath.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgfsyssoftpath@smallbuffer@items=\count33
+\pgfsyssoftpath@bigbuffer@items=\count34
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+sprotocol.code.tex
+Loading file pgfsysprotocol.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+e.code.tex
+Loading package pgfcore version 2023-01-15 v3.1.10 (3.1.10).
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code
+.tex
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathutil.
+code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparse
+r.code.tex
+\pgfmath@dimen=\dimen28
+\pgfmath@count=\count35
+\pgfmath@box=\box19
+\pgfmath@toks=\toks19
+\pgfmath@stack@operand=\toks20
+\pgfmath@stack@operation=\toks21
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.basic.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.trigonometric.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.random.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.comparison.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.base.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.round.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.misc.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.integerarithmetics.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.
+code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat
+.code.tex
+\c@pgfmathroundto@lastzeros=\count36
+))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.
+tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epoints.code.tex
+Loading file pgfcorepoints.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgf@picminx=\dimen29
+\pgf@picmaxx=\dimen30
+\pgf@picminy=\dimen31
+\pgf@picmaxy=\dimen32
+\pgf@pathminx=\dimen33
+\pgf@pathmaxx=\dimen34
+\pgf@pathminy=\dimen35
+\pgf@pathmaxy=\dimen36
+\pgf@xx=\dimen37
+\pgf@xy=\dimen38
+\pgf@yx=\dimen39
+\pgf@yy=\dimen40
+\pgf@zx=\dimen41
+\pgf@zy=\dimen42
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathconstruct.code.tex
+Loading file pgfcorepathconstruct.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+
+\pgf@path@lastx=\dimen43
+\pgf@path@lasty=\dimen44
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathusage.code.tex
+Loading file pgfcorepathusage.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgf@shorten@end@additional=\dimen45
+\pgf@shorten@start@additional=\dimen46
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+escopes.code.tex
+Loading file pgfcorescopes.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgfpic=\box20
+\pgf@hbox=\box21
+\pgf@layerbox@main=\box22
+\pgf@picture@serial@count=\count37
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+egraphicstate.code.tex
+Loading file pgfcoregraphicstate.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgflinewidth=\dimen47
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+etransformations.code.tex
+Loading file pgfcoretransformations.code.tex version 2023-01-15 v3.1.10 (3.1.10
+).
+\pgf@pt@x=\dimen48
+\pgf@pt@y=\dimen49
+\pgf@pt@temp=\dimen50
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+equick.code.tex
+Loading file pgfcorequick.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eobjects.code.tex
+Loading file pgfcoreobjects.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathprocessing.code.tex
+Loading file pgfcorepathprocessing.code.tex version 2023-01-15 v3.1.10 (3.1.10)
+.
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+earrows.code.tex
+Loading file pgfcorearrows.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgfarrowsep=\dimen51
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eshade.code.tex
+Loading file pgfcoreshade.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgf@max=\dimen52
+\pgf@sys@shading@range@num=\count38
+\pgf@shadingcount=\count39
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eimage.code.tex
+Loading file pgfcoreimage.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eexternal.code.tex
+Loading file pgfcoreexternal.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgfexternal@startupbox=\box23
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+elayers.code.tex
+Loading file pgfcorelayers.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+etransparency.code.tex
+Loading file pgfcoretransparency.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epatterns.code.tex
+Loading file pgfcorepatterns.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+erdf.code.tex
+Loading file pgfcorerdf.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+shapes.code.tex
+Loading file pgfmoduleshapes.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgfnodeparttextbox=\box24
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+plot.code.tex
+Loading file pgfmoduleplot.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/utilities\pgffor.te
+x
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/plain/pgf/utilities\pgfrcs.te
+x)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.
+code.tex
+Loading package pgffor version 2023-01-15 v3.1.10 (3.1.10).
+\pgffor@iter=\dimen53
+\pgffor@skip=\dimen54
+\pgffor@stack=\toks22
+\pgffor@toks=\toks23
+))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z\tikz.code.tex
+Loading package tikz version 2023-01-15 v3.1.10 (3.1.10).
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryplothandlers.code.tex
+Loading file pgflibraryplothandlers.code.tex version 2023-01-15 v3.1.10 (3.1.10
+).
+\pgf@plot@mark@count=\count40
+\pgfplotmarksize=\dimen55
+)
+\tikz@lastx=\dimen56
+\tikz@lasty=\dimen57
+\tikz@lastxsaved=\dimen58
+\tikz@lastysaved=\dimen59
+\tikz@lastmovetox=\dimen60
+\tikz@lastmovetoy=\dimen61
+\tikzleveldistance=\dimen62
+\tikzsiblingdistance=\dimen63
+\tikz@figbox=\box25
+\tikz@figbox@bg=\box26
+\tikz@tempbox=\box27
+\tikz@tempbox@bg=\box28
+\tikztreelevel=\count41
+\tikznumberofchildren=\count42
+\tikznumberofcurrentchild=\count43
+\tikz@fig@count=\count44
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+matrix.code.tex
+Loading file pgfmodulematrix.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+\pgfmatrixcurrentrow=\count45
+\pgfmatrixcurrentcolumn=\count46
+\pgf@matrix@numberofcolumns=\count47
+)
+\tikz@expandcount=\count48
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarytopaths.code.tex
+Loading file tikzlibrarytopaths.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3-generic.
+tex
+Package: expl3 2024-08-30 L3 programming layer (loader)
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3-code.tex
+Package: expl3 2024-08-30 L3 programming layer (code)
+\c_max_int=\count49
+\l_tmpa_int=\count50
+\l_tmpb_int=\count51
+\g_tmpa_int=\count52
+\g_tmpb_int=\count53
+\l__seq_internal_a_int=\count54
+\l__seq_internal_b_int=\count55
+\g__kernel_prg_map_int=\count56
+\g__prop_prefix_int=\count57
+\c__ior_term_noprompt_ior=\count58
+\c_log_iow=\count59
+\l_iow_line_count_int=\count60
+\l__iow_line_target_int=\count61
+\l__iow_one_indent_int=\count62
+\l__iow_indent_int=\count63
+\c_zero_dim=\dimen64
+\c_max_dim=\dimen65
+\l_tmpa_dim=\dimen66
+\l_tmpb_dim=\dimen67
+\g_tmpa_dim=\dimen68
+\g_tmpb_dim=\dimen69
+\c_zero_skip=\skip19
+\c_max_skip=\skip20
+\l_tmpa_skip=\skip21
+\l_tmpb_skip=\skip22
+\g_tmpa_skip=\skip23
+\g_tmpb_skip=\skip24
+\c_zero_muskip=\muskip10
+\c_max_muskip=\muskip11
+\l_tmpa_muskip=\muskip12
+\l_tmpb_muskip=\muskip13
+\g_tmpa_muskip=\muskip14
+\g_tmpb_muskip=\muskip15
+\l_keys_choice_int=\count64
+\l__intarray_loop_int=\count65
+\c__intarray_sp_dim=\dimen70
+\g__intarray_font_int=\count66
+\c__fp_leading_shift_int=\count67
+\c__fp_middle_shift_int=\count68
+\c__fp_trailing_shift_int=\count69
+\c__fp_big_leading_shift_int=\count70
+\c__fp_big_middle_shift_int=\count71
+\c__fp_big_trailing_shift_int=\count72
+\c__fp_Bigg_leading_shift_int=\count73
+\c__fp_Bigg_middle_shift_int=\count74
+\c__fp_Bigg_trailing_shift_int=\count75
+\c__kernel_randint_max_int=\count76
+\l__fp_function_arg_int=\count77
+\g__fp_array_int=\count78
+\l__fp_array_loop_int=\count79
+\l__bitset_internal_int=\count80
+\g__cctab_allocate_int=\count81
+\l__sort_length_int=\count82
+\l__sort_min_int=\count83
+\l__sort_top_int=\count84
+\l__sort_max_int=\count85
+\l__sort_true_max_int=\count86
+\l__sort_block_int=\count87
+\l__sort_begin_int=\count88
+\l__sort_end_int=\count89
+\l__sort_A_int=\count90
+\l__sort_B_int=\count91
+\l__sort_C_int=\count92
+\c__str_replacement_char_int=\count93
+\l__str_modulo_int=\count94
+\l__tl_analysis_normal_int=\count95
+\l__tl_analysis_index_int=\count96
+\l__tl_analysis_nesting_int=\count97
+\l__tl_analysis_type_int=\count98
+\l__tl_peek_charcode_int=\count99
+\l__regex_internal_a_int=\count100
+\l__regex_internal_b_int=\count101
+\l__regex_internal_c_int=\count102
+\l__regex_balance_int=\count103
+\l__regex_group_level_int=\count104
+\l__regex_mode_int=\count105
+\c__regex_cs_in_class_mode_int=\count106
+\c__regex_cs_mode_int=\count107
+\l__regex_catcodes_int=\count108
+\l__regex_default_catcodes_int=\count109
+\c__regex_catcode_D_int=\count110
+\c__regex_catcode_S_int=\count111
+\c__regex_catcode_L_int=\count112
+\c__regex_catcode_O_int=\count113
+\c__regex_catcode_A_int=\count114
+\c__regex_all_catcodes_int=\count115
+\l__regex_show_lines_int=\count116
+\l__regex_min_state_int=\count117
+\l__regex_max_state_int=\count118
+\l__regex_left_state_int=\count119
+\l__regex_right_state_int=\count120
+\l__regex_capturing_group_int=\count121
+\g__regex_case_int=\count122
+\l__regex_case_max_group_int=\count123
+\l__regex_min_pos_int=\count124
+\l__regex_max_pos_int=\count125
+\l__regex_curr_pos_int=\count126
+\l__regex_start_pos_int=\count127
+\l__regex_success_pos_int=\count128
+\l__regex_curr_char_int=\count129
+\l__regex_curr_catcode_int=\count130
+\l__regex_last_char_int=\count131
+\l__regex_last_char_success_int=\count132
+\l__regex_case_changed_char_int=\count133
+\l__regex_curr_state_int=\count134
+\l__regex_step_int=\count135
+\l__regex_min_thread_int=\count136
+\l__regex_max_thread_int=\count137
+\l__regex_replacement_csnames_int=\count138
+\l__regex_match_count_int=\count139
+\l__regex_min_submatch_int=\count140
+\l__regex_submatch_int=\count141
+\l__regex_zeroth_submatch_int=\count142
+\l__regex_added_begin_int=\count143
+\l__regex_added_end_int=\count144
+\g__regex_trace_regex_int=\count145
+\c_empty_box=\box29
+\l_tmpa_box=\box30
+\l_tmpb_box=\box31
+\g_tmpa_box=\box32
+\g_tmpb_box=\box33
+\l__box_top_dim=\dimen71
+\l__box_bottom_dim=\dimen72
+\l__box_left_dim=\dimen73
+\l__box_right_dim=\dimen74
+\l__box_top_new_dim=\dimen75
+\l__box_bottom_new_dim=\dimen76
+\l__box_left_new_dim=\dimen77
+\l__box_right_new_dim=\dimen78
+\l__box_internal_box=\box34
+\l__color_internal_int=\count146
+\g__color_model_int=\count147
+\g__pdf_backend_object_int=\count148
+\l__coffin_internal_box=\box35
+\l__coffin_internal_dim=\dimen79
+\l__coffin_offset_x_dim=\dimen80
+\l__coffin_offset_y_dim=\dimen81
+\l__coffin_x_dim=\dimen82
+\l__coffin_y_dim=\dimen83
+\l__coffin_x_prime_dim=\dimen84
+\l__coffin_y_prime_dim=\dimen85
+\c_empty_coffin=\box36
+\l__coffin_aligned_coffin=\box37
+\l__coffin_aligned_internal_coffin=\box38
+\l_tmpa_coffin=\box39
+\l_tmpb_coffin=\box40
+\g_tmpa_coffin=\box41
+\g_tmpb_coffin=\box42
+\l__coffin_bounding_shift_dim=\dimen86
+\l__coffin_left_corner_dim=\dimen87
+\l__coffin_right_corner_dim=\dimen88
+\l__coffin_bottom_corner_dim=\dimen89
+\l__coffin_top_corner_dim=\dimen90
+\l__coffin_scaled_total_height_dim=\dimen91
+\l__coffin_scaled_width_dim=\dimen92
+\c__coffin_empty_coffin=\box43
+\l__coffin_display_coffin=\box44
+\l__coffin_display_coord_coffin=\box45
+\l__coffin_display_pole_coffin=\box46
+\l__coffin_display_offset_dim=\dimen93
+\l__coffin_display_x_dim=\dimen94
+\l__coffin_display_y_dim=\dimen95
+\g__codepoint_data_ior=\read1
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
+tex.def
+File: l3backend-pdftex.def 2024-05-08 v L3 backend support: PDF output (pdfTeX)
+
+\l__color_backend_stack_int=\count149
+\l__pdf_internal_box=\box47
+))
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryarrows.meta.code.tex
+Loading file pgflibraryarrows.meta.code.tex version 2023-01-15 v3.1.10 (3.1.10)
+.
+\pgfarrowinset=\dimen96
+\pgfarrowlength=\dimen97
+\pgfarrowwidth=\dimen98
+\pgfarrowlinewidth=\dimen99
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+bending.code.tex
+Loading file pgfmodulebending.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+nonlineartransformations.code.tex
+Loading file pgfmodulenonlineartransformations.code.tex version 2023-01-15 v3.1
+.10 (3.1.10).
+\pgftransformnonlinearflatness=\dimen100
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+arycurvilinear.code.tex
+Loading file pgflibrarycurvilinear.code.tex version 2023-01-15 v3.1.10 (3.1.10)
+.
+\pgf@curvilinear@time@a=\dimen101
+\pgf@curvilinear@length@a=\dimen102
+\pgf@curvilinear@length@b=\dimen103
+\pgf@curvilinear@length@c=\dimen104
+\pgf@curvilinear@length@d=\dimen105
+)
+\pgf@arrows@the@rigidity=\dimen106
+)
+\g__witharrows_last_env_int=\count150
+\l__witharrows_pos_env_int=\count151
+\l__witharrows_pos_arrow_int=\count152
+\g__witharrows_arrow_int=\count153
+\g__witharrows_line_int=\count154
+\g__witharrows_col_int=\count155
+\g__witharrows_static_col_int=\count156
+\l__witharrows_nb_cols_int=\count157
+\l__witharrows_arrow_width_dim=\dimen107
+\l__witharrows_up_and_down_radius_dim=\dimen108
+\l__witharrows_xoffset_for_o_arrows_dim=\dimen109
+\l__witharrows_max_length_of_arrow_dim=\dimen110
+\l__witharrows_ygap_dim=\dimen111
+\l__witharrows_ystart_dim=\dimen112
+\l__witharrows_xoffset_dim=\dimen113
+\l__witharrows_interline_skip=\skip25
+\l__witharrows_start_adjust_dim=\dimen114
+\l__witharrows_end_adjust_dim=\dimen115
+\l__witharrows_mathindent_skip=\skip26
+)
+(C:\Users\panti\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarycalc.code.tex
+Loading file tikzlibrarycalc.code.tex version 2023-01-15 v3.1.10 (3.1.10).
+)
+\l__witharrows_x_dim=\dimen116
+\l__witharrows_initial_int=\count158
+\l__witharrows_final_int=\count159
+\l__witharrows_arrow_int=\count160
+\l__witharrows_pos_of_arrow_int=\count161
+\l__witharrows_jump_int=\count162
+\l__witharrows_env_box=\box48
+\l__witharrows_first_arrow_of_group_int=\count163
+\l__witharrows_first_line_of_group_int=\count164
+\l__witharrows_last_line_of_group_int=\count165
+\l__witharrows_first_arrow_int=\count166
+\l__witharrows_last_arrow_int=\count167
+\g__witharrows_x_initial_dim=\dimen117
+\g__witharrows_x_final_dim=\dimen118
+\g__witharrows_y_initial_dim=\dimen119
+\g__witharrows_y_final_dim=\dimen120
+\l__witharrows_delim_wd_dim=\dimen121
+\l__witharrows_left_brace_box=\box49
+\linewidth=\dimen122
+\l__witharrows_linewidth_dim=\dimen123
+\l__witharrows_halign_box=\box50
+\g__witharrows_alignment_dim=\dimen124
+\l__witharrows_new_box=\box51
+\g__witharrows_right_x_dim=\dimen125
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(643.20255+4.0)x469.75499, glue set 7.41786
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+0.0)x469.75499, glue set 385.8938fil
+..\hbox(0.0+0.0)x20.0
+..\tenrm E
+..\tenrm s
+..\tenrm s
+..\tenrm a
+..etc.
+.\glue 28.45274
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 3.5
+.etc.
+
+ [1{C:/Users/panti/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2] )<C:/
+Users/panti/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10
+.pfb><C:/Users/panti/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmmi10.pfb><C:/Users/panti/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmmi5.pfb><C:/Users/panti/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmmi7.pfb><C:/Users/panti/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/panti/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/panti/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/panti/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/panti/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on essai-plain.pdf (2 pages, 92354 bytes).
+PDF statistics:
+ 48 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 13 words of extra memory for PDF output out of 10000 (max. 10000000)
+

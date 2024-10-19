@@ -1,0 +1,15 @@
+# Fdb version 3
+["dvips"] 0 "witharrows.dvi" "witharrows.ps" "witharrows" 0
+  "witharrows.dvi" 0 -1 0 "latex"
+  (generated)
+  "witharrows.ps"
+["latex"] 0 "witharrows.tex" "witharrows.dvi" "witharrows" 0
+  "witharrows.aux" 1595927410 9 a94a2480d3289e625eea47cd1b285758 ""
+  "witharrows.tex" 0 -1 0 ""
+  (generated)
+  "witharrows.log"
+  "witharrows.dvi"
+["ps2pdf"] 0 "witharrows.ps" "witharrows.pdf" "witharrows" 0
+  "witharrows.ps" 0 -1 0 "dvips"
+  (generated)
+  "witharrows.pdf"

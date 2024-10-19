@@ -1,0 +1,56 @@
+\contentsline {section}{\numberline {1}Options for the shape of the arrows}{2}{section.0.1}%
+\contentsline {section}{\numberline {2}Numbers of columns}{6}{section.0.2}%
+\contentsline {section}{\numberline {3}Precise positioning of the arrows}{7}{section.0.3}%
+\contentsline {section}{\numberline {4}The option 'o' for individual arrows}{9}{section.0.4}%
+\contentsline {section}{\numberline {5}The options 'up' and 'down' for individual arrows}{10}{section.0.5}%
+\contentsline {section}{\numberline {6}Comparison with the environment \{aligned\}}{11}{section.0.6}%
+\contentsline {section}{\numberline {7}Arrows in nested environments}{14}{section.0.7}%
+\contentsline {section}{\numberline {8}Arrows from outside environments \{WithArrows\}}{16}{section.0.8}%
+\contentsline {section}{\numberline {9}The environment \{DispWithArrows\}}{17}{section.0.9}%
+\contentsline {subsection}{\numberline {9.1}The option <...> of DispWithArrows}{22}{subsection.0.9.1}%
+\contentsline {section}{\numberline {10}Advanced features}{23}{section.0.10}%
+\contentsline {subsection}{\numberline {10.1}Utilisation with Beamer}{23}{subsection.0.10.1}%
+\contentsline {subsection}{\numberline {10.2}Use with plain-TeX}{23}{subsection.0.10.2}%
+\contentsline {subsection}{\numberline {10.3}The option tikz-code : how to change the shape of the arrows}{24}{subsection.0.10.3}%
+\contentsline {subsection}{\numberline {10.4}The command \textbackslash WithArrowsNewStyle}{24}{subsection.0.10.4}%
+\contentsline {subsection}{\numberline {10.5}The key right-overlap}{25}{subsection.0.10.5}%
+\contentsline {subsection}{\numberline {10.6}Vertical positioning of the arrows}{25}{subsection.0.10.6}%
+\contentsline {subsection}{\numberline {10.7}Footnotes in the environments of witharrows}{27}{subsection.0.10.7}%
+\contentsline {subsection}{\numberline {10.8}Option no-arrows}{27}{subsection.0.10.8}%
+\contentsline {subsection}{\numberline {10.9}Note for the users of AUCTeX}{27}{subsection.0.10.9}%
+\contentsline {subsection}{\numberline {10.10}Note for the developpers}{28}{subsection.0.10.10}%
+\contentsline {section}{\numberline {11}Examples}{28}{section.0.11}%
+\contentsline {subsection}{\numberline {11.1}\textbackslash MoveEqLeft}{28}{subsection.0.11.1}%
+\contentsline {subsection}{\numberline {11.2}A command \textbackslash DoubleArrow}{28}{subsection.0.11.2}%
+\contentsline {subsection}{\numberline {11.3}Modifying the shape of the nodes}{29}{subsection.0.11.3}%
+\contentsline {subsection}{\numberline {11.4}Examples with the option tikz-code}{29}{subsection.0.11.4}%
+\contentsline {subsubsection}{\numberline {11.4.1}Example 1}{30}{subsubsection.0.11.4.1}%
+\contentsline {subsubsection}{\numberline {11.4.2}Example 2}{30}{subsubsection.0.11.4.2}%
+\contentsline {subsubsection}{\numberline {11.4.3}Example 3}{31}{subsubsection.0.11.4.3}%
+\contentsline {subsection}{\numberline {11.5}Automatic numbered loop}{32}{subsection.0.11.5}%
+\contentsline {section}{\numberline {12}Implementation}{33}{section.0.12}%
+\contentsline {subsection}{\numberline {12.1}Declaration of the package and extensions loaded}{33}{subsection.0.12.1}%
+\contentsline {subsection}{\numberline {12.2}The packages footnote and footnotehyper}{33}{subsection.0.12.2}%
+\contentsline {subsection}{\numberline {12.3}The class option leqno}{35}{subsection.0.12.3}%
+\contentsline {subsection}{\numberline {12.4}Collecting options}{36}{subsection.0.12.4}%
+\contentsline {subsection}{\numberline {12.5}Some technical definitions}{36}{subsection.0.12.5}%
+\contentsline {subsection}{\numberline {12.6}Variables}{39}{subsection.0.12.6}%
+\contentsline {subsection}{\numberline {12.7}The definition of the options}{42}{subsection.0.12.7}%
+\contentsline {subsection}{\numberline {12.8}The command \textbackslash Arrow}{50}{subsection.0.12.8}%
+\contentsline {subsection}{\numberline {12.9}The environments \{WithArrows\} and \{DispWithArrows\}}{52}{subsection.0.12.9}%
+\contentsline {subsubsection}{\numberline {12.9.1}Code before the \textbackslash halign}{52}{subsubsection.0.12.9.1}%
+\contentsline {subsubsection}{\numberline {12.9.2}The construction of the preamble of the \textbackslash halign}{55}{subsubsection.0.12.9.2}%
+\contentsline {subsubsection}{\numberline {12.9.3}The environment \{WithArrows\}}{57}{subsubsection.0.12.9.3}%
+\contentsline {subsubsection}{\numberline {12.9.4}After the construction of the \textbackslash halign}{59}{subsubsection.0.12.9.4}%
+\contentsline {subsubsection}{\numberline {12.9.5}The command of end of row}{60}{subsubsection.0.12.9.5}%
+\contentsline {subsubsection}{\numberline {12.9.6}The environment \{DispWithArrows\}}{64}{subsubsection.0.12.9.6}%
+\contentsline {subsection}{\numberline {12.10}The commands \textbackslash tag, \textbackslash notag, \textbackslash label, \textbackslash tagnextline and \textbackslash qedhere for \{DispWithArrows\}}{69}{subsection.0.12.10}%
+\contentsline {subsection}{\numberline {12.11}We draw the arrows}{71}{subsection.0.12.11}%
+\contentsline {subsubsection}{\numberline {12.11.1}The command update_x}{81}{subsubsection.0.12.11.1}%
+\contentsline {subsubsection}{\numberline {12.11.2}We draw the arrows of type o}{81}{subsubsection.0.12.11.2}%
+\contentsline {subsection}{\numberline {12.12}The command \textbackslash Arrow in code-after}{84}{subsection.0.12.12}%
+\contentsline {subsection}{\numberline {12.13}The command \textbackslash MultiArrow in code-after}{86}{subsection.0.12.13}%
+\contentsline {subsection}{\numberline {12.14}The error messages of the package}{88}{subsection.0.12.14}%
+\contentsline {subsection}{\numberline {12.15}The command \textbackslash WithArrowsNewStyle}{94}{subsection.0.12.15}%
+\contentsline {subsection}{\numberline {12.16}The options up and down}{95}{subsection.0.12.16}%
+\contentsline {section}{\numberline {13}History}{100}{section.0.13}%

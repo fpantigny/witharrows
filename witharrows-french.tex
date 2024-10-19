@@ -1,0 +1,2758 @@
+% -*- coding: utf-8 ; -*-
+\documentclass[dvipsnames]{article}% dvipsnames est pour xcolor (chargé par Tikz)
+\usepackage{xltxtra}
+\usepackage[french]{babel}
+\frenchsetup{og = « , fg = »}
+
+\usepackage[xetex]{geometry}
+\geometry{left=2.8cm,right=2.8cm,top=2.5cm,bottom=2.5cm,papersize={21cm,29.7cm}}
+
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{mathtools}
+\usepackage[hyperfootnotes = false]{hyperref}
+\usepackage[footnotehyper]{witharrows}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{varwidth}
+\usetikzlibrary{calc}
+\usepackage[only,llbracket,rrbracket]{stmaryrd}
+
+% We use \MakeShortVerb of shortvrb and not \DefineShortVerb of fancyvrb
+% because we don't want the contents of short verbatim colored in gray
+\usepackage{shortvrb}
+\MakeShortVerb{\|}
+
+
+\usepackage{fancyvrb}
+\fvset{commandchars=\~\#\@,formatcom={\color{gray}}}
+
+
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{6.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{4.5ex plus 1ex minus .2ex}{2ex plus .2ex}
+
+
+\NewDocumentCommand{\Definition}{m}
+  {{\setlength{\fboxsep}{1pt}\colorbox{gray!20}{\ttfamily \vphantom{gl}#1}}}
+
+\NewDocumentCommand{\DefinitionCommande}{m}
+  {{\setlength{\fboxsep}{1pt}\colorbox{gray!20}{\ttfamily
+        \vphantom{gl}\textbackslash #1}}}
+
+
+\labelformat{equation}{(#1)}
+
+\def\interitem{\vspace{7mm plus 2 mm minus 3mm}}
+\def\emphase{\bgroup\color{RoyalPurple}\let\next=}
+
+
+
+\usepackage{piton}
+\PitonOptions{language = verbatim, detected-commands = {emph,textsl}, splittable = 4}
+\SetPitonStyle{ Number = , Comment = }
+
+\ExplSyntaxOn
+
+\dim_new:N \l__pantigny_width_dim 
+
+\keys_define:nn { pantigny }
+  { width .dim_set:N = \l__pantigny_width_dim }
+
+\NewPitonEnvironment { Code } { O { } }
+  { 
+    \medskip
+    \char_set_catcode_other:N |
+    \cs_set_eq:NN \emph \emphase
+    \dim_zero:N \l__pantigny_width_dim 
+    \keys_set:nn { pantigny } { #1 }
+    \color{gray}
+    \dim_compare:nNnT \l__pantigny_width_dim > \c_zero_dim 
+      { 
+        \PitonOptions { width = \l__pantigny_width_dim } 
+        \begin{minipage}[c]{\l__pantigny_width_dim} 
+      }
+  }
+  { 
+    \dim_compare:nNnT \l__pantigny_width_dim > \c_zero_dim 
+      { \end{minipage} }
+    \medskip
+  }
+
+\ExplSyntaxOff  
+
+
+
+
+\skip \footins = 2 \bigskipamount
+
+\usepackage[hyperfootnotes = false]{hyperref}
+
+\hypersetup
+  {
+    pdfinfo = 
+      {
+        Title = L’extension witharrows ,
+        Subject = Une extension pour plain-TeX et LaTeX  ,
+        Author = F. Pantigny 
+      }
+  }
+
+\NewDocumentEnvironment {scope} {} {} {}
+
+\NewDocumentCommand {\pkg} {m} {\textsf{#1}}
+\NewDocumentCommand {\cls} {m} {\textsf{#1}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+
+\VerbatimFootnotes
+
+\title{L'extension \pkg{witharrows} pour plain-TeX et LaTeX\thanks{Ce document correspond à la 
+version~\myfileversion\space de \pkg{witharrows}, à la date du~\myfiledate.}} 
+\author{F. Pantigny \\ \texttt{fpantigny@wanadoo.fr}}  
+
+\maketitle
+
+
+\begin{abstract}
+L'extension \pkg{witharrows} fournit des environments |{WithArrows}| et |{DispWithArrows}|
+similaires aux environnements |{aligned}| et |{align}| de l'extension \pkg{amsmath} mais
+avec la possibilité de dessiner des flèches sur le côté droit. Ces flèches sont
+habituellement utilisées pour donner des explications concernant le calcul mathématique
+présenté.
+\end{abstract}
+
+
+\vspace{1cm} L'extension LaTeX \pkg{witharrows} est entièrement contenue dans le fichier
+|witharrows.sty|. Ce fichier peut être placé dans le répertoire courant ou dans une
+arborescence |texmf|. Le mieux reste néanmoins d'installer \pkg{witharrows} avec une
+distribution TeX comme MiKTeX, TeX~Live ou MacTeX.
+
+\medskip
+En fait, \pkg{witharrows} est aussi une extension utilisable avec plain-TeX et dans ce
+cas, le seul fichier nécessaire est le fichier |witharrows.tex| : voir à ce sujet
+p.~\pageref{plain-TeX}. Dans la suite, on décrira l'extension LaTeX.
+
+\medskip
+Cette extension peut être utilisée avec |xelatex|, |lualatex|, |pdflatex| mais aussi avec
+le cheminement classique |latex|-|dvips|-|ps2pdf| (ou Adobe Distiller). \textsl{Néanmoins,
+  le fichier witharrows-french.tex de la présente documentation ne peut être compilé
+  qu'avec LuaLaTeX.} L'extension \pkg{witharrows} charge les extensions \pkg{l3keys2e},
+\pkg{tikz}, \pkg{varwidth} ainsi que les bibliothèques Tikz \pkg{arrows.meta} et
+\pkg{bending}. L'utilisateur final n'a qu'à charger l'extension \pkg{witharrows} avec
+l'instruction habituelle : |\usepackage{witharrows}|.
+
+\medskip
+Les flèches sont tracées avec Tikz et donc \textbf{plusieurs compilations peuvent être
+  nécessaires}.\footnote{Si vous utilisez Overleaf, Overleaf effectue automatiquement un
+  nombre de compilations suffisant (en utilisant |latexmk|).}
+
+\bigskip
+Cette extension fournit un environnement \Definition{\{WithArrows\}} pour construire des
+alignements d'équations avec des flèches pour les explications sur le côté droit.
+
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \emph{\Arrow{on développe}} \\
+  & = a^2 + 2a + 1  % <------ ne pas mettre de \\ ici
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1  
+\end{WithArrows}$
+
+
+
+\medskip
+La flèche a été tracée avec la commande \DefinitionCommande{Arrow} dans la rangée dont la
+flèche part. La commande |\Arrow| doit être utilisée dans la seconde colonne (le mieux est
+de la mettre à la fin de la ligne comme dans l'exemple précédent).
+
+
+\medskip
+L'environnement |{WithArrows}| est proche de l'environnement |{aligned}|
+de \pkg{amsmath}. L'extension \pkg{witharrows} propose aussi des environnements
+|{DispWithArrows}| et |{DispWithArrows*}| qui sont similaires aux environnements |{align}|
+et |{align*}| de l'extension \pkg{amsmath}: cf. p.~\pageref{DispWithArrows}.
+
+
+\section{Options pour la forme des flèches}
+
+La commande |\Arrow| a plusieurs options. Ces options peuvent être placées entre crochets,
+avant, ou après, l'argument obligatoire.
+
+\medskip
+L'option \Definition{jump} indique le nombre\footnote{Il n'est pas possible de donner une
+  valeur négative à |jump|. Voir plus loin (p.~\pageref{Backwards}) la manière de tracer
+  une flèche qui remonte.} de rangées que la flèche doit sauter (la valeur initiale est,
+bien entendu,~$1$).
+
+
+\begin{Code}
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 \Arrow[\emph{jump=2}]{on développe} \\
+  & = (a+b)^2 +  2(a+b) +1 \\
+  & = a^2 + 2ab + b^2 + 2a + 2b +1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 \Arrow[jump=1+1]{on développe} \\
+  & = (a+b)^2 + 2(a+b) +1 \\
+  & = a^2 + 2ab + b^2 + 2a + 2b +1 
+\end{WithArrows}$
+
+\interitem
+Il est possible de faire partir plusieurs flèches d'une même rangée.
+\begin{Code}
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 \emph{\Arrow{}\Arrow{}[jump=2]} \\
+  & = (a+b)^2 + 2(a+b) +1 \\
+  & = a^2 + 2ab + b^2 + 2a + 2b +1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 \Arrow{}\Arrow{}[jump=2] \\
+  & = (a+b)^2 + 2(a+b) +1 \\
+  & = a^2 + 2ab + b^2 + 2a + 2b +1 
+\end{WithArrows}$
+
+\interitem L'option \Definition{xoffset} décale la flèche vers la droite (habituellement,
+on ne souhaite pas que les flèches soient collées au texte). La valeur initiale de
+|xoffset| est de $3$~mm.
+\begin{Code}
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 
+\Arrow[\emph{xoffset=1cm}]{avec \texttt{xoffset=1cm}} \\
+  & = (a+b)^2 + 2(a+b) +1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 
+\Arrow[xoffset=1cm]{avec \texttt{xoffset=1cm}} \\
+  & = (a+b)^2 + 2(a+b) +1 
+\end{WithArrows}$
+
+
+\interitem 
+Les flèches sont tracées avec Tikz. C'est pourquoi la commande |\Arrow| a une option
+\Definition{tikz} qui peut être utilisée pour donner à la flèche (en fait, à la commande
+|\path| de Tikz) les options proposées par Tikz pour une telle flèche. L'exemple suivant
+fournit une flèche en trait épais. 
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[\emph{tikz=thick}]{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[tikz=thick]{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+\interitem 
+Il est également possible de changer les pointes de flèche. Par exemple, nous pouvons
+tracer une flèche qui remonte vers le haut avec l'option Tikz~|<-|.\label{Backwards}
+
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow\emph{[tikz=<-]}{on factorise} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[tikz=<-]{on factorise} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+\interitem 
+Il est aussi possible de supprimer les deux pointes de flèche avec l'option Tikz
+«|-|».\par\nobreak
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[\emph{tikz=-}]{très classique} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[tikz=-]{très classique} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+\interitem
+Pour avoir des flèches droites et non incurvées, il convient d'utiliser l'option Tikz 
+«|bend left = 0|».
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow\emph{[tikz={bend left=0}]}{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[tikz={bend left=0}]{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+\smallskip 
+En fait, il est possible de modifier de manière plus drastique la forme des flèches avec
+l'option |tikz-code| (présentée p.~\pageref{tikz-code}).
+
+\interitem
+Il est possible d'utiliser l'option «|text width|» pour contrôler la largeur du texte
+associé à la flèche. 
+\newcounter{fnnohyphen} \setcounter{fnnohyphen}{\thefootnote}
+%
+\begin{Code}
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 
+\Arrow[jump=2,\emph{tikz={text width=5.3cm}}]{Nous avons développé...} \\
+  & = (a+b)^2 + 2(a+b) +1 \\
+  & = a^2 + 2ab + b^2 + 2a + 2b +1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = \bigl((a+b)+1\bigr)^2 
+\Arrow[jump=2,tikz={text width=5.3cm}]{Nous avons développé en deux étapes 
+                                       mais il aurait été plus habile
+                                       d'utiliser la formule du multinôme.} \\
+& = (a+b)^2 + 2(a+b) +1 \\
+& = a^2 + 2ab + b^2 + 2a + 2b +1
+\end{WithArrows}$
+
+
+\bigskip
+Dans les environnements |{DispWithArrows}| et |{DispWithArrows*}|, il y a une
+option |wrap-lines|. Lorsque cette option est utilisée, les lignes des étiquettes sont
+automatiquement coupées sur la marge droite : voir p.~\pageref{DispWithArrows}.
+
+\interitem
+Si on veut changer la fonte du texte associé à une flèche, on peut, bien entendu, placer
+une commande comme |\bfseries|, |\large| ou |\sffamily| au début du texte. Mais, par
+défaut, les étiquettes sont composées avec une combinaison de |\small| et |\itshape|. En
+ajoutant |\bfseries| au début du texte, on ne va pas supprimer le |\small| et le
+|\itshape| et, par conséquent, on aura un texte en gras, italique et petite taille.
+%
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{\emph{\bfseries} on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{\bfseries on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+\interitem 
+Il est possible de placer des commandes |\\| dans le texte pour forcer des retours à la ligne\footnote{Par
+défaut, ce n'est pas possible dans un nœud Tikz. Néanmoins, dans \pkg{witharrows},
+les nœuds sont construits avec l'option |align=left|, et, ainsi, cela devient possible.}. Néanmoins, si on utilise des commandes |\\|, une instruction de fonte placée au début
+du texte aura un effet seulement jusqu'à la première occurrence de~|\\| (comme
+dans un environnement |{tabular}|). C'est pourquoi Tikz fournit une option
+\Definition{font} pour modifier la fonte de tout le texte de l'étiquette. Cette fois-ci, si on
+utilise une option |tikz={font={\bfseries}}|, la spécification par défaut constituée par
+|\small| et |\itshape| va être écrasée. 
+%
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[\emph{tikz={font={\bfseries}}}]{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow[tikz={font={\bfseries}}]{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+\medskip
+Si on veut exactement le même résultat que précédemment, on doit donner à l'option |font|
+la valeur |\itshape\small\bfseries|.
+
+
+\interitem 
+Presque toutes les options peuvent être données entre crochets à l'environnement
+|{WithArrows}|. Il ne doit pas y avoir d'espace entre le |\begin{WithArrows}| et le
+crochet ouvrant (|[|) des options de l'environnement. Ces options s'appliquent à toutes
+les flèches de l'environnement.\footnote{Elles s'appliquent aussi aux environnements
+  imbriqués dans un environnement |{WithArrows}| donné (avec des exceptions attendues pour
+  les options |interline|, |code-before| et |code-after|).}
+%
+\begin{Code}
+$\begin{WithArrows}[\emph{tikz=blue}]
+A & = \bigl((a+b)+1\bigr)^2 \Arrow{premier développement} \\
+  & = (a+b)^2 + 2(a+b) +1 \Arrow{second développement} \\
+  & = a^2 + 2ab + b^2 + 2a + 2b +1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}[tikz=blue]
+A & = \bigl((a+b)+1\bigr)^2 \Arrow{premier développement} \\
+  & = (a+b)^2 + 2(a+b) +1 \Arrow{second développement} \\
+  & = a^2 + 2ab + b^2 + 2a + 2b +1 
+\end{WithArrows}$
+
+
+\interitem
+L'environnement |{WithArrows}| a une option \Definition{displaystyle}. Avec cette option,
+tous les éléments sont composés en |\displaystyle| (comme dans un environnement
+|{aligned}| de l'extension \pkg{amsmath}).
+
+\medskip
+Sans l'option |displaystyle|:
+%
+\begin{Verbatim}
+$\begin{WithArrows}
+\int_0^1 (x+1)^2 dx 
+& = \int_0^1 (x^2+2x+1) dx
+\Arrow{linéarité de l'intégration}     \\
+& = \int_0^1 x^2 dx + 2 \int_0^1 x dx + \int_0^1 dx \\
+& = \frac{1}{3} + 2\frac{1}{2} + 1 \\
+& = \frac{7}{3}
+\end{WithArrows}$
+\end{Verbatim}
+
+$\begin{WithArrows}
+\int_0^1 (x+1)^2 dx 
+& = \int_0^1 (x^2+2x+1) dx
+\Arrow{linéarité de l'intégration}     \\
+& = \int_0^1 x^2 dx + 2 \int_0^1 x dx + \int_0^1 dx \\
+& = \frac{1}{3} + 2\frac{1}{2} + 1 \\
+& = \frac{7}{3}
+\end{WithArrows}$
+
+
+\medskip
+Le même exemple avec l'option |displaystyle|:\par\nobreak
+
+$\begin{WithArrows}[displaystyle]
+\int_0^1 (x+1)^2 dx 
+& = \int_0^1 (x^2+2x+1) dx
+\Arrow{linéarité de l'intégration}     \\
+& = \int_0^1 x^2 dx + 2 \int_0^1 x dx + \int_0^1 dx \\
+& = \frac{1}{3} + 2\frac{1}{2} + 1 \\
+& = \frac{7}{3}
+\end{WithArrows}$
+
+
+
+\interitem 
+Presque toutes les options peuvent aussi être fixées au niveau du document avec la
+commande \DefinitionCommande{WithArrowsOptions}. Dans ce cas, la portée des déclarations
+est le groupe TeX courant (de telles déclarations sont parfois qualifiées de
+«semi-globales»). Par exemple, si nous voulons que tous les environnements |{WithArrows}|
+soient composés en |\displaystyle| avec des flèches bleues, nous pouvons écrire
+|\WithArrowsOptions{displaystyle,tikz=blue}|.\footnote{Il est aussi possible de configurer
+  \pkg{witharrows} en modifiant le style Tikz |WithArrows/arrow| qui est le style utilisé
+  par \pkg{witharrows} lors du tracé d'une flèche. Par exemple, pour avoir les étiquettes
+  en bleu et en caractères droits, on peut utiliser l'instruction suivante :
+  |\tikzset{WithArrows/arrow/.append style = {blue,font = {}}}|.}
+
+\begin{Code}
+\emph{\WithArrowsOptions{displaystyle,tikz=blue}}
+$\begin{WithArrows}
+\sum_{i=1}^n (x_i+1)^2 
+& = \sum_{i=1}^n (x_i^2+2x_i+1) \Arrow{par linéarité}\\
+& = \sum_{i=1}^n x_i^2 + 2\sum_{i=1}^nx_i+ n
+\end{WithArrows}$
+\end{Code}
+
+\begin{scope}
+\WithArrowsOptions{displaystyle,tikz=blue}
+$\begin{WithArrows}
+\sum_{i=1}^n (x_i+1)^2 
+& = \sum_{i=1}^n (x_i^2+2x_i+1) \Arrow{par linéarité}\\
+& = \sum_{i=1}^n x_i^2 + 2\sum_{i=1}^nx_i+ n
+\end{WithArrows}$
+\end{scope}
+
+
+\interitem 
+La commande |\Arrow| est reconnue seulement dans les environnements de \pkg{witharrows}.
+Si on dispose d'une commande |\Arrow| précédemment définie, il est possible de continuer à
+l'utiliser à l'extérieur des environnements de \pkg{witharrows}.
+
+Néanmoins, une commande |\Arrow| définie précédemment pourrait encore être utile dans un
+environnement |{WithArrows}|. Si vous voulez l'utiliser dans un tel environnement, il est
+possible de changer le nom de la commande |\Arrow| de l'extension \pkg{witharrows} grâce à
+une option \Definition{command-name} dédiée. Le nouveau nom de la commande doit être
+fourni à l'option \emph{sans} la contre-oblique.
+%
+\begin{Code}
+\NewDocumentCommand {\Arrow} {} {\longmapsto}
+$\begin{WithArrows}[~emphase#command-name=Explication@]
+f & = \bigl(x \Arrow (x+1)^2\bigr)
+\emph{\Explication{on travaille directement sur les fonctions}}\\
+& = \bigl(x \Arrow x^2+2x+1\bigr)
+\end{WithArrows}$
+\end{Code}
+%
+\begin{scope}
+\NewDocumentCommand {\Arrow} {} {\longmapsto}
+$\begin{WithArrows}[command-name=Explication]
+f & = \bigl(x \Arrow (x+1)^2\bigr)
+\Explication{on travaille directement sur les fonctions}\\
+& = \bigl(x \Arrow x^2+2x+1\bigr)
+\end{WithArrows}$
+\end{scope}
+
+
+\interitem 
+L'environnement |{WithArrows}| fournit aussi deux options \Definition{code-before} et
+\Definition{code-after} pour du code LaTeX qui sera exécuté au début et à la fin de
+l'environnement. Ces options ne sont pas conçues pour être utilisées comme des
+\emph{hooks} (elles sont disponibles uniquement au niveau de l'environnement et ne
+s'appliquent pas aux environnements imbriqués).
+%
+\begin{Code}
+$\begin{WithArrows}[\emph{code-before = \color{blue}}]
+A & = (a+b)^2 \Arrow{on développe} \\
+  & = a^2 + 2ab + b^2 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}[code-before = \color{blue}]
+A & = (a+b)^2 \Arrow{on développe} \\
+  & = a^2 + 2ab + b^2 
+\end{WithArrows}$
+
+\medskip 
+Des commandes spéciales sont disponibles dans le |code-after|: une commande
+\DefinitionCommande{WithArrowsNbLines} qui indique le nombre de lignes (=rangées) de
+l'environnement courant (pour TeX, il s'agit d'une commande et non d'un compteur), une
+forme spéciale de la commande |\Arrow| et la commande |\MultiArrow| : ces deux dernières
+commandes sont décrites à partir de la page~\pageref{NestedEnv}.
+
+\section{Nombre et formats des colonnes}
+
+Jusqu'à présent, nous n'avons utilisé l'environnement |{WithArrows}| qu'avec deux
+colonnes. Néanmoins, il est possible de l'utiliser avec un nombre arbitraire de colonnes
+grâce à l'option \Definition{format}. La valeur donnée à cette option est similaire au
+préambule d'un environnement |{array}|: il s'agit d'une séquence de lettres |r|, |c| et
+|l| mais aussi |R|, |C| et |L|.
+
+\smallskip
+Les lettres |R|, |C| et |L| placent des groupes vides |{}| qui permettent un espacement
+correct lorsque ces colonnes contiennent des symboles de type |\mathrel| (comme $=$,
+$\le$, etc.) ou |\mathbin| (comme $+$, $×$, etc.). Ce système est inspiré par
+l'environnement |{IEEEeqnarray}| de \pkg{IEEEtrantools}.
+
+\smallskip
+La valeur initiale du paramètre |format| est, en fait, |rL|.
+
+\bigskip
+Par exemple, si on veut seulement une colonne alignée à gauche, on peut utiliser l'option
+|format=l|.
+\begin{Code}
+$\begin{WithArrows}[\emph{format = l}]
+f(x) \ge g(x) \Arrow{on élève les deux membres au carré} \\
+f(x)^2 \ge g(x)^2 \Arrow{on fait tout passer à gauche} \\
+f(x)^2 - g(x)^2 \ge 0 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}[format = l]
+f(x) \ge g(x) \Arrow{on élève les deux membres au carré} \\
+f(x)^2 \ge g(x)^2 \Arrow{on fait tout passer à gauche} \\
+f(x)^2 - g(x)^2 \ge 0 
+\end{WithArrows}$
+
+\interitem
+Dans l'exemple suivant, on utilise cinq colonnes toutes centrées (l'environnement
+|{DispWithArrows*}| utilisé est présenté p.~\pageref{DispWithArrows}).
+
+\begin{Code}
+\begin{DispWithArrows*}[\emph{format = cCcCc},
+                        wrap-lines,
+                        interline=1mm]
+k & \;\le\; & t & \;\le\; & k+1 \\
+\frac{1}{k+1} & \le & \frac{1}{t} & \le & \frac{1}{k} 
+\Arrow{nous pouvons intégrer les inégalités puisque $k \leq k+1$ } \\
+\int\limits_k^{k+1} \frac{dt}{k+1} 
+& \le & \int\limits_k^{k+1} \frac{dt}{t} 
+& \le & \int\limits_k^{k+1} \frac{dt}{k} \\
+\frac{1}{k+1} & \le & \ln(k+1)-\ln(k) & \le & \frac{1}{k} 
+\end{DispWithArrows*}
+\end{Code}
+\begin{DispWithArrows*}[format = cCcCc,
+                        wrap-lines,
+                        interline=1mm]
+k & \;\le\; & t & \;\le\; & k+1 \\
+\frac{1}{k+1} & \le & \frac{1}{t} & \le & \frac{1}{k} 
+\Arrow{nous pouvons intégrer les inégalités puisque $k \leq k+1$} \\
+\int\limits_k^{k+1} \frac{dt}{k+1} 
+& \le & \int\limits_k^{k+1} \frac{dt}{t} 
+& \le & \int\limits_k^{k+1} \frac{dt}{k} \\
+\frac{1}{k+1} & \le & \ln(k+1)-\ln(k) & \le & \frac{1}{k} 
+\end{DispWithArrows*}
+
+
+\section{Positionnement précis des flèches}
+
+L'environnement |{WithArrows}| construit, lors de la composition du tableau, deux séries
+de nœuds représentés en rouge dans l'exemple suivant.\footnote{L'option
+  \Definition{show-nodes} peut être utilisée pour visualiser ces nœuds. Les nœuds sont en
+  fait des nœuds Tikz de forme rectangulaire et de largeur nulle. Une flèche entre deux
+  nœuds part de l'ancre sud (\emph{south anchor}) du premier nœud et arrive à l'ancre nord
+  (\emph{north anchor}) du deuxième nœud.}
+
+
+\smallskip
+$\begin{WithArrows}[displaystyle,show-nodes]
+I
+& = \int_{\frac{\pi}{4}}^0 \ln\Bigl(1+\tan\left(\tfrac{\pi}{4}-u\right)\Bigr)(-d u) \\
+& = \int_0^{\frac{\pi}{4}} \ln\Bigl(1+\tan\left(\tfrac{\pi}{4}-u\right)\Bigr)d u \\
+& = \int_0^{\frac{\pi}{4}}\ln\left(1+\frac{1-\tan u}{1+\tan u}\right)\, d u \\
+& =\int_0^{\frac{\pi}{4}}\ln\left(\frac{1+\tan u+1-\tan u}{1+\tan u}\right) d u \\
+& =\int_0^{\frac{\pi}{4}} \ln\left(\frac{2}{1+\tan u}\right)\, d u\\
+& =\int_0^{\frac{\pi}{4}}\bigl(\ln2-\ln(1+\tan u)\bigr)\, d u \\
+& =\frac{\pi}{4}\ln2-\int_0^{\frac{\pi}{4}}\ln(1+\tan u)\, d u  \\
+& =\frac{\pi}{4}\ln2-I 
+\end{WithArrows}$
+
+\bigskip
+Les nœuds sur la gauche sont à la fin de chaque ligne de texte. Ces nœuds seront appelés
+\emph{nœuds de gauche}. Les nœuds du côté droit sont alignés verticalement sur le bord
+droit de l'alignement d'équations. Ces nœuds seront appelés \emph{nœuds de droite}.
+
+
+Par défaut, les flèches utilisent les nœuds de droite. Nous dirons que ces flèches sont
+dans le mode \Definition{rr} (\emph{r} for \emph{right} en anglais). Ces flèches sont
+verticales (nous dirons qu'une flèche est \emph{verticale} lorsque ses deux extrémités
+sont à la même abscisse).
+
+
+
+\smallskip
+Néanmoins, il est possible d'utiliser les nœuds de gauche, ou une combinaison de nœuds de
+gauche et de droite avec l'une des options \Definition{lr}, \Definition{rl} et
+\Definition{ll} (\emph{l} for \emph{left} en anglais). Ces flèches sont, la plupart du
+temps, non verticales. 
+
+
+Ainsi\enskip
+$\begin{WithArrows}[displaystyle]
+I
+& = \int_{\frac{\pi}{4}}^0 \ln\Bigl(1+\tan\left(\tfrac{\pi}{4}-u\right)\Bigr)(-d u) 
+\Arrow[lr]{Cette flèche utilise une option \texttt{lr}.}\\
+& = \int_0^{\frac{\pi}{4}} \ln\Bigl(1+\tan\left(\tfrac{\pi}{4}-u\right)\Bigr)d u \\
+& = \int_0^{\frac{\pi}{4}}\ln\left(1+\frac{1-\tan u}{1+\tan u}\right)\, d u \\
+& =\int_0^{\frac{\pi}{4}}\ln\left(\frac{1+\tan u+1-\tan u}{1+\tan u}\right) d u 
+\Arrow[ll,jump=2,tikz={text width = 5cm}]{Cette flèche utilise une option \texttt{ll} 
+et une option \texttt{jump} fixée à $2$}\\ 
+& =\int_0^{\frac{\pi}{4}} \ln\left(\frac{2}{1+\tan u}\right)\, d u\\
+& =\int_0^{\frac{\pi}{4}}\bigl(\ln2-\ln(1+\tan u)\bigr)\, d u \\
+& =\frac{\pi}{4}\ln2-\int_0^{\frac{\pi}{4}}\ln(1+\tan u)\, d u  \\
+& =\frac{\pi}{4}\ln2-I 
+\end{WithArrows}$
+
+
+\interitem 
+Il y a aussi une option nommée \Definition{i} (\emph{i} pour \emph{intermédiaire}). Avec cette option, la flèche est
+verticale et calée à gauche.
+
+\begin{Code}
+$\begin{WithArrows}
+(a+b)(a+ib)(a-b)(a-ib) 
+& = (a+b)(a-b)\cdot(a+ib)(a-ib) \\
+& = (a^2-b^2)(a^2+b^2) \Arrow\emph{[i]}{parce que $(x-y)(x+y)=x^2-y^2$}\\
+& = a^4-b^4 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+(a+b)(a+ib)(a-b)(a-ib) 
+& = (a+b)(a-b)\cdot(a+ib)(a-ib) \\
+& = (a^2-b^2)(a^2+b^2) \Arrow[i]{parce que \((x-y)(x+y)=x^2-y²\)}\\
+& = a^4-b^4 
+\end{WithArrows}$
+
+
+\interitem 
+L'environnement |{WithArrows}| propose aussi une option \Definition{group}. Avec cette option,
+\emph{toutes} les flèches de l'environnement sont regroupées sur une même verticale calée à gauche.
+\label{group}
+%
+\begin{Code}
+$\begin{WithArrows}[\emph{displaystyle,group}]
+2xy'-3y=\sqrt{x}
+& \Longleftrightarrow 2x(K'y_0+Ky_0')-3Ky_0 = \sqrt{x} \\
+& \Longleftrightarrow 2xK'y_0 + K(2xy_0'-3y_0) = \sqrt{x} \\
+& \Longleftrightarrow 2x K'y_0 = \sqrt{x} \Arrow{...}\\
+...
+\end{WithArrows}$
+\end{Code}
+
+
+$\begin{WithArrows}[displaystyle,group]
+2xy'-3y=\sqrt{x}
+& \Longleftrightarrow 2x(K'y_0+Ky_0')-3Ky_0 = \sqrt{x} \\
+& \Longleftrightarrow 2xK'y_0 + K(2xy_0'-3y_0) = \sqrt{x} \\
+& \Longleftrightarrow 2x K'y_0 = \sqrt{x} \Arrow{on remplace $y_0$ par sa valeur}\\
+& \Longleftrightarrow 2xK'x^{\frac{3}{2}} = x^{\frac{1}{2}} \Arrow{simplification par $x$}\\
+& \Longleftrightarrow K' = \tfrac{1}{2x^2} \Arrow{on primitive}\\
+& \Longleftrightarrow K = -\tfrac{1}{2x} 
+\end{WithArrows}$
+
+
+\bigskip
+L'environnement |{WithArrows}| fournit encore une autre option, nommée \Definition{groups}
+(avec un \emph{s} dans le nom). Avec cette option, les flèches sont divisées en plusieurs
+«groupes». Chaque groupe est un ensemble de flèches connectées entre elles\footnote{Plus
+  précisément : pour chaque flèche $a$, notons $i(a)$ le numéro de sa rangée de départ et
+  $f(a)$ le numéro de sa rangée d'arrivée ; pour deux flèches $a$ et $b$, nous noterons
+  $a \sim b$ lorsque
+  $\llbracket i(a),f(a)\rrbracket \cap \llbracket i(b),f(b)\rrbracket \neq \varnothing$ ;
+  les groupes sont les classes d'équivalence de la clôture transitive de la relation
+  $\sim$.}. Toutes les flèches d'un même groupe sont placées sur une même verticale qui
+est calée à gauche.
+
+
+\bigskip
+$\begin{WithArrows}[groups]
+A & = B \Arrow{un} \\
+  & = C+D \Arrow{deux} \\
+  & = D' \\
+  & = E+F+G+H+I \\
+  & = K + L + M \Arrow{trois}\\
+  & = N \Arrow{quatre}\\
+  & = O
+\end{WithArrows}$
+
+\bigskip 
+Dans un environnement qui utilise l'option |group| ou l'option |groups|, il est encore
+possible de donner une option de position (|ll|, |lr|, |rl|, |rr| ou |i|) à une flèche
+individuelle\footnote{Une telle flèche est qualifiée d'\emph{indépendante}
+  (\emph{independent} en anglais) dans la documentation technique.}. Une telle flèche sera
+tracée indépendamment des groupes. Il est aussi possible de commencer un nouveau groupe
+avec l'option \Definition{new-group} pour une certaine flèche.
+
+
+\bigskip
+Si on le souhaite, on peut passer l'option |group| ou |groups| à la commande
+|WithArrowsOptions| de telle sorte qu'elle deviendra la valeur par défaut (jusqu'à la fin
+du groupe TeX courant). Dans ce cas, il est encore possible de revenir au comportement par
+défaut pour un environnement |{WithArrows}| donné avec l'option |rr|:
+|\begin{WithArrows}[rr]|.
+
+
+\vspace{1cm} 
+Dans l'exemple suivant, nous avons utilisé l'option |groups| pour l'environnement et
+l'option |new-group| pour la dernière flèche (c'est pourquoi cette dernière flèche n'est
+pas alignée avec les premières).
+
+\bigskip
+$\begin{WithArrows}[interline=1mm,groups]
+\sum\limits_{k=0}^n\frac{\cos kx}{\cos^k x}
+& = \sum\limits_{k=0}^n \frac{\Re (e^{ikx})}{(\cos x)^k} 
+\Arrow{\((\cos x)^k\) est réel} \\
+& = \sum\limits_{k=0}^n \Re\left(\frac{e^{ikx}}{(\cos x)^k}\right)
+\Arrow{\(\Re(z+z')=\Re(z)+\Re(z')\)}\\
+& = \Re \left(\sum\limits_{k=0}^n \left(\frac{e^{ix}}{\cos x}\right)^k\right)
+\Arrow{somme de termes d'une suite géométrique} \\
+& = \Re \left(\frac{1-\left(\frac{e^{ix}}{\cos x}\right)^{n+1}}{1-\frac{e^{ix}}{\cos x}} \right)
+\Arrow{calcul algébrique} \\
+& = \Re \left(\frac{1-\frac{e^{i(n+1)x}}{\cos^{n+1}x}}{1-\frac{e^{ix}}{\cos x}}\right)
+\Arrow{réduction au même dénominateur} \\
+& = \Re \left(\frac{\frac{\cos^{n+1}x-e^{i(n+1)x}}{\cos^{n+1}x}}{\frac{\cos x-e^{ix}}{\cos x}}\right)
+\Arrow{\(\Re(kz) = k\cdot\Re(z)\) lorsque \(k\) est réel} \\
+& = \frac{1}{\cos^n x}\Re \left(\frac{\cos^{n+1}x-e^{i(n+1)x}}{\cos x-e^{ix}}\right)
+\Arrow[new-group]{forme algébrique des nombres complexes} \\
+& =\frac{1}{\cos^n x}
+    \Re\left(\frac{\cos^{n+1}x-(\cos(n+1)x+i\sin(n+1)x)}{\cos x-(\cos x+i\sin x)}\right) \\
+& =\frac{1}{\cos^n x}
+    \Re\left(\frac{(\cos^{n+1}x-\cos(n+1)x)-i\sin(n+1)x}{-i\sin x}\right) \\
+& = \frac{1}{\cos^nx}\cdot\frac{\sin(n+1)x}{\sin x}
+\end{WithArrows}$
+
+
+\interitem
+\section{L'option « o » pour des flèches individuelles}
+
+\label{option-o}
+
+Considérons, dans un environnement donné, deux flèches notées formellement $a$ et $b$. 
+
+On notera $i_a$ et $i_b$ les numéros des lignes de départ de $a$ et $b$ et $f_a$ et $f_b$
+les numéros de leurs lignes d'arrivée. On a bien entendu $i_a \le f_a$ et $i_b \le f_b$
+
+\smallskip
+On dira que la flèche~$a$ \emph{recouvre} la flèche~$b$ lorsque $i_a \le i_b \le f_b \le f_a$
+
+
+\medskip
+\parbox{8cm}{Dans l'exemple ci-contre, la flèche rouge recouvre la flèche bleue.}\hspace{3cm}
+$\begin{WithArrows}[c]
+A & = B \Arrow[tikz=red,jump=3]{}\\
+  & = C \Arrow[tikz=blue]{}\\
+  & = D \\
+  & = E
+\end{WithArrows}$
+
+\bigskip
+Au niveau local, il existe une option \Definition{o}. Cette option n'est disponible que
+lorsque l'on est en mode |group| ou bien en mode |groups| (cf. p.~\pageref{group}).
+
+Une flèche de type |o| est tracée avec un décalage horizontal (comme celui fixé par
+|xoffset|) calculé automatiquement en fonction des flèches qu'elle
+recrouvre.\footnote{Parmi les flèches recouvertes, les flèches indépendantes (c'est-à-dire
+  celles qui ont une option explicite |rr|, |ll|, |rl|, |lr|, |i|, |up| ou |down|) ne sont
+  pas prises en compte pour le calcul du |xoffset|.}
+
+
+\bigskip
+\begin{Code}[width=10cm]
+$\begin{WithArrows}[groups]
+A & = B     \Arrow{un}\Arrow[\emph{o},jump=3]{direct} \\
+  & = C + C \Arrow{deux} \\
+  & = D + D + D \Arrow{trois} \\
+  & = E + E \\
+  & = F + F 
+\end{WithArrows}$
+\end{Code}
+$\begin{WithArrows}[c,groups]
+A & = B     \Arrow{un}\Arrow[o,jump=3]{direct} \\
+  & = C + C \Arrow{deux} \\
+  & = D + D + D \Arrow{trois} \\
+  & = E + E \\
+  & = F + F 
+\end{WithArrows}$
+
+
+
+\interitem
+Les flèches de type |o| peuvent elles-mêmes être recouvertes par d'autres flèches de
+type~|o|:\par\nobreak
+
+\bigskip
+\begin{Code}
+$\begin{WithArrows}[groups]
+A & = B \Arrow{un}\Arrow[\emph{o},jump=2]{deux}\Arrow[\emph{o},jump=3]{trois}\\
+  & = C \\
+  & = D \\
+  & = E + E + E + E + E + E + E 
+\end{WithArrows}$
+\end{Code}
+
+
+\bigskip
+$\begin{WithArrows}[c,groups]
+A & = B \Arrow{un}\Arrow[o,jump=2]{deux}\Arrow[o,jump=3]{trois}\\
+  & = C \\
+  & = D \\
+  & = E + E + E + E + E + E + E 
+\end{WithArrows}$
+
+\bigskip
+L'espace (horizontal) entre une flèche de type |o| et les flèches immédiatement
+recouvertes est fixé par le paramètre \Definition{xoffset-for-o-arrows} que l'on peut
+régler avec |\WithArrowsOptions| (valeur initiale : 2~mm).
+
+\bigskip
+\emph{Remarque} : La lettre |o| a été choisie car c'est la première lettre du mot anglais
+\emph{over}. Une flèche de type~|o| est \emph{au-dessus} des flèches qu'elle recouvre.
+
+\interitem
+
+\section{Les options « up » et « down » pour des flèches individuelles} 
+
+\label{up-and-down}
+Au niveau local, il y a deux options pour les flèches individuelles, nommées
+\Definition{up} et \Definition{down}. L'exemple suivant illustre ces types de flèches:
+
+
+\begin{Code}
+\(\begin{WithArrows}
+A & = B 
+\Arrow\emph{[up]}{une flèche de type \texttt{up}} \\
+  & = C + C + C + C + C + C + C + C  \\
+  & = C + C + C + C + C + C + C + C  
+\Arrow\emph{[down]}{une flèche de type \texttt{down}} \\
+  & = E + E 
+\end{WithArrows}\)
+\end{Code}
+
+\bigskip
+$\begin{WithArrows}
+A & = B 
+\Arrow[up]{une flèche de type \texttt{up}} \\
+  & = C + C + C + C + C + C + C + C  \\
+  & = C + C + C + C + C + C + C + C  
+\Arrow[down]{une flèche de type \texttt{down}} \\
+  & = E + E 
+\end{WithArrows}$
+
+
+\vspace{1cm} 
+Les options |up| et |down| nécessitent la bibliothèque Tikz \pkg{calc}. Si elle n'a pas
+été chargée au préalable par l'utilisateur, une erreur sera levée.
+
+\vspace{1cm}
+Les options |up| et |down| peuvent en fait prendre comme valeur une liste de couples
+clé-valeur.  
+\begin{itemize}
+\item La clé \Definition{radius} est le rayon de l'angle arrondi de la flèche\footnote{La
+  valeur initiale de ce paramètre est égale à $4$~pt, qui est la valeur par défaut du
+  ``|rounded corners|'' de Tikz.}.
+\item La clé \Definition{width} contrôle la largeur (de la partie horizontale) de la flèche :
+\begin{itemize}
+\item avec la valeur \Definition{max}, la largeur de la flèche est ajustée par rapport à
+la position des nœuds (c'est le comportement par défaut des flèches |up| et |down| comme
+illustré dans l'exemple précédent) ;
+\item avec une valeur numérique, la largeur de la flèche est directement fixée par cette
+valeur numérique ;
+\item avec la valeur \Definition{min}, la largeur de la flèche est ajustée au contenu de
+son étiquette. 
+\end{itemize}
+\end{itemize}
+
+\vspace{1cm}
+\begin{Code}
+$\begin{WithArrows}
+A & = B 
+\Arrow[\emph{up={width=2cm,radius=0pt}}]{essai} \\
+  & = C + C + C + C + C + C + C + C 
+\end{WithArrows}$
+\end{Code}
+
+\medskip
+$\begin{WithArrows}
+A & = B 
+\Arrow[up={width=2cm,radius=0pt}]{essai} \\
+  & = C + C + C + C + C + C + C + C 
+\end{WithArrows}$
+
+
+\vspace{1cm}
+\begin{Code}
+$\begin{WithArrows}
+A & = B 
+\Arrow[\emph{up={width=min}}]{essai} \\
+  & = C + C + C + C + C + C + C + C 
+\end{WithArrows}$
+\end{Code}
+
+\medskip
+$\begin{WithArrows}
+A & = B 
+\Arrow[up={width=min}]{essai} \\
+  & = C + C + C + C + C + C + C + C 
+\end{WithArrows}$
+
+\vspace{1cm}
+Les options relatives aux flèches |up| et |down| peuvent être fixées au niveau global ou
+environnemental avec la clé \Definition{up-and-down}. Cette clé peut aussi être utilisée
+comme préfixe comme illustré maintenant.
+%
+\begin{Verbatim}
+\WithArrowsOptions{up-and-down/width=min}
+\end{Verbatim}
+
+\interitem
+
+\section{Comparaison avec l'environnement \{aligned\}}
+
+L'environnement |{WithArrows}| présente des similitudes avec l'environnement |{aligned}|
+de l'extension \pkg{amsmath}. Ce sont seulement des similitudes car |{WithArrows}| n'a pas
+été écrit en s'appuyant sur |{aligned}|.\footnote{En fait, il est possible d'utiliser
+  l'extension \pkg{witharrows} sans l'extension \pkg{amsmath}.}
+
+\interitem 
+
+Comme dans les environnements de l'extension \pkg{amsmath}, il est possible de changer
+l'espacement entre deux rangées avec l'option de la commande |\\| de fin de ligne (il est
+aussi possible d'utiliser |\\*| mais cela a exactement le même effet que |\\| puisqu'un
+environnement |{WithArrows}| est toujours insécable). Cette option est conçue pour être
+utilisée avec des valeurs positives uniquement.
+%
+\begin{Code}
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{on développe} \emph{\\[2ex]}
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{on développe} \\*[2ex]
+\noalign{\vspace{3mm}}
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+
+\interitem 
+Dans les environnements de l'extension \pkg{amsmath} (ou de \pkg{mathtools}), l'espace
+entre deux rangées est fixé par un paramètre appelé |\jot| (il s'agit d'une dimension et
+non d'un ressort). C'est aussi le cas pour l'environnement |{WithArrows}|. Une option
+\Definition{jot} a été ajoutée à l'environnement |{WithArrows}| dans le but de changer ce
+paramètre |\jot| pour un environnement donné.\footnote{Il est aussi possible de changer
+  |\jot| avec l'environnement |{spreadlines}| de \pkg{mathtools}.}
+%
+\begin{Code}
+$\begin{WithArrows}[displaystyle,\emph{jot=2ex}]
+F & = \frac{1}{2}G     \Arrow{on développe}\\
+  & = H + \frac{1}{2}K \Arrow{on continue}\\
+  & = K 
+\end{WithArrows}$
+\end{Code}
+
+
+$\begin{WithArrows}[displaystyle,jot=2ex]
+F & = \frac{1}{2}G     \Arrow{on développe}\\
+  & = H + \frac{1}{2}K \Arrow{on continue}\\
+  & = K 
+\end{WithArrows}$
+
+
+\bigskip
+Néanmoins, cette nouvelle valeur de |\jot| sera aussi utilisée dans les nouveaux
+alignements inclus dans l'environnement~|{WithArrows}|:
+%
+\begin{Code}
+$\begin{WithArrows}[\emph{jot=2ex}]
+\varphi(x,y) = 0  & \Leftrightarrow (x+y)^2 + (x+2y)^2 = 0 
+\Arrow{$x$ et $y$ sont réels}\\
+& \Leftrightarrow \left\{
+\begin{aligned}
+x+y & = 0 \\
+x+2y & = 0 
+\end{aligned}
+\right.
+\end{WithArrows}$
+\end{Code}
+
+
+$\begin{WithArrows}[jot=2ex]
+\varphi(x,y) = 0  & \Leftrightarrow (x+y)^2 + (x+2y)^2 = 0 
+\Arrow{\(x\) et \(y\) sont réels}\\
+& \Leftrightarrow \left\{
+\begin{aligned}
+x+y & = 0 \\
+x+2y & = 0 
+\end{aligned}
+\right.
+\end{WithArrows}$
+
+\bigskip
+Peut-être que cela ne correspond pas au résultat souhaité. C'est pourquoi une option
+\Definition{interline} est fournie. Il est possible d'utiliser un ressort (\emph{skip})
+pour cette option.
+%
+\begin{Code}
+$\begin{WithArrows}[\emph{interline=2ex}]
+\varphi(x,y) = 0  & \Leftrightarrow (x+y)^2 + (x+2y)^2 = 0 
+\Arrow{$x$ et $y$ sont réels}\\
+& \Leftrightarrow \left\{
+\begin{aligned}
+x+y & = 0 \\
+x+2y & = 0 \\
+\end{aligned}
+\right.
+\end{WithArrows}$
+\end{Code}
+
+
+$\begin{WithArrows}[interline=2ex]
+\varphi(x,y) = 0  & \Leftrightarrow (x+y)^2 + (x+2y)^2 = 0 
+\Arrow{\(x\) et \(y\) sont réels}\\
+& \Leftrightarrow \left\{
+\begin{aligned}
+x+y & = 0 \\
+x+2y & = 0 \\
+\end{aligned}
+\right.
+\end{WithArrows}$
+
+
+\interitem 
+De même que l'environnement |{aligned}|, |{WithArrows}| a une option de placement qui peut
+prendre les valeurs \Definition{t}, \Definition{c} ou \Definition{b}. Néanmoins, la valeur
+initiale n'est pas |c| mais |t|. Si on le souhaite, il est possible d'avoir la valeur |c|
+comme valeur par défaut en utilisant l'instruction |\WithArrowsOptions{c}| au début du document.
+%
+\begin{Verbatim}
+Ainsi\enskip
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+\end{Verbatim}
+
+Ainsi\enskip 
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{WithArrows}$
+
+\bigskip
+La valeur |c| peut être utile, par exemple, si on souhaite mettre une accolade :
+
+\smallskip
+% Dans le code suivant, on ne peut utiliser {Code} avec \emph{} à cause du \{...
+\begin{Verbatim}
+On pose\enskip $~emphase#{\left\{@
+\begin{WithArrows}[~emphase#c@]
+f(x) & = 3x^3+2x^2-x+4 
+\Arrow[tikz=-]{les deux sont des polynômes}\\
+g(x) & = 5x^2-5x+6
+\end{WithArrows}
+~emphase#\right.@
+\end{Verbatim}
+
+
+On pose\enskip $\left\{
+\begin{WithArrows}[c]
+f(x) & = 3x^3+2x^2-x+4 
+\Arrow[tikz=-]{les deux sont des polynômes}\\
+g(x) & = 5x^2-5x+6
+\end{WithArrows}
+\right.$
+
+
+\interitem
+Contrairement à |{aligned}|, l'environnement |{WithArrows}| utilise |\textstyle| par défaut.
+
+Là aussi, il est possible de changer ce comportement avec |\WithArrowsOptions|:
+
+\smallskip
+|\WithArrowsOptions{displaystyle}|.
+
+
+\smallskip
+L'exemple suivant est composé avec |{aligned}|:\par\nobreak
+
+\smallskip
+$\left\{
+\begin{aligned}
+\sum_{i=1}^n (x_i+1)^2  
+& = \sum_{i=1}^n (x_i^2 + 2x_i+1) \\
+& = \sum_{i=1}^n x_i^2 + 2 \sum_{i=1}^n x_i + n 
+\end{aligned}
+\right.$
+
+
+\medskip 
+L'exemple suivant est composé avec |{WithArrows}[c,displaystyle]|. Les résultats 
+sont parfaitement identiques.\par\nobreak
+
+\smallskip
+$\left\{
+\begin{WithArrows}[c,displaystyle]
+\sum_{i=1}^n (x_i+1)^2 
+& = \sum_{i=1}^n (x_i^2 + 2x_i+1) \\
+& = \sum_{i=1}^n x_i^2 + 2 \sum_{i=1}^n x_i + n 
+\end{WithArrows}
+\right.$
+
+
+\section{Les flèches dans les environnements imbriqués}
+
+\label{NestedEnv}
+
+Les environnements |{WithArrows}| peuvent être imbriqués. Dans ce cas, les options fournies
+à l'environnement englobant s'appliquent aussi aux environnements imbriqués (avec des
+exceptions tout à fait attendues pour |interline|, |code-before| et |code-after|). La commande
+|\Arrow| peut être utilisée dans chaque environnement |{WithArrows}|.
+
+\begin{Code}
+$\emph{\begin{WithArrows}}
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \Arrow{les nombres sont réels}\\
+  & \Leftrightarrow
+  \left\{\emph{\begin{WithArrows}}[c]
+  x+2y & = 0 \\
+  2x+4y & = 0 
+  \emph{\end{WithArrows}}\right. \\
+  & \Leftrightarrow
+  \left\{\emph{\begin{WithArrows}}[c]
+  x+2y & = 0 \Arrow[tikz=-]{la même équation}\\
+  x+2y & = 0 
+  \emph{\end{WithArrows}}\right. \\
+  & \Leftrightarrow x+2y=0 
+\emph{\end{WithArrows}}$
+\end{Code}
+
+$\begin{WithArrows}
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \Arrow{les nombres sont réels}\\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \\
+  2x+4y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \Arrow[tikz=-]{la même équation}\\
+  x+2y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow x+2y=0 
+\end{WithArrows}$
+
+\bigskip
+Néanmoins, on peut souhaiter tracer une flèche entre des rangées qui ne sont pas dans le
+même environnement. Par exemple, on pourrait souhaiter tracer la flèche suivante :
+
+\bigskip
+$\begin{WithArrows}[code-after = \Arrow[v]{1-2}{2-2}{division par $2$} ]
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \\
+  2x+4y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \\
+  x+2y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow x+2y=0 
+\end{WithArrows}$
+
+
+\bigskip
+Une telle construction est possible en utilisant |\Arrow| dans le |code-after| :
+dans le |code-after|, une version spéciale de la commande |\Arrow| est disponible 
+(nous l'appellerons  «|\Arrow| dans le |code-after|»).
+
+\smallskip
+Une commande |\Arrow| dans le |code-after| prend trois arguments :
+\begin{itemize}
+\item une spécification pour la rangée de départ de la flèche ;
+\item une spécification pour la rangée d'arrivée ;
+\item une étiquette pour la flèche.
+\end{itemize}
+Comme d'habitude, il est possible de donner des options entre crochets avant ou après les
+trois arguments obligatoires. Néanmoins, ces options sont limitées (voir plus bas).
+
+\interitem La spécification de rangée est construite avec la position de l'environnement
+conidéré dans l'arbre des imbrications, suivie, après un trait d'union, par le numéro de
+la rangée.
+
+\bigskip
+Dans l'exemple précédent, il y a deux environnements |{WithArrows}| imbriqués dans
+l'environnement |{WithArrows}| principal.
+
+\medskip
+$\begin{WithArrows}[tikz-code = {\path (#1) to node {#3} (#2) ; }]
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \\
+  & \Leftrightarrow \color{blue}
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \Arrow{environnement \no 1}\\
+  2x+4y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow \color{red}
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \Arrow{environnement \no 2}\\
+  x+2y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow x+2y=0 
+\end{WithArrows}$
+
+\bigskip
+La flèche que nous voulons tracer part de la rangée~$2$ du sous-environnement \no $1$ (et,
+par conséquent, la spécification est |1-2|) et arrive à la rangée~$2$ du
+sous-environnement \no $2$ (et, par conséquent, la spécification est |2-2|). Nous pouvons
+tracer la flèche avec une commande |\Arrow| dans le |code-after| de la manière suivante :
+
+\begin{Code}
+$\begin{WithArrows}[\emph{code-after = \Arrow{1-2}{2-2}{division par $2$}}]
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \\
+.........
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}[code-after = \Arrow{1-2}{2-2}{division par $2$} ]
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \\
+  2x+4y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \\
+  x+2y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow x+2y=0 
+\end{WithArrows}$
+
+\bigskip
+Les options autorisées pour une commande |\Arrow| dans le |code-after| sont : |ll|, |lr|,
+|rl|, |rr|, |v|, |xoffset|, |tikz| et |tikz-code|. Exceptée |v|, qui est spécifique à
+|\Arrow| dans le |code-after|, toutes ces options ont leur signification habituelle.
+
+
+Avec l'option |v|, la flèche tracée est verticale à une abscisse calculée avec la rangée
+de départ et la rangée d'arrivée uniquement : les lignes intermédiaires ne sont pas prises
+en compte contrairement à ce qui se passe avec l'option |i|. Pour le moment, l'option |i|
+n'est pas disponible pour la commande~|\Arrow| dans le |code-after|. Néanmoins, il est
+toujours possible de déplacer une flèche avec |xoffset| (ou |xshift| de Tikz).
+\begin{Code}
+$\begin{WithArrows}[code-after=\Arrow\emph{[v]}{1-2}{2-2}{division by $2$}]
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \\
+.........
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}[code-after = \Arrow[v]{1-2}{2-2}{division par $2$} ]
+\varphi(x,y)=0
+  & \Leftrightarrow (x+2y)^2+(2x+4y)^2 = 0 \\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \\
+  2x+4y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow
+  \left\{\begin{WithArrows}[c]
+  x+2y & = 0 \\
+  x+2y & = 0 
+  \end{WithArrows}\right. \\
+  & \Leftrightarrow x+2y=0 
+\end{WithArrows}$
+
+ 
+\interitem 
+L'extension \pkg{witharrows} fournit une autre commande disponible dans le |code-after| :
+la commande \DefinitionCommande{MultiArrow}. Cette commande dessine un «rateau». La liste
+des rangées concernées par ce rateau est donnée dans le premier argument de la commande
+|\MultiArrow|. La syntaxe utilisée pour décrire cette liste est celle de la commande
+|\foreach| de \pkg{pgffor}.
+
+\begin{Code}
+$\begin{WithArrows}[tikz = rounded corners,
+                    code-after = {\emph{\MultiArrow{1,...,4}{text}}} ]
+A & = B \\
+  & = C \\
+  & = D \\
+  & = E \\
+  & = F
+\end{WithArrows}$
+\end{Code}
+
+
+$\begin{WithArrows}[tikz = rounded corners,
+                    code-after = {\MultiArrow{1,...,4}{text}}]
+A & = B \\
+  & = C \\
+  & = D \\
+  & = E \\
+  & = F
+\end{WithArrows}$
+
+\medskip
+Pour le moment, aucune option n'est disponible pour cette commande |\MultiArrow|.
+
+
+\medskip
+\section{Dessiner des flèches depuis l'extérieur des  environnements \{WithArrows\}}
+
+Si on désire dessiner des flèches depuis l'extérieur des environnements |{WithArrows}|, il
+est possible de le faire en utilisant les nœuds Tikz créés par ces environnements.
+
+Le nom d'un nœud Tikz créé par \pkg{witharrows} est préfixé par |wa-|. Ensuite, on trouve
+une liste de nombres qui indique quelle est la position de l'environnement dans l'arbre
+d'imbrication des environnements. À la fin, on a le suffixe |l| pour un nœud de gauche et
+le suffixe |r| pour un nœud de droite.
+
+\smallskip
+À titre d'illustration, nous donnons un exemple d'environnements |{WithArrows}| imbriqués
+et, pour chaque nœud de droite, le nom de ce nœud.\footnote{Il existe une option
+  \Definition{show-node-names} pour faire afficher les noms de ces nœuds.}
+
+
+\medskip
+\[\begin{WithArrows}[show-nodes,show-node-names]
+A & \vartriangleleft B+B+B+B+B+B+B+B+B+B+B+B+B \\
+& \vartriangleleft \left\{
+\begin{WithArrows}[c]
+C & \vartriangleleft D \\
+E & \vartriangleleft F 
+\end{WithArrows}
+\right. \\
+ & \vartriangleleft 
+\left\{
+\begin{WithArrows}[c]
+G & \vartriangleleft H+H+H+H+H+H+H \\
+I & \vartriangleleft 
+\left\{
+\begin{WithArrows}
+J &\vartriangleleft K \\
+L &\vartriangleleft M 
+\end{WithArrows}
+\right.
+\end{WithArrows}
+\right. \\
+ & \vartriangleleft 
+\left\{
+\begin{WithArrows}[c]
+N & \vartriangleleft O \\
+P & \vartriangleleft Q 
+\end{WithArrows}
+\right.
+\end{WithArrows}\]
+
+\medskip
+L'extension \pkg{witharrows} fournit quelques outils pour faciliter l'utilisation de ces nœuds :
+\begin{itemize}
+\item la commande \DefinitionCommande{WithArrowsLastEnv} donne le numéro du dernier
+environnement de niveau~$0$ (c'est-à-dire non imbriqué dans un autre environnement de
+\pkg{witharrows}) ; 
+
+\item un nom peut être donné à un environnement avec l'option \Definition{name} et, dans
+ce cas, les nœuds créés dans l'environnement auront des alias construits en utilisant ce
+nom ;
+
+\item le style Tikz \Definition{WithArrows/arrow} est le style utilisé par
+\pkg{witharrows} pour dessiner une flèche\footnote{Plus précisément, ce style est passé à Tikz via l'option «|every path|» avant le dessin de la
+  flèche (qui se fait avec l'instruction Tikz stockée dans |tikz-code|). Ce style est modifié par l'option
+  |tikz| de \pkg{witharrows} (avec une portée correspondant au groupe TeX courant).} ;
+
+\item le style Tikz \Definition{WithArrows/arrow/tips} est le style utilisé pour la pointe
+de flèche (ce style est lui-même chargé par le style |WithArrows/arrow|).
+\end{itemize}
+
+Par exemple, nous pouvons tracer une flèche allant de  \texttt{wa-\WithArrowsLastEnv-2-1-2-r.south}
+à \texttt{wa-\WithArrowsLastEnv-3-2-r.north} avec l'instruction Tikz suivante :
+
+\begin{Verbatim}
+\begin{tikzpicture}[remember picture,overlay]
+\draw [WithArrows/arrow] 
+      ([xshift=3mm]wa-\WithArrowsLastEnv-2-1-2-r.south)
+   to ([xshift=3mm]wa-\WithArrowsLastEnv-3-2-r.north) ;
+\end{tikzpicture}
+\end{Verbatim}
+
+\[\begin{WithArrows}
+A & \vartriangleleft B+B+B+B+B+B+B+B+B+B+B+B+B \\
+& \vartriangleleft \left\{
+\begin{WithArrows}[c]
+C & \vartriangleleft D \\
+E & \vartriangleleft F 
+\end{WithArrows}
+\right. \\
+ & \vartriangleleft 
+\left\{
+\begin{WithArrows}[c]
+G & \vartriangleleft H+H+H+H+H+H+H \\
+I & \vartriangleleft 
+\left\{
+\begin{WithArrows}
+J &\vartriangleleft K \\
+L &\vartriangleleft M 
+\end{WithArrows}
+\right.
+\end{WithArrows}
+\right. \\
+ & \vartriangleleft 
+\left\{
+\begin{WithArrows}[c]
+N & \vartriangleleft O \\
+P & \vartriangleleft Q 
+\end{WithArrows}
+\right.
+\end{WithArrows}
+%
+\begin{tikzpicture}[remember picture,overlay]
+\draw [WithArrows/arrow] 
+      ([xshift=3mm]wa-\WithArrowsLastEnv-2-1-2-r.south)
+   to ([xshift=3mm]wa-\WithArrowsLastEnv-3-2-r.north) ;
+\end{tikzpicture}
+\]
+
+\medskip
+Dans le cas présent, il aurait été plus facile d'utiliser une commande |\Arrow| dans le
+|code-after| mais c'était seulement un exemple pour illustrer comment les nœuds Tikz créés
+par \pkg{witharrows} peuvent être utilisés.
+
+\bigskip
+Dans l'exemple suivant, on crée des environnements |{WithArrows}| nommés «|premier|» et
+«|second|» et on dessine une flèche entre un nœud du premier et un nœud du second.
+
+\begin{Code}
+$\begin{WithArrows}[\emph{name=premier}]
+A & = B \\
+  & = C 
+\end{WithArrows}$
+
+\bigskip
+$\begin{WithArrows}[\emph{name=second}]
+A' & = B' \\
+   & = C'
+\end{WithArrows}$
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw [WithArrows/arrow] 
+      ([xshift=3mm]\emph{premier}-1-r.south)
+   to ([xshift=3mm]\emph{second}-1-r.north) ;
+\end{tikzpicture}
+\end{Code}
+
+
+\begin{center}
+$\begin{WithArrows}[name=premier]
+A & = B \\
+  & = C 
+\end{WithArrows}$
+
+\bigskip
+$\begin{WithArrows}[name=second]
+A' & = B' \\
+   & = C' 
+\end{WithArrows}$
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw [WithArrows/arrow] 
+      ([xshift=3mm]premier-1-r.south)
+   to ([xshift=3mm]second-1-r.north) ;
+\end{tikzpicture}
+
+\section{L'environnement \{DispWithArrows\}}
+\label{DispWithArrows}
+
+Comme dit précédemment, l'environnement |{WithArrows}| présente des similitudes avec
+l'environnement |{aligned}| de l'extension \pkg{amsmath} (et de |mathtools|). L'extension
+\pkg{witharrows} fournit aussi un environnement \Definition{\{DispWithArrows\}} qui est
+similaire aux environnements |{align}| et |{flalign}| de l'extension \pkg{amsmath}.
+
+\medskip
+L'environnement |{DispWithArrows}| doit être utilisé \emph{hors} du mode mathématique.
+Comme |{align}|, il doit être utilisé en mode horizontal.
+\begin{Code}
+\begin{\emph{DispWithArrows}}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{\emph{DispWithArrows}}
+\end{Code}
+\begin{DispWithArrows}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{DispWithArrows}
+
+\medskip
+Il est possible d'utiliser la commande \DefinitionCommande{notag} (ou
+\DefinitionCommande{nonumber}) pour supprimer un numéro d'équation.
+
+Il est possible d'utiliser la commande \DefinitionCommande{tag} pour placer une étiquette 
+spéciale (par ex. $\star$).
+
+Il est aussi possible de placer un label pour une ligne de l'environnement avec la
+commande \DefinitionCommande{label}.
+
+Ces commandes doivent être utilisées dans la dernière colonne de l'environnement.
+\begin{Code}
+\begin{DispWithArrows}
+A & = (a+1)^2 \Arrow{on développe} \emph{\notag} \\
+  & = a^2 + 2a + 1 \emph{\tag{$\star$} \label{mon-équation}}
+\end{DispWithArrows}
+\end{Code}
+\begin{DispWithArrows}
+A & = (a+1)^2 \Arrow{on développe} \notag \\
+  & = a^2 + 2a + 1 \tag{$\star$} \label{mon-équation}
+\end{DispWithArrows}
+Un lien vers l'équation \ref{mon-équation}.\footnote{Dans ce document, les 
+références ont été personnalisées avec |\labelformat{equation}{(#1)}|}
+
+
+\medskip
+Si \pkg{amsmath} (ou \pkg{mathtools}) est chargée, il est possible d'utiliser |\tag*| qui
+compose le label sans les parenthèses. Par exemple, il est possible de l'utiliser pour
+mettre le symbole |\square| de \pkg{amssymb}. Ce symbole est souvent utilisé pour marquer
+la fin d'une démonstration.\footnote{Signalons que l'environnement |{DispWithArrows}| est
+  compatible avec la commande |\qedhere| de \pkg{amsthm}.}
+\begin{Code}
+\begin{DispWithArrows}
+A & = (a+1)^2 \Arrow{on développe} \notag \\
+  & = a^2 + 2a + 1 \emph{\tag*{$\square$}}
+\end{DispWithArrows}
+\end{Code}
+\begin{DispWithArrows}
+A & = (a+1)^2 \Arrow{on développe} \notag \\
+  & = a^2 + 2a + 1 \tag*{$\square$} 
+\end{DispWithArrows}
+
+\medskip
+Il est également possible de supprimer tous les numéros d'équations avec l'option
+booléenne \Definition{notag} (ou \Definition{nonumber}), au niveau global ou bien au niveau d'un
+environnement. 
+
+Enfin, il existe aussi un environnement \Definition{\{DispWithArrows*\}} qui supprime tous
+les numéros.\footnote{Même dans ce cas, il est possible de mettre une étiquette
+  manuellement avec la commande |\tag|.}
+\begin{Code}
+\begin{\emph{DispWithArrows*}}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{\emph{DispWithArrows*}}
+\end{Code}
+\begin{DispWithArrows*}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{DispWithArrows*}
+
+\medskip
+En fait, il y a une autre option, nommée \Definition{tagged-lines}, qui peut être utilisée
+pour contrôler quelles lignes seront numérotées. La valeur de cette option est la liste
+des numéros de lignes (dans l'environnement) qui seront numérotées (par le système de
+numérotage des équations). Par exemple, avec l'option |tagged-lines = {first,3,last}|,
+seulement la première, la troisième et la dernière lignes seront numérotées. Il y a aussi
+une valeur spéciale |all| qui signifie que toutes les lignes doivent être numérotées.
+\begin{Code}
+\begin{DispWithArrows}[\emph{tagged-lines = last}]
+A & = A_1 \Arrow{première étape} \\
+  & = A_2 \Arrow{deuxième étape} \\
+  & = A_3 
+\end{DispWithArrows}
+\end{Code}
+\begin{DispWithArrows}[tagged-lines = last]
+A & = A_1 \Arrow{première étape} \\
+  & = A_2 \Arrow{deuxième étape} \\
+  & = A_3 
+\end{DispWithArrows}
+
+\bigskip
+Avec l'option \Definition{fleqn}, l'environnement est composé calé à gauche (d'une manière
+similaire à l'option |fleqn| des classes standard de LaTeX). Dans ce cas, la marge gauche
+peut être réglée avec l'option \Definition{mathindent} (qui a un nom inspiré du paramètre
+|\mathindent| de LaTeX). La valeur initiale pour cette option est de 25~pt. On peut y
+mettre comme valeur un ressort (= \emph{skip} = \emph{glue}).
+
+\begin{Code}
+\begin{DispWithArrows}[\emph{fleqn,mathindent = 1cm}]
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{DispWithArrows}
+\end{Code}
+\begin{DispWithArrows}[fleqn,mathindent = 1cm]
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\end{DispWithArrows}
+
+\medskip
+\emph{Remarque} : Par conception, l'option |fleqn| de \pkg{witharrows} est indépendante de
+l'option de classe |fleqn| de LaTeX. En effet, puisque les environnement de
+\pkg{witharrows} sont conçus pour être utilisés avec des flèches sur le côté droit,
+l'utilisateur peut souhaiter utiliser \pkg{witharrows} avec l'option |fleqn| (de manière à
+avoir plus de place sur la droite des équations pour les flèches) tout en continuant à
+centrer les équations classiques.
+
+\medskip
+Si l'option |leqno| est utilisée comme option de classe, les labels seront composés à
+gauche également pour les environnements |{DispWithArrows}|.\footnote{L'extension
+  \pkg{amsmath} a une option |leqno| mais \pkg{witharrows}, bien entendu, ne tient pas
+  compte de cette option : \pkg{witharrows} vérifie seulement l'option |leqno| de la
+  classe du document.}
+
+
+\medskip
+Si l'extension \pkg{amsmath} est chargée, il est possible d'utiliser la commande
+|\intertext| dans les environnements |{DispWithArrows}|. Il est également possible
+d'utiliser l'environnement |{subequations}|. Néanmoins, il existe pour les environnements
+|{DispWithArrows}| une option \Definition{subequations} qui demande d'encapsuler
+l'environnement dans un environnement |{subequations}|.
+
+
+\medskip
+Dans l'exemple suivant, l'option |subequations| est fixée via la commande
+|\WithArrowsOptions|. Chacun des environnements suivants sera alors sous-numéroté (dans la
+portée de la commande |WithArrowsOptions|).
+
+\begin{Code}
+\emph{\WithArrowsOptions{subequations}}
+Premier environnement.
+\begin{DispWithArrows}
+A & = B \\
+  & = C 
+\end{DispWithArrows}
+Deuxième environnement.
+\begin{DispWithArrows}
+D & = E \\
+  & = F 
+\end{DispWithArrows}
+\end{Code}
+%
+\begin{scope}
+\WithArrowsOptions{subequations}
+Premier environnement.
+\begin{DispWithArrows}
+A & = B \\
+  & = C 
+\end{DispWithArrows}
+Deuxième environnement.
+\begin{DispWithArrows}
+D & = E \\
+  & = F 
+\end{DispWithArrows}
+\end{scope}
+
+\bigskip
+S'il n'y a pas suffisamment de place pour faire appraraître le numéro d'équation à la fin
+de la ligne, il n'y a pas de positionnement automatique de ce numéro sur la ligne suivante
+(comme dans les environnements de l'extension \pkg{amsmath}) : il y aura surimpression de texte.
+Néanmoins, dans |{DispWithArrows}|, l'utilisateur peut utiliser la commande
+\DefinitionCommande{tagnextline} pour demander manuellement la composition du numéro sur
+la ligne suivante. 
+\begin{Code}
+\begin{DispWithArrows}[displaystyle]
+S_{2(p+1)}
+& =\sum_{k=1}^{2(p+1)} (-1)^k k^2 \\
+& \smash[b]{=\sum_{k=1}^{2p}(-1)^kk²
+   +(-1)^{2p+1}(2p+1)^2+(-1)^{2p+2}(2p+2)^2} \emph{\tagnextline} \\
+&= S_{2p}-(2p+1)^2+(2p+2)^2\\
+&=p(2p+1)-(2p+1)^2+(2p+2)^2\\
+&= 2p^2+5p+3 
+\end{DispWithArrows}
+\end{Code}
+\begin{center}
+\color{gray}\vrule%
+\begin{minipage}{275pt}\color{black}
+\begin{DispWithArrows}[displaystyle]
+S_{2(p+1)}
+& =\sum_{k=1}^{2(p+1)} (-1)^k k^2 \\
+& \smash[b]{=\sum_{k=1}^{2p}(-1)^kk^2+(-1)^{2p+1}(2p+1)^2+(-1)^{2p+2}(2p+2)^2}
+\tagnextline \\ 
+&= S_{2p}-(2p+1)^2+(2p+2)^2\\
+&= 2p^2+p-4p^2-4p-1+4p^2+8p+4\\
+&= 2p^2+5p+3 
+\end{DispWithArrows}
+\end{minipage}%
+\color{gray}\vrule
+\end{center}
+
+
+
+\bigskip
+Les environnements |{DispWithArrows}| et |{DispWithArrows*}| fournissent également une
+option \Definition{wrap-lines}. Avec cette option, les lignes de l'étiquette sont
+automatiquement coupées à droite.
+
+\begin{Code}
+\begin{DispWithArrows*}[displaystyle,\emph{wrap-lines}]
+S_n
+& = \frac{1}{n} \Re \left(\sum_{k=0}^{n-1}\bigl(e^{i\frac{\pi}{2n}}\bigr)^k\right)
+\Arrow{somme des termes d'une suite géométrique de raison $e^{i\frac{2\pi}{n}}$}\\
+& = \frac{1}{n} \Re \left( \frac{1-\bigl(e^{i\frac{\pi}{2n}}\bigr)^n}
+                            {1-e^{i\frac{\pi}{2n}}}\right)
+\Arrow{cette ligne de texte a été coupée automatiquement} \\
+& = \frac{1}{n} \Re \left(\frac{1-i}{1-e^{i\frac{\pi}{2n}}}\right) 
+\end{DispWithArrows*}
+\end{Code}
+\begin{DispWithArrows*}[displaystyle,wrap-lines]
+S_n
+& = \frac{1}{n} \Re \left(\sum_{k=0}^{n-1}\bigl(e^{i\frac{\pi}{2n}}\bigr)^k\right)
+\Arrow{somme des termes d'une suite géométrique de raison $e^{i\frac{2\pi}{n}}$}\\
+& = \frac{1}{n} \Re \left(
+\frac{1-\bigl(e^{i\frac{\pi}{2n}}\bigr)^n}{1-e^{i\frac{\pi}{2n}}} \right) 
+\Arrow{cette ligne de texte a été coupée automatiquement} \\
+& = \frac{1}{n} \Re \left(\frac{1-i}{1-e^{i\frac{\pi}{2n}}}\right) 
+\end{DispWithArrows*}
+
+\bigskip
+L'option |wrap-lines| ne s'applique pas aux environnements |{WithArrows}|
+imbriqués dans un environnement |{DispWithArrows}| ou |{DispWithArrows*}|. Néanmoins,
+elle s'applique aux instructions |\Arrow| et |\MultiArrow| du |code-after|
+de l'environnement englobant.
+
+\vspace{1cm}
+Nous avons dit que les environnements |{DispWithArrows}| et |{DispWithArrows*}| devaient
+être utilisés en mode horizontal et non en mode vertical. Il y a néanmoins une exception.
+Ces environnements peuvent être utilisés directement après un |\item| d'une liste LaTeX.
+Dans ce cas, aucun espace vertical n'est ajouté avant l'environnement.\footnote{Il est
+  possible de désactiver cette fonctionnalité avec l'option
+  |standard-behaviour-with-items|.}
+
+\medskip
+Voici un exemple où, avec |{DispWithArrows}|, on peut insérer l'équation dans un
+environnement |{enumerate}| tout en utilisant l'option |wrap-lines|.
+
+\smallskip
+\begingroup
+\small
+\begin{Code}
+\emph{\begin{enumerate}
+\item }
+\begin{DispWithArrows}%
+  [displaystyle, wrap-lines, tagged-lines = last, fleqn, mathindent = 0 pt]
+S_n
+& = \frac{1}{n} \Re \left(\sum_{k=0}^{n-1}\bigl(e^{i\frac{\pi}{2n}}\bigr)^k\right)
+\Arrow{on utilise la formule pour la somme de termes d'une suite géométrique de raison
+$e^{i\frac{2\pi}n}$} \\ 
+& = \frac{1}{n} \Re \left( \frac{1-\bigl(e^{i\frac{\pi}{2n}}\bigr)^n}
+                            {1-e^{i\frac{\pi}{2n}}}\right)
+\Arrow{$\bigl(e^{i\frac{\pi}{2n}}\bigr)^n = e^{i\frac{\pi}{2}}=i$} \\
+& = \frac{1}{n} \Re \left(\frac{1-i}{1-e^{i\frac{\pi}{2n}}}\right) 
+\end{DispWithArrows}
+\emph{\end{enumerate}}
+\end{Code}
+\endgroup
+\begin{enumerate}
+\item 
+\begin{DispWithArrows}%
+   [displaystyle, wrap-lines, tagged-lines = last, fleqn, mathindent = 0 pt]
+S_n
+& = \frac{1}{n} \Re \left(\sum_{k=0}^{n-1}\bigl(e^{i\frac{\pi}{2n}}\bigr)^k\right)
+\Arrow{on utilise la formule pour la somme de termes d'une suite géométrique de raison 
+$e^{i\frac{2\pi}n}$}\\ 
+& = \frac{1}{n} \Re \left(
+\frac{1-\bigl(e^{i\frac{\pi}{2n}}\bigr)^n}{1-e^{i\frac{\pi}{2n}}} \right) 
+\Arrow{$\bigl(e^{i\frac{\pi}{2n}}\bigr)^n = e^{i\frac{\pi}{2}}=i$} \\
+& = \frac{1}{n} \Re \left(\frac{1-i}{1-e^{i\frac{\pi}{2n}}}\right) 
+\end{DispWithArrows}
+\end{enumerate}
+
+\vspace{1cm} 
+L'environnement |{DispWithArrows}| est similaire à l'environnement |{align}| de
+l'extension \pkg{amsmath}. Néanmoins, |{DispWithArrows}| n'est pas construit en utilisant
+|{align}| (en fait, il est possible d'utiliser \pkg{witharrows} sans \pkg{amsmath}).
+
+Il y a quelques différences entre |{DispWithArrows}| et |{align}|. 
+\begin{itemize}
+\item L'environnement |{DispWithArrows}| ne peut pas être inséré dans un environment
+|{gather}| de l'extension \pkg{amsmath}.
+\item Un environment |{DispWithArrows}| est toujours insécable (même avec
+|\allowdisplaybreaks| de l'extension \pkg{amsmath}).
+\item Les commandes |\label|, |\tag|, |\notag| et |\nonumber| ne sont autorisées
+que dans la dernière colonne.
+\item Après un |\item| d'une liste LaTeX, aucun espace vertical n'est ajouté (cela peut être 
+modifié avec l'option |standard-behaviour-with-items|).
+\item 
+\begin{bfseries}
+Enfin, par défaut, les éléments d'un environnement |\{DispWithArrows\}|
+sont composés en |textstyle| et non en |displaystyle| (il est possible de modifier
+ce point avec l'option |displaystyle|). 
+\end{bfseries}
+\end{itemize}
+
+\bigskip 
+En ce qui concerne les références, l'extension \pkg{witharrows} est compatible avec les
+extensions \pkg{autonum}, \pkg{cleveref}, \pkg{fancyref}, 
+\pkg{hyperref}, \pkg{listlbls}, \pkg{prettyref}, \pkg{refcheck},
+\pkg{refstyle}, \pkg{showlabels}, \pkg{smartref}, \pkg{typedref} et
+\pkg{varioref} et avec les options |showonlyrefs| et |showmanualtags| de
+\pkg{mathtools}.\footnote{Rappelons que \pkg{varioref}, \pkg{hyperref},
+\pkg{cleveref} et \pkg{autonum} doivent être chargés dans cet ordre. L'extension
+\pkg{witharrows} peut être chargée n'importe où.}
+
+Elle n'est pas compatible avec \pkg{showkeys} (certains labels ne sont pas affichés).
+
+
+
+
+\subsection*{L'option <...> de DispWithArrows}
+
+L'environnement |{DispWithArrows}| propose une option \Definition{left-brace}. Si cette
+option est présente, son contenu est composé à gauche, suivi d'une accolade (d'où le nom)
+puis du corps de l'environnement.\footnote{L'option |left-brace| peut aussi être utilisée
+  sans valeur: dans ce cas, seule l'accolade est tracée.}
+
+Pour la lisibilité, cette option |left-brace| est aussi disponible avec une syntaxe
+spéciale : on peut la rentrer en la mettant entre chevrons (|<| et |>|) juste après le
+|{DispWithArrows}| (et donc avant les éventuels arguments optionnels entre crochets).
+
+\bigskip
+On peut alors faire des constructions avec distinctions de cas, comme dans l'exemple
+suivant.\footnote{L'environnement |{cases}| de l'extension \pkg{amsmath} permet de réaliser de
+  telles distinctions de cas mais on ne peut pas utiliser la numérotation automatique des
+  équations. L'environnement |{numcases}| de l'extension \pkg{cases} (de Donald Arseneau)
+  permet d'utiliser ces numéros d'équations, mais, bien entendu, il n'y a pas de
+  composition de flèches.}
+
+
+
+\medskip
+
+\begin{Code}
+\begin{DispWithArrows}\emph{< \binom{n}{p} = >}[format = ll,fleqn,displaystyle]
+0 & \quad \text{si } p > n  
+\Arrow{ce cas peut en fait rentrer\\ dans le suivant} \\
+\frac{n(n-1)\cdots(n-p+1)}{p!} & \quad \text{si } 0 \leq p \leq n  \\
+0 & \quad \text{si } p < 0 
+\end{DispWithArrows}
+\end{Code}
+%
+\begin{DispWithArrows}< \binom{n}{p} = >[format = ll,fleqn,displaystyle]
+0 & \quad \text{si } p > n  
+\Arrow{ce cas peut en fait rentrer\\ dans le suivant} \\
+\frac{n(n-1)\cdots(n-p+1)}{p!} & \quad \text{si } 0 \leq p \leq n  \\
+0 & \quad \text{si } p < 0 
+\end{DispWithArrows}
+
+\interitem
+Dans l'exemple suivant, on sous-numérote les équations d'un système avec l'option
+|subequations| (disponible quand l'|amsmath| est chargé).
+
+\begin{Code}
+\begin{DispWithArrows}\emph{< \label{système} \ref*{système} \Leftrightarrow >}%
+    [format = l, subequations]
+x+y+z = -3 \Arrow[tikz=-,jump=2]{3 equations} \\
+xy+xz+yz=-2 \\
+xyz = -15 \label{dernière-équation}
+\end{DispWithArrows}
+\end{Code}
+%
+\begin{DispWithArrows}< \label{système} \ref*{système} \Leftrightarrow >%
+    [format = l, subequations]
+x+y+z = -3 \Arrow[tikz=-,jump=2]{3 équations} \\
+xy+xz+yz=-2 \\
+xyz = -15 \label{dernière-équation} 
+\end{DispWithArrows}
+
+\bigskip
+Le système complet est l'équation \ref{système} (cette référence a été obtenue avec
+|\ref{système}|) et la dernière équation est l'équation \ref{dernière-équation} (référence
+obtenue avec |\ref{dernière-équation}|). Notons que |\ref*|, utilisé dans le code
+ci-dessus, est une variante de |ref| qui compose une référence sans créer de lien
+hypertexte (même quand \pkg{hyperref} est chargé).
+
+\bigskip
+On peut souhaiter remplacer l'accolade gauche par un autre délimiteur extensible (gauche).
+On peut le faire avec l'option \Definition{replace-left-brace-by}. Par exemple,
+«|replace-left-brace-by = [\enskip|» va composer avec un crochet et ajouter aussi un
+espace de 0.5~em après le crochet.
+
+\bigskip
+\section{Fonctionnalités avancées}
+
+\subsection{Utilisation avec Beamer}
+
+\colorbox{yellow!50}{\textbf{Nouveau 2.9}}\par\nobreak
+
+\smallskip
+Si l'extension \pkg{witharrows} est utilisée avec Beamer, la commande |\Arrow| accepte un
+argument entre chevrons (après l'argument optionnel entre crochets) pour indiquer les
+«\emph{overlays}» concernés (en interne, \pkg{witharrows} utilise simplement la commande
+|\only| de Beamer).
+
+\begin{Code}
+\Arrow[jump=2]\emph{<3->}{Exemple}
+\end{Code}
+
+\subsection{Utilisation avec plain-TeX}
+\label{plain-TeX}
+
+L'extension \pkg{witharrows} peut être utilisée avec plain-TeX. Pour cela, on doit charger
+l'extension avec |\input|:
+%
+\begin{Verbatim}
+\input{witharrows.tex}
+\end{Verbatim}
+
+\medskip
+En plain-TeX, il n'y a pas d'environnements comme dans LaTeX.
+
+Au lieu de |\begin{WithArrows}| et |\end{WithArrows}| comme en LaTeX, on doit utiliser un
+pseudo-environnement délimité par |\Witharrows| et |\endWithArrows| (de même pour
+|{DispWithArrows}|). 
+%
+\begin{Verbatim}
+$\WithArrows
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1 
+\endWithArrows$
+\end{Verbatim}
+
+\medskip
+La version pour plain-TeX de \pkg{witharrows} ne propose pas toutes les fonctionnalités
+proposées pour la version LaTeX. En particulier, les fonctionnalités concernant les
+numéros d'équations ne sont pas disponibles (puisqu'elles reposent sur le système de
+numérotation de LaTeX).
+
+\subsection{L'option tikz-code : comment changer la forme des flèches}
+
+\label{tikz-code}
+
+L'option \Definition{tikz-code} permet à l'utilisateur de changer la forme des
+flèches.\footnote{Si l'option |wrap-lines| est utilisée dans un environnement
+  |{DispWithArrows}| ou |{DispWithArrows*}|, l'option |tikz-code| n'aura pas d'effet sur
+  les flèches de cet environnement mais uniquement sur les flèches des environnements
+  |{WithArrows}| imbriqués.}
+
+\smallskip
+Par exemple, les options «|up|» et «|down|» décrites précédemment (cf.
+p.~\pageref{up-and-down}) sont programmées en interne avec |tikz-code|.
+
+\smallskip
+La valeur de cette option doit être une instruction de tracé Tikz valide (avec le
+point-virgule final) où les trois marqueurs |#1|, |#2| et |#3| représentent le point de
+départ, le point d'arrivée et l'étiquette de la flèche.
+
+
+\bigskip
+La valeur initiale de |tikz-code| est la suivante :
+
+\smallskip
+\qquad |\draw (#1) to node {#3} (#2) ;|
+
+
+\bigskip
+Dans l'exemple suivant, nous remplaçons le chemin par défaut par un chemin avec trois
+segments (et un nœud recouvrant le deuxième segment).
+\begin{Code}
+\begin{WithArrows}[format=c,ygap=5pt,interline=4mm,
+      \emph{tikz-code = {\draw[rounded corners]
+                        (#1) -- ([xshift=5mm]#1)
+                        -- node[circle,
+                                draw,
+                                auto = false,
+                                fill = gray!50,
+                                inner sep = 1pt] {\tiny #3} 
+                        ([xshift=5mm]#2)
+                        -- (#2) ; }}]
+3 (2x+4) = 6   \Arrow{$\div 3$} \\
+2x+4 = 2       \Arrow{$-4$}     \\
+2x = -2        \Arrow{$\div 2$} \\
+ x = -1
+\end{WithArrows}
+\end{Code}
+
+
+\[\begin{WithArrows}[format=c,
+      ygap=5pt,
+      interline=4mm,
+      tikz-code = {\draw[rounded corners]
+                        (#1) 
+                        --
+                        ([xshift=5mm]#1)
+                        -- node[circle,
+                                draw,
+                                auto=false,
+                                fill=gray!50,
+                                inner sep = 1pt] {\tiny #3} 
+                        ([xshift=5mm]#2)
+                        --
+                        (#2) ; }]
+3 (2x+4) = 6   \Arrow{$\div 3$} \\
+2x+4 = 2       \Arrow{$-4$}     \\
+2x = -2        \Arrow{$\div 2$} \\
+ x = -1
+\end{WithArrows}\]
+
+\bigskip
+L'environnement |{DispWithArrows}| et sa version étoilée |{DispWithArrows*}| fournissent
+une commande \DefinitionCommande{WithArrowsRightX} qui peut être utilisée dans l'option
+|tikz-code|. Cette commande fournit l'abscisse de la marge droite de la boîte de
+composition courante (en prenant en compte les éventuels numéros des équations). Pour un
+exemple d'utilisation, voir p.~\pageref{example-WithArrowsRightX}.
+
+
+\bigskip
+\subsection{La commande \textbackslash WithArrowsNewStyle}
+
+L'extension \pkg{witharrows} fournit une commande \DefinitionCommande{WithArrowsNewStyle}
+pour définir des styles d'une manière similaire aux «styles» de Tikz.
+
+\smallskip
+La commande |\WithArrowsNewStyle| prend deux arguments obligatoires. Le premier est le nom
+du style et le second est une liste de couples clé-valeur. La portée de la definition
+ainsi faite par |\WithArrowsNewStyle| est le groupe TeX courant.\footnote{On rappelle que,
+  en particulier, tout environnement LaTeX est un groupe TeX.}
+
+\smallskip
+Le style peut être utilisé comme une clé au niveau du document (avec
+|\WithArrowsOptions|), au niveau d'un environnement (via les arguments optionnels) ou bien
+encore dans une autre commande |\WithArrowsNewStyle|.
+
+\smallskip
+Pour un exemple d'utilisation, voir p.~\pageref{example-WithArrowsRightX}.
+
+
+\bigskip
+Il n'existe pas de style pour les flèches individuelles. Néanmoins, il reste possible de
+définir de nouvelles commandes s'appuyant sur la commande |\Arrow|. Par exemple :
+
+\begin{Verbatim}
+\newcommand{\ThickArrow}{\Arrow[tikz=thick]}
+\end{Verbatim}
+
+Cette nouvelle commande |\ThickArrow| garde la possibilité\footnote{Dans la version de
+  \pkg{witharrows} pour LaTeX mais pas dans la version pour plain-TeX.} d'accepter des
+clés entre crochets. On peut écrire |\ThickArrow[jump=2]| car en fait,
+|\Arrow[tikz=thick][jump=2]| est une syntaxe autorisée pour la commande |\Arrow| (on peut
+mettre un nombre arbitraire d'arguments optionnels entre crochets après la commande
+|\Arrow|).
+
+\bigskip
+\subsection{La clé right-overlap}
+
+La clé \Definition{right-overlap} est une clé booléenne dont la valeur initiale est
+|true|. Elle concerne uniquement les environnements |{WithArrows}|.
+
+Quand la clé |right-overlap| est active, les flèches (et leurs étiquettes) sont tracées en
+débordement et n'entrent donc pas dans le calcul de la boîte TeX contenant l'environnement
+|{WithArrows}|.
+
+Quand la clé |right-overlap| est mise à |false| (dans |\WithArrowsOptions| ou bien dans un
+environnement |{WithArrows}| individuel) le débord vers la droite est pris en compte dans
+le calcul des dimensions de la boîte englobante.
+
+\begin{Code}
+$\left\{\begin{WithArrows}[c,format = rCrCl,\emph{right-overlap=false}]
+2x & + & 3y & = & 5 \Arrow{on ajoute $L_1$ à $L_2$}\\
+-2x & - & 5y & = & 2 
+\end{WithArrows}\right.$\quad
+$\left\{\begin{WithArrows}[c,format = rCrCl]
+2x & + & 3y & = & 5 \\
+   & - & 2y & = & 7 
+\end{WithArrows}\right.$
+\end{Code}
+
+\medskip
+$\left\{\begin{WithArrows}[c,format = rCrCl,right-overlap=false]
+2x & + & 3y & = & 5 \Arrow{on ajoute $L_1$ à $L_2$}\\
+-2x & - & 5y & = & 2 
+\end{WithArrows}\right.$\quad
+$\left\{\begin{WithArrows}[c,format = rCrCl]
+2x & + & 3y & = & 5 \\
+   & - & 2y & = & 7 
+\end{WithArrows}\right.$
+
+\bigskip
+Le réglage |right-overlap = false| peut aussi être utile en conjonction avec la classe
+|standalone|.
+
+\bigskip
+\subsection{Positionnement vertical des flèches}
+
+Il y a quatre paramètres pour ajuster finement la position verticale des flèches :
+\Definition{ygap}, \Definition{ystart}, \Definition{start-adjust} et
+\Definition{end-adjust}. 
+
+\medskip
+Nous expliquons d'abord le comportement quand les paramètres |start-adjust| et
+|end-adjust| sont égaux à zéro:
+\begin{itemize}
+\item l'option |ystart| représente la distance verticale entre la ligne de base du
+texte et le début de la flèche (valeur initiale : $0.4$~ex);
+\item l'option |ygap| représente la distance verticale entre deux flèches consécutives
+(valeur initiale : $0.4$~ex).
+\end{itemize}
+
+
+\bigskip
+$\begin{WithArrows}[interline=1mm, adjust = 0pt]
+ (\cos x + \sin x)^2 & = \cos^2 x +2 \cos x \sin x + \sin^2 x\Arrow{}\tikz[remember picture] \coordinate (A) ; \\
+   & = \cos^2x + \sin^2x + 2\sin x\cos x \Arrow{} \\
+   & = 1 + \sin(2x) 
+\end{WithArrows}$
+
+\begin{tikzpicture}[remember picture,overlay,blue]
+\draw (wa-\WithArrowsLastEnv-1-r.south) to ++(1,0) coordinate (B) to ++(0.1,0) ;
+\draw (A) to ++(1,0) coordinate (C) to ++(0.1,0) ;
+\draw (B) -- (C) ;
+\draw[<-] (B) to ++(0,0.2) ;
+\draw[<-] (C) to ++(0,-0.2) ;
+\path (C) node[right=1mm] {\texttt{ystart}} ;
+\draw (wa-\WithArrowsLastEnv-2-r.north) to ++(3,0) coordinate (E) to ++(0.1,0);
+\draw (wa-\WithArrowsLastEnv-2-r.south) to ++(3,0) coordinate (F) to ++(0.1,0);
+\draw (E) -- (F) ;
+\draw[<-] (E) to ++(0,0.2) ;
+\draw[<-] (F) to ++(0,-0.2) ;
+\path (F) node[right=1mm] {\texttt{ygap}} ;
+\end{tikzpicture}
+
+\interitem 
+Néanmoins, pour des raisons esthétiques, quand il est possible, \pkg{witharrows} commence
+la flèche un peu plus haut (d'une quantité |start-adjust|) et termine la flèche un peu plus
+bas (par une quantité |end-adjust|). Par défaut, ces deux paramètres |start-adjust|
+est |end-adjust| sont égaux à $0.4$~ex.
+
+\bigskip
+Voici par exemple le comportement sans le mécanisme de |start-adjust| et
+|end-adjust| :
+\begin{Code}
+$\begin{WithArrows}\emph{[start-adjust=0pt, end-adjust=0pt]}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1  
+\end{WithArrows}$
+\end{Code}
+
+$\begin{WithArrows}[start-adjust=0pt, end-adjust=0pt]
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1  
+\end{WithArrows}$
+
+
+\bigskip
+Voici le comportement par défaut (les paramètres |start-adjust| et |end-ajust| sont
+utilisés avec la valeur initiale $0.4$~ex). La flèche est plus longue et le résultat est
+plus esthétique.
+
+\medskip
+$\begin{WithArrows}
+A & = (a+1)^2 \Arrow{on développe} \\
+  & = a^2 + 2a + 1  
+\end{WithArrows}$
+
+
+\bigskip
+Il est possible d'utiliser l'option \Definition{adjust} qui fixe à la fois |start-adjust|
+et |end-ajust|.
+
+\bigskip
+Une flèche de |jump| égal à~$1$ a une longueur\footnote{On appelle \emph{longueur} de la
+  flèche la différence entre l'ordonnée du point de départ et l'ordonnée du point
+  d'arrivée.} maximale égale au paramètre \Definition{max-length-of-arrow}. La valeur
+initiale de ce paramètre est égale à~$2$~cm.
+
+Dans l'exemple suivant, la valeur de |max-length-of-arrow| a été fixée à $1.5$~cm.
+\begin{Code}
+\[\begin{WithArrows}[\emph{max-length-of-arrow = 1.5cm}]
+A 
+& = 
+\begin{vmatrix}
+1 & a & a^2 & a^3 & a^4 \\
+1 & b & b^2 & b^3 & b^4 \\
+1 & c & c^2 & c^3 & c^4 \\
+1 & d & d^2 & d^3 & d^4 \\
+1 & e & e^2 & e^3 & e^4 
+\end{vmatrix}
+\Arrow{
+$L_2 \gets L_2-L_1$ \\ 
+$L_3 \gets L_3-L_1$ \\ 
+$L_4 \gets L_4-L_1$ \\
+$L_5 \gets L_5-L_1$ % ne pas mettre de \\ ici
+} \\
+& = 
+\begin{vmatrix}
+1 & a & a^2 & a^3 & a^4 \\
+0 & b-a & b^2-a^2 & b^3-a^3 & b^4-a^4 \\
+0 & c-a & c^2-a^2 & c^3-a^3 & c^4-a^4 \\
+0 & d-a & d^2-a^2 & d^3-a^3 & d^4-a^4 \\
+0 & e-a & e^2-a^2 & e^3-a^3 & e^4-a^4 
+\end{vmatrix}
+\end{WithArrows}\]
+\end{Code}
+
+
+\bigskip
+\[\begin{WithArrows}[max-length-of-arrow = 1.5cm]
+A 
+& = 
+\begin{vmatrix}
+1 & a & a^2 & a^3 & a^4 \\
+1 & b & b^2 & b^3 & b^4 \\
+1 & c & c^2 & c^3 & c^4 \\
+1 & d & d^2 & d^3 & d^4 \\
+1 & e & e^2 & e^3 & e^4 
+\end{vmatrix}
+\Arrow{
+$L_2 \gets L_2-L_1$ \\ 
+$L_3 \gets L_3-L_1$ \\ 
+$L_4 \gets L_4-L_1$ \\
+$L_5 \gets L_5-L_1$ 
+} \\
+& = 
+\begin{vmatrix}
+1 & a & a^2 & a^3 & a^4 \\
+0 & b-a & b^2-a^2 & b^3-a^3 & b^4-a^4 \\
+0 & c-a & c^2-a^2 & c^3-a^3 & c^4-a^4 \\
+0 & d-a & d^2-a^2 & d^3-a^3 & d^4-a^4 \\
+0 & e-a & e^2-a^2 & e^3-a^3 & e^4-a^4 
+\end{vmatrix}
+\end{WithArrows}\]
+
+
+\bigskip
+\subsection{Notes de pied de page dans les environnements de witharrows}
+
+Si vous voulez mettre des notes de pied de page dans un environnement de \pkg{witharrows},
+vous pouvez utiliser une paire |\footnotemark|--|\footnotetext|.
+
+\smallskip
+Il est aussi possible d'extraire les notes de pieds de page avec l'extension
+\pkg{footnote} ou bien l'extension \pkg{footnotehyper}.
+
+\smallskip
+Si \pkg{witharrows} est chargée avec l'option \Definition{footnote} (avec
+|\usepackage[footnote]{witharrows}| ou avec |\PassOptionsToPackage|), l'extension
+\pkg{footnote} est chargée (si elle ne l'est pas déjà) et elle est utilisée pour extraire
+les notes de pied de page.
+
+\smallskip
+Si \pkg{witharrows} est chargée avec l'option \Definition{footnotehyper}, l'extension
+\pkg{footnotehyper} est chargée (si elle ne l'est pas déjà) et elle est utilisée pour
+extraire les notes de pied de page.
+
+\smallskip
+Attention : Les extensions \pkg{footnote} et \pkg{footnotehyper} sont incompatibles.
+L'extension \pkg{footnotehyper} est le successeur de l'extension \pkg{footnote} et devrait
+être utilisée préférentiellement. L'extension \pkg{footnote} a quelques défauts ; en
+particulier, elle doit être chargée après l'extension \pkg{xcolor} et elle n'est pas
+parfaitement compatible avec \pkg{hyperref}.
+
+\medskip
+Dans ce document, l'extension \pkg{witharrows} a été chargée avec l'option |footnotehyper|
+et nous donnons un exemple avec une note de pied de page dans l'étiquette d'une flèche :
+
+
+\smallskip
+$\begin{WithArrows}
+A & = (a+b)^2 
+\Arrow{on développe\,\footnote{Une note de pied de page.}} \\
+   & = a^2+b^2+2ab
+\end{WithArrows}$
+
+\bigskip
+\subsection{L'option no-arrows}
+
+L'option \Definition{no-arrows} est une facilité donnée à l'utilisateur. Avec cette
+option, les flèches ne sont pas tracées. Néanmoins, une analyse des flèches est effectuée
+et certaines erreurs sont détectées (par exemple, si une flèche arrive après la dernière
+ligne de l'environnement).
+
+
+\bigskip
+\subsection{Note pour les utilisateurs de AUCTeX}
+
+Dans un éditeur de texte paramétré pour éditer du LaTeX, les environnements
+|{DispWithArrows}| et |{DispWithArrows*}| devraient être formatés comme l'environnement
+|{equation}| de LaTeX c'est-à-dire avec un formatage adapté au mode mathématique.
+
+Dans l'éditeur Emacs avec AUCTeX, cela se fait en ajoutant les chaînes |"DispWithArrows"|
+et |"DispWithArrows*"| à la variable |font-latex-math-environments|. On peut le faire en
+utilisant l'interface de personnalisation de Emacs :
+
+|M-x customize| > |[Text]| > |[TeX]| > |[Font LaTeX]|
+
+\bigskip
+\subsection{Note pour les développeurs}
+
+Si vous définissez un environnement s'appuyant sur un environnement de 
+\pkg{witharrows}, nous recommandons de faire appel à l'environnement de \pkg{witharrows} avec 
+|\WithArrows|--|\endWithArrows| ou |\DispWithArrows|--|\endDispWithArrows| (et
+non |\begin{WithArrows}|--|\end{WithArrows}|, etc.).
+
+\smallskip
+En faisant ainsi, les messages d'erreur affichés par \pkg{witharrows} mentionneront (le
+cas échéant) le nom de votre environnement et seront plus faciles à comprendre pour
+l'utilisateur final.
+
+\smallskip
+Par exemple, vous pouvez définir un environnement |{DWA}| qui va être un alias de
+|{DispWithArrows}|:
+\begin{BVerbatim}
+\NewDocumentEnvironment {DWA} {} {\DispWithArrows}{\endDispWithArrows}
+\end{BVerbatim}
+
+\smallskip
+Si vous utilisez cet environnement |{DWA}| en mode mathématique, vous aurez le message
+d'erreur suivant :
+
+\begin{BVerbatim}
+The environment {DWA} should be used only outside math mode.
+\end{BVerbatim}
+
+\interitem
+Une autre exemple est donné en interne par la définition de l'environnement |{DispWithArrows*}|
+dans l'extension \pkg{witharrows} avec le code suivant:
+\begin{Verbatim}
+\NewDocumentEnvironment {DispWithArrows*} {}
+    {\WithArrowsOptions{notag}%
+     \DispWithArrows}
+    {\endDispWithArrows}
+\end{Verbatim}
+
+
+
+\section{Exemples}
+
+\subsection{\textbackslash MoveEqLeft}
+
+Il est possible d'utiliser |\MoveEqLeft| de \pkg{mathtools}. Dans ce cas, on doit se
+souvenir que la commande |\MoveEqLeft| a aussi la valeur d'une esperluette (|&|). Il faut
+en tenir compte pour le positionnement d'une éventuelle commande |\Arrow|.
+
+\begingroup
+\small
+\begin{Code}
+$\begin{WithArrows}[interline=0.5ex]
+\emph{\MoveEqLeft} \arccos(x) = \arcsin \frac{4}{5} + \arcsin \frac{5}{13} 
+\Arrow{parce que les deux sont dans $[-\frac{\pi}{2},\frac{\pi}{2}]$} \\
+& \Leftrightarrow x = \sin\left(\arcsin\frac{4}{5} + \arcsin\frac{5}{13}\right) \\
+& \Leftrightarrow x = \frac{4}{5}\cos\arcsin\frac{5}{13}+\frac{5}{13}\cos\arcsin\frac{4}{5} 
+\Arrow{$\forall x \in [-1,1], \cos(\arcsin x) = \sqrt{1-x^2}$} \\
+& \Leftrightarrow x = \frac{4}{5}\sqrt{1-\bigl(\frac{5}{13}\bigr)^2}
++ \frac{5}{13}\sqrt{1-\bigl(\frac{4}{5}\bigr)^2} 
+\end{WithArrows}$
+\end{Code}
+\endgroup
+
+\medskip
+$\begin{WithArrows}[interline=0.5ex]
+\MoveEqLeft \arccos(x) = \arcsin \frac{4}{5} + \arcsin \frac{5}{13} 
+\Arrow{parce que les deux sont dans \([-\frac{\pi}{2},\frac{\pi}{2}]\)} \\
+& \Leftrightarrow x = \sin\left(\arcsin\frac{4}{5} + \arcsin\frac{5}{13}\right) \\
+& \Leftrightarrow x = \frac{4}{5}\cos\arcsin\frac{5}{13} + \frac{5}{13} \cos\arcsin\frac{4}{5} 
+\Arrow{\(\forall x \in [-1,1], \cos(\arcsin x) = \sqrt{1-x^2}\)} \\
+& \Leftrightarrow x = \frac{4}{5}\sqrt{1-\bigl(\frac{5}{13}\bigr)^2}
++ \frac{5}{13}\sqrt{1-\bigl(\frac{4}{5}\bigr)^2} 
+\end{WithArrows}$
+
+
+\bigskip
+\subsection{Une commande \textbackslash DoubleArrow}
+
+En utilisant l'option |o| (cf. p. \pageref{option-o}) disponible au niveau local, on peut
+facilement écrire une commande |\DoubleArrow| pour deux flèches allant en sens inverse
+l'une de l'autre.
+
+\bigskip
+\begin{Code}
+\NewDocumentCommand \DoubleArrow { O {} m m }
+  {
+    \Arrow[tikz=->,#1]{#2}%
+    \Arrow[o,tikz=<-,#1]{#3}
+  }
+\end{Code}
+
+
+\NewDocumentCommand \DoubleArrow { O {} m m }
+  {
+    \Arrow[tikz=->,#1]{#2}%
+    \Arrow[o,tikz=<-,#1]{#3}
+  }
+
+
+\bigskip
+Exemple d'utilisation :
+
+\begin{Code}
+$\begin{WithArrows}[groups]
+A & = (a+b)^2 \DoubleArrow[tikz={font=\bfseries}]{développement}{factorisation} \\
+  & = a^2 + 2ab+b^2 
+\end{WithArrows}$
+\end{Code} 
+
+\bigskip
+$\begin{WithArrows}[groups]
+A & = (a+b)^2 \DoubleArrow[tikz={font=\bfseries}]{développement}{factorisation} \\
+  & = a^2 + 2ab+b^2 
+\end{WithArrows}$
+
+
+
+
+\bigskip
+\subsection{Modifier la forme des nœuds}
+
+Il est possible de changer la forme des étiquettes, qui sont des nœuds Tikz, en
+modifiant la clé «|every node|» de Tikz.
+
+\begin{Code}
+\begin{WithArrows}%
+     [format = c,    
+      interline = 4mm,
+      tikz = {\emph{every node/.style = {circle,
+                                   draw,
+                                   auto = false,
+                                   fill = gray!50,
+                                   inner sep = 1pt,
+                                   font = \tiny}}}]
+ 3 (2x+4) = 6 \Arrow{$\div 3$} \\
+ 2x+4 = 2     \Arrow{$-4$} \\
+ 2x = -2      \Arrow{$\div 2$} \\
+ 2x = -1
+\end{WithArrows}
+\end{Code}
+
+\[\begin{WithArrows}[%
+      format = c,
+      interline = 4mm,
+      tikz = {every node/.style = {circle,
+                                   draw,
+                                   auto = false,
+                                   fill = gray!50,
+                                   inner sep = 1pt,
+                                   font = \tiny}}]
+ 3 (2x+4) = 6 \Arrow{$\div 3$} \\
+ 2x+4 = 2     \Arrow{$-4$}     \\
+ 2x = -2      \Arrow{$\div 2$} \\
+ 2x = -1
+\end{WithArrows}\]
+
+
+\bigskip
+\subsection{Exemples avec l'option tikz-code}
+
+Rappelons que l'option |tikz-code| est le code Tikz utilisé par \pkg{witharrows}
+pour tracer les flèches.\footnote{Si un environnement |{DispWithArrows}| ou
+|{DispWithArrows*}| est utilisé avec l'option |wrap-lines|, la valeur de l'option
+|tikz-code| n'est pas utilisée pour cet environnement (mais est utilisée pour les 
+environnements imbriqués à l'intérieur).}
+
+\smallskip
+La valeur initiale de |tikz-code| est |\draw (#1) to node {#3} (#2) ;| où les trois
+marqueurs |#1|, |#2| et |#3| représentent le point de départ, le point d'arrivée et
+l'étiquette de la flèche.
+
+
+\bigskip
+\subsubsection{Exemple 1}
+Dans l'exemple suivant, nous définissons la valeur de |tikz-code| avec deux
+instructions |\path| : la première instruction trace la flèche elle-même et la seconde
+place l'étiquette dans un nœud Tikz dans le rectangle délimité par la flèche.
+
+\begin{Code}
+\begin{DispWithArrows*}%
+      [displaystyle,
+       ygap = 2mm,
+       ystart = 0mm,
+       \emph{tikz-code = {\draw (#1) -- ++(4.5cm,0) |- (#2) ;
+                    \path (#1) -- (#2) 
+                           node[text width = 4.2cm, right, midway] {#3} ;}}]
+S_n
+& = \frac{1}{n} \sum_{k=0}^{n-1}\cos\bigl(\tfrac{\pi}{2}\cdot\tfrac{k}{n}\bigr)
+...........
+\end{Code}
+
+
+\bigskip
+\begin{DispWithArrows*}[
+       displaystyle,
+       ygap = 2mm,
+       ystart = 0mm,
+       tikz-code = {\draw (#1) -- ++(4.5cm,0) |- (#2) ;
+                    \path (#1) -- (#2) 
+                           node[text width = 4.2cm, right, midway] {#3} ;}]
+S_n
+& = \frac{1}{n} \sum_{k=0}^{n-1}\cos\bigl(\tfrac{\pi}{2}\cdot\tfrac kn\bigr)
+\Arrow{$\cos x = \Re(e^{ix})$}\\
+& = \frac{1}{n} \sum_{k=0}^{n-1} \Re\left(e^{i\frac{k\pi}{2n}}\right)
+\Arrow{$\Re(z+z')=\Re(z)+\Re(z')$}\\
+& = \frac{1}{n} \Re\left(\sum_{k=0}^{n-1} e^{i\frac{k\pi}{2n}}\right)
+\Arrow{$\exp$ est un morphisme pour $\times$ et $+$} \\
+& = \frac{1}{n} \Re \left(\sum_{k=0}^{n-1}\bigl(e^{i\frac{\pi}{2n}}\bigr)^k\right)
+\Arrow{somme de termes d'une suite géométrique de raison $e^{i\frac{2\pi}n}$}\\
+& = \frac{1}{n} \Re \left( \frac{1-\bigl(e^{i\frac{\pi}{2n}}\bigr)^n}{1-e^{i\frac{\pi}{2n}}}\right)\\
+& = \frac{1}{n} \Re \left(\frac{1-i}{1-e^{i\frac{\pi}{2n}}}\right) 
+\end{DispWithArrows*}
+
+\bigskip
+\subsubsection{Exemple 2}
+
+\label{example-WithArrowsRightX}
+Il est possible de modifier l'exemple précédent pour avoir «|text width|» calculé
+automatiquement en fonction de la marge droite (d'une manière similaire à l'option
+|wrap-lines|) dans les environnements |{DispWithArrows}| et |{DispWithArrows*}|. Dans la
+définition de |tikz-code|, nous utilisons la commande  |\WithArrowsRightX| qui donne
+l'abscisse de la marge droite de la boîte de composition (pour TeX, il s'agit d'une
+commande et non d'une dimension). Pour la lisibilité, nous avons utilisé un style de
+\pkg{witharrows}. Cet exemple nécessite l'extension Tikz \pkg{calc}. 
+
+\begin{Code}
+\WithArrowsNewStyle{MonStyle}       
+  {displaystyle,
+   ygap = 2mm, 
+   xoffset = 0pt,
+   ystart = 0mm,
+   tikz-code = {\path let \p1 = (#1)
+                      in (#1)
+                          -- node [anchor = west, 
+                                   text width = {\emph{\WithArrowsRightX} - \x1 - 0.5 em}] 
+                                  {#3} 
+                         (#2) ;
+                \draw let \p1 = (#1) 
+                      in (#1) -- ++(\emph{\WithArrowsRightX} - \x1,0) |- (#2) ; }}
+\end{Code}
+
+\begin{Verbatim}
+\begin{DispWithArrows}[MonStyle]
+  S_n
+  & = \frac{1}{n} \sum_{k=0}^{n-1}\cos\bigl(\tfrac{\pi}{2}\cdot\tfrac{k}{n}\bigr)
+  \Arrow{$\cos x = \Re(e^{ix})$}\\
+...........
+\end{Verbatim}
+
+\WithArrowsNewStyle{MonStyle}       
+{displaystyle,
+ ygap = 2mm,
+ xoffset = 0pt,
+ ystart = 0mm,
+ tikz-code = {\path let \p1 = (#1)
+                    in (#1)
+                        -- node [anchor = west, 
+                                 text width = {\WithArrowsRightX - \x1 - 0.5 em}] {#3} 
+                       (#2) ;
+              \draw let \p1 = (#1) 
+                    in (#1) -- ++(\WithArrowsRightX - \x1,0) |- (#2) ; }}
+
+\begin{DispWithArrows}[MonStyle]
+S_n
+& = \frac{1}{n} \sum_{k=0}^{n-1}\cos\bigl(\tfrac{\pi}{2}\cdot\tfrac{k}{n}\bigr)
+\Arrow{$\cos x = \Re(e^{ix})$}\\
+& = \frac{1}{n} \sum_{k=0}^{n-1} \Re\left(e^{i\frac{k\pi}{2n}}\right)
+\Arrow{$\Re(z+z')=\Re(z)+\Re(z')$}\\
+& = \frac{1}{n} \Re\left(\sum_{k=0}^{n-1} e^{i\frac{k\pi}{2n}}\right)
+\Arrow{$\exp$ est un morphisme pour $\times$ et $+$} \\
+& = \frac{1}{n} \Re \left(\sum_{k=0}^{n-1}\bigl(e^{i\frac{\pi}{2n}}\bigr)^k\right)
+\Arrow{somme de termes d'une suite géométrique $e^{i\frac{2\pi}n}$}\\
+& = \frac{1}{n} \Re \left( \frac{1-\bigl(e^{i\frac{\pi}{2n}}\bigr)^n}{1-e^{i\frac{\pi}{2n}}}\right)\\
+& = \frac{1}{n} \Re \left(\frac{1-i}{1-e^{i\frac{\pi}{2n}}}\right) 
+\end{DispWithArrows}
+
+
+
+\bigskip
+\subsubsection{Exemple 3}
+
+Dans l'exemple suivant, nous changeons la forme de la flèche selon que la rangée de départ
+est plus longue ou plus courte que la rangée d'arrivée. Cet exemple nécessite l'extension
+\pkg{calc} de Tikz. 
+
+
+\begin{Code}
+\begin{WithArrows}[ll,interline=5mm,xoffset=5mm,
+      \emph{tikz-code  = {\draw[rounded corners,
+                          every node/.style = {circle,
+                                               draw,
+                                               auto = false,
+                                               inner sep = 1pt,
+                                               fill = gray!50,
+                                               font = \tiny }] 
+                          let \p1 = (#1),
+                              \p2 = (#2)
+                          and \ifdim \x1 > \x2
+                               (\p1) -- node {#3} (\x1,\y2) -- (\p2)
+                             \else
+                               (\p1) -- (\x2,\y1) -- node {#3} (\p2)
+                             \fi ;}}]
+E & \Longleftrightarrow \frac{(x+4)}{3} + \frac{5x+3}{5} = 7 
+\Arrow{$\times 15$}\\
+  & \Longleftrightarrow 5(x+4) + 3(5x+3) = 105 \\
+  & \Longleftrightarrow 5x+20 + 15x+9 = 105 \\
+  & \Longleftrightarrow 20x+29 = 105 
+\Arrow{$-29$}\\
+  & \Longleftrightarrow 20x = 76 
+\Arrow{$\div 20$}\\
+  & \Longleftrightarrow x = \frac{38}{10} 
+\end{WithArrows}
+\end{Code}
+
+
+\[\begin{WithArrows}[ll,interline=5mm,xoffset=5mm,
+      tikz-code  = {\draw[rounded corners,
+                          every node/.style = {circle,
+                                               draw,
+                                               auto = false,
+                                               inner sep = 1pt,
+                                               fill = gray!50,
+                                               font = \tiny}] 
+                          let \p1 = (#1),
+                              \p2 = (#2)
+                          in \ifdim \x1 > \x2
+                               (\p1) -- node {#3} (\x1,\y2) -- (\p2)
+                             \else
+                               (\p1) -- (\x2,\y1) -- node {#3} (\p2)
+                             \fi ;}]
+E & \Longleftrightarrow \frac{(x+4)}{3} + \frac{5x+3}{5} = 7 
+\Arrow{$\times 15$}\\
+  & \Longleftrightarrow 5(x+4) + 3(5x+3) = 105 \\
+  & \Longleftrightarrow 5x+20 + 15x+9 = 105 \\
+  & \Longleftrightarrow 20x+29 = 105 
+\Arrow{$-29$}\\
+  & \Longleftrightarrow 20x = 76 
+\Arrow{$\div 20$}\\
+  & \Longleftrightarrow x = \frac{38}{10} 
+\end{WithArrows}\]
+
+
+
+\subsection{Boucle numérotée automatique}
+
+Supposons que nous voulions tracer une boucle avec des flèches numérotées. Dans ce but, il
+est possible d'écrire une commande dédiée |\NumberedLoop| qui fera le travail quand elle
+sera utilisée dans le |code-after|. Dans l'exemple suivant, nous avons écrit cette
+commande avec |\foreach| de \pkg{pgffor} (cette extension est chargée quand \pkg{witharrows} est chargé.).
+
+\begin{Verbatim}
+\NewDocumentCommand \NomberedLoop {}
+        {\foreach \j in {2,...,\WithArrowsNbLines} 
+              { \pgfmathtruncatemacro{\i}{\j-1}
+                \Arrow[rr]{\i}{\j}{\i} }
+         \Arrow[rr,xoffset=1cm,tikz=<-]{1}{\WithArrowsNbLines}{\WithArrowsNbLines}}
+\end{Verbatim}
+
+La commande |\WithArrowsNbLines| est une commande disponible dans le |code-after| qui donne
+le nombre total de lignes (=rangées) dans l'environnement courant (pour TeX, il s'agit
+d'une commande et non d'un compteur).
+
+
+\medskip
+\begin{Code}
+$\begin{WithArrows}[\emph{code-after = \NumberedLoop}]
+a.\;& f \text{ est continue sur } E \\
+b.\;& f \text{ est continue en } 0 \\
+c.\;& f \text{ est bornée sur la sphère unité} \\
+d.\;& \exists K > 0\quad \forall x \in E\quad \|f(x)\| \le K \|x\| \\
+e.\;& f \text{ est lipschitzienne} 
+\end{WithArrows}$
+\end{Code}
+
+\bigskip
+\begin{scope}
+\NewDocumentCommand \NumberedLoop {}
+        {\foreach \j in {2,...,\WithArrowsNbLines} 
+              { \pgfmathtruncatemacro{\i}{\j-1}
+                \Arrow[rr]{\i}{\j}{\i} }
+         \Arrow[rr,xoffset=1cm,tikz=<-]{1}{\WithArrowsNbLines}{\WithArrowsNbLines}}
+
+
+$\begin{WithArrows}[code-after = \NumberedLoop]
+a.\;& f \text{ est continue sur } E \\
+b.\;& f \text{ est continue en } 0 \\
+c.\;& f \text{ est bornée sur la sphère unité} \\
+d.\;& \exists K > 0\quad \forall x \in E\quad \|f(x)\| \le K \|x\| \\
+e.\;& f \text{ est lipschitzienne} 
+\end{WithArrows}$
+
+
+\bigskip
+Comme d'habitude, il est possible changer les caractéristiques des flèches et des nœuds 
+avec l'option |tikz|. Néanmoins, si nous voulons changer le style pour avoir, par
+exemple, les numéros entre parenthèses, le moyen le plus rapide est de changer la valeur de
+|tikz-code|:
+
+\begin{Code}
+tikz-code = {\draw (#1) to node {\footnotesize (#3)} (#2) ;}
+\end{Code}
+
+\WithArrowsOptions{tikz-code = {\draw (#1) to node {\footnotesize (#3)} (#2) ;}}
+
+$\begin{WithArrows}[code-after = \NumberedLoop]
+a.\;& f \text{ est continue on } E \\
+b.\;& f \text{ est continue dans } 0 \\
+c.\;& f \text{ est bornée sur la sphère unité} \\
+d.\;& \exists K > 0\quad \forall x \in E\quad \|f(x)\| \le K \|x\| \\
+e.\;& f \text{ est lipschitzienne}  
+\end{WithArrows}$
+
+\end{scope}
+
+
+\section*{Autre documentation}
+
+Le document |witharrows.pdf| (fourni avec l'extension \pkg{witharrows}) contient une
+traduction anglaise de la documentation ici présente, ainsi que le code source commenté et
+un historique des versions.  
+
+\tableofcontents
+
+\end{document}
