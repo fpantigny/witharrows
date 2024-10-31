@@ -2799,6 +2799,12 @@ version 2005/12/01 or later.
 % 
 % \section{Implementation}
 %
+% \medskip
+% The development of the extension \pkg{witharrows} is done on the following GitHub
+% depot:
+%
+% \verb|https://github.com/fpantigny/witharrows|
+%
 % \subsection{Declaration of the package and extensions loaded}
 %
 % The prefix |witharrows| has been registred for this extension.
@@ -4265,6 +4271,10 @@ version 2005/12/01 or later.
     \keys_set:nn { WithArrows / Arrow / FirstPass } { #1 , #3 } 
 %    \end{macrocode}
 %
+%    \begin{macrocode}
+    \prop_clear_new_linked:N \l_tmpa_linked_prop
+%    \end{macrocode}
+% 
 % \medskip
 % We construct now a global property list to store the informations of the
 % considered arrow with the six fields ``initial'', ``final'', ``status'',
@@ -4274,42 +4284,42 @@ version 2005/12/01 or later.
 % \begin{enumerate}
 % \item First, the row from which the arrow starts:
 %    \begin{macrocode}
-    \prop_put:NnV \l_tmpa_prop { initial } \g_@@_line_int
+    \prop_put:NnV \l_tmpa_linked_prop { initial } \g_@@_line_int
 %    \end{macrocode}
 %
 % \item The row where the arrow ends (that's why it was necessary to analyze the
 % key |jump|):
 %    \begin{macrocode}
     \int_set:Nn \l_tmpa_int { \g_@@_line_int + \l_@@_jump_int }
-    \prop_put:NnV \l_tmpa_prop { final } \l_tmpa_int
+    \prop_put:NnV \l_tmpa_linked_prop { final } \l_tmpa_int
 %    \end{macrocode}
 %
 % \item The ``status'' of the arrow, with 4 possible values: empty,
 % |independent|, |new-group| or |over|.
 %    \begin{macrocode} 
-    \prop_put:Nno \l_tmpa_prop { status } \l_@@_status_arrow_str
+    \prop_put:Nno \l_tmpa_linked_prop { status } \l_@@_status_arrow_str
 %    \end{macrocode}
 % 
 % \item The options of the arrow (it's a token list):
 %    \begin{macrocode}
-    \prop_put:Nnn \l_tmpa_prop { options } { #1 , #3 }
+    \prop_put:Nnn \l_tmpa_linked_prop { options } { #1 , #3 }
 %    \end{macrocode}
 %
 % \item The label of the arrow (it's also a token list):
 %    \begin{macrocode}
-    \prop_put:Nnn \l_tmpa_prop { label } { #2 } 
+    \prop_put:Nnn \l_tmpa_linked_prop { label } { #2 } 
 %    \end{macrocode}
 % 
 % \item The number of the line where the command |\Arrow| is issued in the TeX
 % source (as of now, this is only useful for some error messages).
 %    \begin{macrocode}
-    \prop_put:Nne \l_tmpa_prop { input-line } \msg_line_number:
+    \prop_put:Nne \l_tmpa_linked_prop { input-line } \msg_line_number:
 %    \end{macrocode}
 %
 % \item The total width of the arrow (with the label)... but we don't know it
 % now and that's why we put |0 pt|. There are used for the arrows of type~|o|.
 %    \begin{macrocode}
-    \prop_put:Nnn \l_tmpa_prop { width } { 0 pt }
+    \prop_put:Nnn \l_tmpa_linked_prop { width } { 0 pt }
 %    \end{macrocode}
 % 
 % \end{enumerate}
@@ -4319,11 +4329,11 @@ version 2005/12/01 or later.
 % position-in-the-tree and the number of the arrow.
 % 
 %    \begin{macrocode}
-    \prop_gclear_new:c 
+    \prop_gclear_new_linked:c 
       { g_@@_arrow _ \l_@@_prefix_str _ \int_use:N \g_@@_arrow_int _ prop }
     \prop_gset_eq:cN 
       { g_@@_arrow _ \l_@@_prefix_str _ \int_use:N \g_@@_arrow_int _ prop } 
-      \l_tmpa_prop
+      \l_tmpa_linked_prop
   }       
 %    \end{macrocode}
 %
@@ -6720,8 +6730,23 @@ version 2005/12/01 or later.
 % will be drawn group by group. The command |\@@_draw_o_arrows_of_the_group:| is
 % called after the construction of the (other) arrows of the group.
 % 
+%
 %    \begin{macrocode}
 \cs_new_protected:Npn \@@_draw_o_arrows_of_the_group: 
+  { 
+    \bool_lazy_all:nTF 
+      { 
+        \l_@@_wrap_lines_bool
+        \l_@@_in_DispWithArrows_bool
+        { ! \seq_if_empty_p:N \l_@@_o_arrows_seq }
+      }
+      { \@@_error:n { o~arrow~with~wrap-lines } }
+      { \@@_draw_o_arrows_of_the_group_i: }
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\cs_new_protected:Npn \@@_draw_o_arrows_of_the_group_i: 
   { 
 %    \end{macrocode}
 %
@@ -7231,6 +7256,7 @@ version 2005/12/01 or later.
   }
 %    \end{macrocode}
 % 
+%
 %    \begin{macrocode}
 \str_const:Nn \c_@@_option_ignored_str
   { If~you~go~on,~this~option~will~be~ignored. }
@@ -7323,6 +7349,19 @@ version 2005/12/01 or later.
     The~key~'o'~for~individual~arrows~can~be~used~only~in~mode~
     'group'~or~in~mode~'groups'.\\
     \c_@@_option_ignored_str 
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+% 
+% 
+%    \begin{macrocode}
+\@@_msg_new:nnn { o~arrow~with~wrap-lines }
+  { 
+    Arrow~of~type~'o'~with~'wrap-lines'. \\
+    You~can't~use~arrows~of~type~'o'~when~
+    'wrap-lines'~is~in~force.\\
+    If~you~go~on,~these~arrows~will~be~ignored.
     \@@_potential_body_i:
   }
   { \@@_potential_body_ii: }

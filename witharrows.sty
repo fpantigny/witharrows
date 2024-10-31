@@ -713,19 +713,20 @@
     \int_gincr:N \g__witharrows_arrow_int
     \str_clear_new:N \l__witharrows_previous_key_str
     \keys_set:nn { WithArrows / Arrow / FirstPass } { #1 , #3 }
-    \prop_put:NnV \l_tmpa_prop { initial } \g__witharrows_line_int
+    \prop_clear_new_linked:N \l_tmpa_linked_prop
+    \prop_put:NnV \l_tmpa_linked_prop { initial } \g__witharrows_line_int
     \int_set:Nn \l_tmpa_int { \g__witharrows_line_int + \l__witharrows_jump_int }
-    \prop_put:NnV \l_tmpa_prop { final } \l_tmpa_int
-    \prop_put:Nno \l_tmpa_prop { status } \l__witharrows_status_arrow_str
-    \prop_put:Nnn \l_tmpa_prop { options } { #1 , #3 }
-    \prop_put:Nnn \l_tmpa_prop { label } { #2 }
-    \prop_put:Nne \l_tmpa_prop { input-line } \msg_line_number:
-    \prop_put:Nnn \l_tmpa_prop { width } { 0 pt }
-    \prop_gclear_new:c
+    \prop_put:NnV \l_tmpa_linked_prop { final } \l_tmpa_int
+    \prop_put:Nno \l_tmpa_linked_prop { status } \l__witharrows_status_arrow_str
+    \prop_put:Nnn \l_tmpa_linked_prop { options } { #1 , #3 }
+    \prop_put:Nnn \l_tmpa_linked_prop { label } { #2 }
+    \prop_put:Nne \l_tmpa_linked_prop { input-line } \msg_line_number:
+    \prop_put:Nnn \l_tmpa_linked_prop { width } { 0 pt }
+    \prop_gclear_new_linked:c
       { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \g__witharrows_arrow_int _ prop }
     \prop_gset_eq:cN
       { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \g__witharrows_arrow_int _ prop }
-      \l_tmpa_prop
+      \l_tmpa_linked_prop
   }
 \cs_new_protected:Npn \__witharrows_Arrow_first_columns:
   { \__witharrows_error:n { Arrow~not~in~last~column } \__witharrows_Arrow }
@@ -1735,6 +1736,17 @@
   }
 \cs_new_protected:Npn \__witharrows_draw_o_arrows_of_the_group:
   {
+    \bool_lazy_all:nTF
+      {
+        \l__witharrows_wrap_lines_bool
+        \l__witharrows_in_DispWithArrows_bool
+        { ! \seq_if_empty_p:N \l__witharrows_o_arrows_seq }
+      }
+      { \__witharrows_error:n { o~arrow~with~wrap-lines } }
+      { \__witharrows_draw_o_arrows_of_the_group_i: }
+  }
+\cs_new_protected:Npn \__witharrows_draw_o_arrows_of_the_group_i:
+  {
     \seq_sort:Nn \l__witharrows_o_arrows_seq
       {
         \prop_get:cnN
@@ -2074,6 +2086,15 @@
     The~key~'o'~for~individual~arrows~can~be~used~only~in~mode~
     'group'~or~in~mode~'groups'.\\
     \c__witharrows_option_ignored_str
+    \__witharrows_potential_body_i:
+  }
+  { \__witharrows_potential_body_ii: }
+\__witharrows_msg_new:nnn { o~arrow~with~wrap-lines }
+  {
+    Arrow~of~type~'o'~with~'wrap-lines'. \\
+    You~can't~use~arrows~of~type~'o'~when~
+    'wrap-lines'~is~in~force.\\
+    If~you~go~on,~these~arrows~will~be~ignored.
     \__witharrows_potential_body_i:
   }
   { \__witharrows_potential_body_ii: }
