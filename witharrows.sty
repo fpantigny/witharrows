@@ -6,7 +6,7 @@
 %%
 %% witharrows.dtx  (with options: `LaTeX')
 %% 
-%% Copyright (C) 2017-2024 by F. Pantigny
+%% Copyright (C) 2017-2025 by F. Pantigny
 %% 
 %% This file may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either
@@ -24,12 +24,20 @@
 \RequirePackage{tikz}
 \usetikzlibrary{arrows.meta}
 \usepgfmodule{bending} % https://texnique.fr/osqa/questions/12199
-\RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {witharrows}
   {\myfiledate}
   {\myfileversion}
   {Draws arrows for explanations on the right}
+\msg_new:nnn { witharrows } { latex-too-old }
+  {
+    Your~LaTeX~release~is~too~old. \\
+    You~need~at~least~a~the~version~of~2023-11-01
+  }
+\IfFormatAtLeastTF
+  { 2023-11-01 }
+  { }
+  { \msg_fatal:nn { witharrows } { latex-too-old } }
 \RequirePackage { varwidth }
 \ProvideDocumentCommand{\IfPackageLoadedT}{mm}
   {\IfPackageLoadedTF{#1}{#2}{}}
@@ -76,7 +84,7 @@
     package~witharrows.~Try~to~use~the~command~
     \token_to_str:N\WithArrowsOptions.
   }
-\ProcessKeysOptions { WithArrows / package }
+\ProcessKeyOptions [ WithArrows / package ]
 \IfClassLoadedT { beamer } { \bool_gset_true:N \g__witharrows_beamer_bool }
 \IfPackageLoadedT { beamerarticle } { \bool_gset_true:N \g__witharrows_beamer_bool }
 \__witharrows_msg_new:nn { footnote~with~footnotehyper~package }

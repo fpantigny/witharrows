@@ -30,27 +30,27 @@
 \contentsline {subsection}{\numberline {11.5}Automatic numbered loop}{32}{subsection.0.11.5}%
 \contentsline {section}{\numberline {12}Implementation}{33}{section.0.12}%
 \contentsline {subsection}{\numberline {12.1}Declaration of the package and extensions loaded}{33}{subsection.0.12.1}%
-\contentsline {subsection}{\numberline {12.2}The packages footnote and footnotehyper}{33}{subsection.0.12.2}%
-\contentsline {subsection}{\numberline {12.3}The class option leqno}{35}{subsection.0.12.3}%
+\contentsline {subsection}{\numberline {12.2}The packages footnote and footnotehyper}{34}{subsection.0.12.2}%
+\contentsline {subsection}{\numberline {12.3}The class option leqno}{36}{subsection.0.12.3}%
 \contentsline {subsection}{\numberline {12.4}Collecting options}{36}{subsection.0.12.4}%
-\contentsline {subsection}{\numberline {12.5}Some technical definitions}{36}{subsection.0.12.5}%
+\contentsline {subsection}{\numberline {12.5}Some technical definitions}{37}{subsection.0.12.5}%
 \contentsline {subsection}{\numberline {12.6}Variables}{39}{subsection.0.12.6}%
 \contentsline {subsection}{\numberline {12.7}The definition of the options}{42}{subsection.0.12.7}%
 \contentsline {subsection}{\numberline {12.8}The command \textbackslash Arrow}{50}{subsection.0.12.8}%
 \contentsline {subsection}{\numberline {12.9}The environments \{WithArrows\} and \{DispWithArrows\}}{52}{subsection.0.12.9}%
 \contentsline {subsubsection}{\numberline {12.9.1}Code before the \textbackslash halign}{52}{subsubsection.0.12.9.1}%
 \contentsline {subsubsection}{\numberline {12.9.2}The construction of the preamble of the \textbackslash halign}{55}{subsubsection.0.12.9.2}%
-\contentsline {subsubsection}{\numberline {12.9.3}The environment \{WithArrows\}}{57}{subsubsection.0.12.9.3}%
+\contentsline {subsubsection}{\numberline {12.9.3}The environment \{WithArrows\}}{58}{subsubsection.0.12.9.3}%
 \contentsline {subsubsection}{\numberline {12.9.4}After the construction of the \textbackslash halign}{59}{subsubsection.0.12.9.4}%
-\contentsline {subsubsection}{\numberline {12.9.5}The command of end of row}{60}{subsubsection.0.12.9.5}%
+\contentsline {subsubsection}{\numberline {12.9.5}The command of end of row}{61}{subsubsection.0.12.9.5}%
 \contentsline {subsubsection}{\numberline {12.9.6}The environment \{DispWithArrows\}}{64}{subsubsection.0.12.9.6}%
-\contentsline {subsection}{\numberline {12.10}The commands \textbackslash tag, \textbackslash notag, \textbackslash label, \textbackslash tagnextline and \textbackslash qedhere for \{DispWithArrows\}}{69}{subsection.0.12.10}%
-\contentsline {subsection}{\numberline {12.11}We draw the arrows}{71}{subsection.0.12.11}%
+\contentsline {subsection}{\numberline {12.10}The commands \textbackslash tag, \textbackslash notag, \textbackslash label, \textbackslash tagnextline and \textbackslash qedhere for \{DispWithArrows\}}{70}{subsection.0.12.10}%
+\contentsline {subsection}{\numberline {12.11}We draw the arrows}{72}{subsection.0.12.11}%
 \contentsline {subsubsection}{\numberline {12.11.1}The command update_x}{81}{subsubsection.0.12.11.1}%
-\contentsline {subsubsection}{\numberline {12.11.2}We draw the arrows of type o}{81}{subsubsection.0.12.11.2}%
+\contentsline {subsubsection}{\numberline {12.11.2}We draw the arrows of type o}{82}{subsubsection.0.12.11.2}%
 \contentsline {subsection}{\numberline {12.12}The command \textbackslash Arrow in code-after}{84}{subsection.0.12.12}%
 \contentsline {subsection}{\numberline {12.13}The command \textbackslash MultiArrow in code-after}{86}{subsection.0.12.13}%
 \contentsline {subsection}{\numberline {12.14}The error messages of the package}{88}{subsection.0.12.14}%
-\contentsline {subsection}{\numberline {12.15}The command \textbackslash WithArrowsNewStyle}{94}{subsection.0.12.15}%
-\contentsline {subsection}{\numberline {12.16}The options up and down}{95}{subsection.0.12.16}%
-\contentsline {section}{\numberline {13}History}{100}{section.0.13}%
+\contentsline {subsection}{\numberline {12.15}The command \textbackslash WithArrowsNewStyle}{95}{subsection.0.12.15}%
+\contentsline {subsection}{\numberline {12.16}The options up and down}{96}{subsection.0.12.16}%
+\contentsline {section}{\numberline {13}History}{101}{section.0.13}%

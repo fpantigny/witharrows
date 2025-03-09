@@ -1,13 +1,13 @@
-This is LuaHBTeX, Version 1.18.1 (MiKTeX 24.4) (format=lualatex 2024.10.19)  19 OCT 2024 11:04
+This is LuaHBTeX, Version 1.21.0 (MiKTeX 25.2) (format=lualatex 2025.3.6)  9 MAR 2025 22:21
  restricted system commands enabled.
 **witharrows-french.tex
 (./witharrows-french.tex
-LaTeX2e <2024-06-01> patch level 2
-L3 programming layer <2024-09-10>
-Lua module: luaotfload 2024-02-14 3.28 Lua based OpenType font support
-Lua module: lualibs 2023-07-13 2.76 ConTeXt Lua standard libraries.
-Lua module: lualibs-extended 2023-07-13 2.76 ConTeXt Lua libraries -- extended c
-ollection.
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
+Lua module: luaotfload 2024-12-03 v3.29 Lua based OpenType font support
+Lua module: lualibs 2023-07-13 v2.76 ConTeXt Lua standard libraries.
+Lua module: lualibs-extended 2023-07-13 v2.76 ConTeXt Lua libraries -- extended 
+collection.
 luaotfload | conf : Root cache directory is "C:/Users/panti/AppData/Local/MiKTeX
 /luatex-cache/generic/names".
 luaotfload | init : Loading fontloader "fontloader-2023-12-28.lua" from kpse-res
@@ -41,19 +41,19 @@ Inserting `luaotfload.aux.set_xheight' in `luaotfload.patch_font'.
 Inserting `luaotfload.rewrite_fontname' in `luaotfload.patch_font'.
 Inserting `tracingstacklevels' in `input_level_string'. (C:/Users/panti/AppData
 /Local/Programs/MiKTeX/tex/latex/base/article.cls
-Document Class: article 2024/02/08 v1.4n Standard LaTeX document class
+Document Class: article 2024/06/29 v1.4n Standard LaTeX document class
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/base/size10.clo
-File: size10.clo 2024/02/08 v1.4n Standard LaTeX file (size option)
+File: size10.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 luaotfload | db : Font names database loaded from C:/Users/panti/AppData/Local/M
 iKTeX/luatex-cache/generic/names/luaotfload-names.luc.gz)
-\c@part=\count192
-\c@section=\count193
-\c@subsection=\count194
-\c@subsubsection=\count195
-\c@paragraph=\count196
-\c@subparagraph=\count197
-\c@figure=\count198
-\c@table=\count199
+\c@part=\count194
+\c@section=\count195
+\c@subsection=\count196
+\c@subsubsection=\count197
+\c@paragraph=\count198
+\c@subparagraph=\count199
+\c@figure=\count266
+\c@table=\count267
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 \bibindent=\dimen140
@@ -65,7 +65,7 @@ Package: xltxtra 2018/12/31 v0.7 Improvements for the "XeLaTeX" format
 Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/iftex/iftex.sty
-Package: iftex 2022/02/03 v1.0f TeX engine tests
+Package: iftex 2024/12/12 v1.0g TeX engine tests
 ))
 
 Package xltxtra Warning: 
@@ -76,34 +76,34 @@ Package xltxtra Warning:
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/l3packages/xparse/xpars
 e.sty
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/l3kernel/expl3.sty
-Package: expl3 2024-09-10 L3 programming layer (loader) 
+Package: expl3 2025-01-18 L3 programming layer (loader) 
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/l3backend/l3backend-lua
 tex.def
 File: l3backend-luatex.def 2024-05-08 L3 backend support: PDF output (LuaTeX)
-\l__color_backend_stack_int=\count266
+\l__color_backend_stack_int=\count268
 Inserting `l3color' in `luaotfload.parse_color'.
 \l__pdf_internal_box=\box52
 ))
 Package: xparse 2024-08-16 L3 Experimental document command parser
 )
 Package: fontspec 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX
-Lua module: fontspec 2024/05/11 2.9e Font selection for XeLaTeX and LuaLaTeX
+Lua module: fontspec 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/fontspec/fontspec-luate
 x.sty
 Package: fontspec-luatex 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaT
 eX
-\l__fontspec_script_int=\count267
-\l__fontspec_language_int=\count268
-\l__fontspec_strnum_int=\count269
-\l__fontspec_tmp_int=\count270
-\l__fontspec_tmpa_int=\count271
-\l__fontspec_tmpb_int=\count272
-\l__fontspec_tmpc_int=\count273
-\l__fontspec_em_int=\count274
-\l__fontspec_emdef_int=\count275
-\l__fontspec_strong_int=\count276
-\l__fontspec_strongdef_int=\count277
+\l__fontspec_script_int=\count269
+\l__fontspec_language_int=\count270
+\l__fontspec_strnum_int=\count271
+\l__fontspec_tmp_int=\count272
+\l__fontspec_tmpa_int=\count273
+\l__fontspec_tmpb_int=\count274
+\l__fontspec_tmpc_int=\count275
+\l__fontspec_em_int=\count276
+\l__fontspec_emdef_int=\count277
+\l__fontspec_strong_int=\count278
+\l__fontspec_strongdef_int=\count279
 \l__fontspec_tmpa_dim=\dimen141
 \l__fontspec_tmpb_dim=\dimen142
 \l__fontspec_tmpc_dim=\dimen143
@@ -111,7 +111,8 @@ eX
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 ) (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/fontspec/fontspec.cfg
 )))) (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/babel/babel.sty
-Package: babel 2024/10/05 v24.11 The Babel package
+Package: babel 2025/02/14 v25.4 The multilingual framework for pdfLaTeX, LuaLaT
+eX and XeLaTeX
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/babel/luababel.def
 \bbl@readstream=\read2
@@ -128,7 +129,7 @@ Package babel Info: Non-standard hyphenation setup on input line 118.
 \babelcatcodetablenum=\catcodetable14
 \bbl@pattcodes=\catcodetable15
 )
-\babel@savecnt=\count278
+\babel@savecnt=\count280
 \U@D=\dimen144
 \l@unhyphenated=\language11
 
@@ -149,7 +150,7 @@ Package babel Info: Hyphen rules for 'acadian' set to \l@french
 (babel)             (\language3). Reported on input line 91.
 Package babel Info: Hyphen rules for 'canadien' set to \l@french
 (babel)             (\language3). Reported on input line 92.
-\FB@stdchar=\count279
+\FB@stdchar=\count281
 \FB@spacing=\attribute5
 \FB@addDPspace=\attribute6
 \FB@addGUILspace=\attribute7
@@ -158,14 +159,14 @@ Package babel Info: Hyphen rules for 'canadien' set to \l@french
 Package french.ldf Info: No need for active punctuation characters
 (french.ldf)             with this version of LuaTeX!
 (french.ldf)             reported on input line 250.
-\FBguill@level=\count280
+\FBguill@level=\count282
 \FBold@everypar=\toks17
 \FB@Mht=\dimen145
-\mc@charclass=\count281
-\mc@charfam=\count282
-\mc@charslot=\count283
-\std@mcc=\count284
-\dec@mcc=\count285
+\mc@charclass=\count283
+\mc@charfam=\count284
+\mc@charslot=\count285
+\std@mcc=\count286
+\dec@mcc=\count287
 Inserting `frenchb.french_punctuation' in `kerning'.
 \FB@parskip=\dimen146
 \listindentFB=\dimen147
@@ -198,9 +199,9 @@ Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
-\Gm@cnth=\count286
-\Gm@cntv=\count287
-\c@Gm@tempcnt=\count288
+\Gm@cnth=\count288
+\Gm@cntv=\count289
+\c@Gm@tempcnt=\count290
 \Gm@bindingoffset=\dimen154
 \Gm@wd@mp=\dimen155
 \Gm@odd@mp=\dimen156
@@ -212,7 +213,7 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@dimlist=\toks19
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/geometry/geometry.cfg)) (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2024/05/23 v2.17q AMS math features
+Package: amsmath 2024/11/05 v2.17t AMS math features
 \@mathmargin=\skip51
 
 For additional information on amsmath, use the `?' option.
@@ -231,14 +232,14 @@ Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
-\inf@bad=\count289
+\inf@bad=\count291
 LaTeX Info: Redefining \frac on input line 235.
-\uproot@=\count290
-\leftroot@=\count291
+\uproot@=\count292
+\leftroot@=\count293
 LaTeX Info: Redefining \overline on input line 398.
 LaTeX Info: Redefining \colon on input line 409.
-\classnum@=\count292
-\DOTSCASE@=\count293
+\classnum@=\count294
+\DOTSCASE@=\count295
 LaTeX Info: Redefining \ldots on input line 495.
 LaTeX Info: Redefining \dots on input line 498.
 LaTeX Info: Redefining \cdots on input line 619.
@@ -251,20 +252,20 @@ LaTeX Info: Redefining \Bigg on input line 724.
 \big@size=\dimen164
 LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
-\macc@depth=\count294
+\macc@depth=\count296
 LaTeX Info: Redefining \bmod on input line 904.
 LaTeX Info: Redefining \pmod on input line 909.
 LaTeX Info: Redefining \smash on input line 939.
 LaTeX Info: Redefining \relbar on input line 969.
 LaTeX Info: Redefining \Relbar on input line 970.
-\c@MaxMatrixCols=\count295
+\c@MaxMatrixCols=\count297
 \dotsspace@=\muskip17
-\c@parentequation=\count296
-\dspbrk@lvl=\count297
+\c@parentequation=\count298
+\dspbrk@lvl=\count299
 \tag@help=\toks21
-\row@=\count298
-\column@=\count299
-\maxfields@=\count300
+\row@=\count300
+\column@=\count301
+\maxfields@=\count302
 \andhelp@=\toks22
 \eqnshift@=\dimen165
 \alignsep@=\dimen166
@@ -280,7 +281,7 @@ LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/graphics/color.sty
-Package: color 2024/01/14 v1.3d Standard LaTeX Color (DPC)
+Package: color 2024/06/23 v1.3e Standard LaTeX Color (DPC)
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
@@ -303,21 +304,21 @@ Package: verbatim 2024-01-22 v1.5x LaTeX2e package for verbatim enhancements
 Package: mathtools 2024/10/04 v1.31 mathematical typesetting tools
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/tools/calc.sty
 Package: calc 2023/07/08 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count301
-\calc@Bcount=\count302
+\calc@Acount=\count303
+\calc@Bcount=\count304
 \calc@Adimen=\dimen171
 \calc@Bdimen=\dimen172
 \calc@Askip=\skip54
 \calc@Bskip=\skip55
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count303
+\calc@Ccount=\count305
 \calc@Cskip=\skip56
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 )
-\g_MT_multlinerow_int=\count304
+\g_MT_multlinerow_int=\count306
 \l_MT_multwidth_dim=\dimen173
 \origjot=\skip57
 \l_MT_shortvdotswithinadjustabove_dim=\dimen174
@@ -329,7 +330,7 @@ Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 \xmathstrut@box=\box55
 \xmathstrut@dim=\dimen180
 ) (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2024-07-10 v7.01j Hypertext links for LaTeX
+Package: hyperref 2024-11-05 v7.01l Hypertext links for LaTeX
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
@@ -375,11 +376,11 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count305
+\c@section@level=\count307
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count306
+Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count308
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/stringenc/stringenc.s
 ty
@@ -387,16 +388,16 @@ Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
 \@linkdim=\dimen181
-\Hy@linkcounter=\count307
-\Hy@pagecounter=\count308
+\Hy@linkcounter=\count309
+\Hy@pagecounter=\count310
  (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2024-07-10 v7.01j Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2024-11-05 v7.01l Hyperref: PDFDocEncoding definition (HO)
 ) (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count309
+\Hy@SavedSpaceFactor=\count311
  (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/hyperref/puenc.def
-File: puenc.def 2024-07-10 v7.01j Hyperref: PDF Unicode definition (HO)
+File: puenc.def 2024-11-05 v7.01l Hyperref: PDF Unicode definition (HO)
 )
 Package hyperref Info: Option `hyperfootnotes' set `false' on input line 4040.
 Package hyperref Info: Hyper figures OFF on input line 4157.
@@ -406,7 +407,7 @@ Package hyperref Info: Plain pages OFF on input line 4172.
 Package hyperref Info: Backreferencing OFF on input line 4177.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4424.
-\c@Hy@tempcnt=\count310
+\c@Hy@tempcnt=\count312
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty
 \Urlmuskip=\muskip18
@@ -423,7 +424,7 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count311
+\Fld@menulength=\count313
 \Field@Width=\dimen183
 \Fld@charsize=\dimen184
 Package hyperref Info: Hyper figures OFF on input line 6042.
@@ -438,20 +439,20 @@ Package hyperref Info: PDF/A mode OFF on input line 6072.
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count312
-\c@Item=\count313
+\Hy@abspage=\count314
+\c@Item=\count315
 )
 Package hyperref Info: Driver (autodetected): hluatex.
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/hyperref/hluatex.def
-File: hluatex.def 2024-07-10 v7.01j Hyperref driver for luaTeX
+File: hluatex.def 2024-11-05 v7.01l Hyperref driver for luaTeX
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/base/atveryend-ltx.sty
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
 kage
 with kernel methods
 )
-\Fld@listcount=\count314
-\c@bookmark@seq@number=\count315
+\Fld@listcount=\count316
+\c@bookmark@seq@number=\count317
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/rerunfilecheck/rerunfil
 echeck.sty
@@ -494,7 +495,7 @@ sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/graphics/graphics.sty
-Package: graphics 2024/05/23 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/graphics/trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
@@ -535,14 +536,14 @@ libraryfiltered.code.tex
 \pgf@yd=\dimen198
 \w@pgf@writea=\write3
 \r@pgf@reada=\read4
-\c@pgf@counta=\count316
-\c@pgf@countb=\count317
-\c@pgf@countc=\count318
-\c@pgf@countd=\count319
+\c@pgf@counta=\count318
+\c@pgf@countb=\count319
+\c@pgf@countc=\count320
+\c@pgf@countd=\count321
 \t@pgf@toka=\toks32
 \t@pgf@tokb=\toks33
 \t@pgf@tokc=\toks34
-\pgf@sys@id@count=\count320
+\pgf@sys@id@count=\count322
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgf.c
 fg
@@ -561,8 +562,8 @@ File: pgfsys-common-pdf.def 2023-01-15 v3.1.10 (3.1.10)
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgfsy
 ssoftpath.code.tex
 File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfsyssoftpath@smallbuffer@items=\count321
-\pgfsyssoftpath@bigbuffer@items=\count322
+\pgfsyssoftpath@smallbuffer@items=\count323
+\pgfsyssoftpath@bigbuffer@items=\count324
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgfsy
 sprotocol.code.tex
@@ -600,7 +601,7 @@ code.tex)
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathparse
 r.code.tex
 \pgfmath@dimen=\dimen199
-\pgfmath@count=\count323
+\pgfmath@count=\count325
 \pgfmath@box=\box57
 \pgfmath@toks=\toks35
 \pgfmath@stack@operand=\toks36
@@ -628,7 +629,7 @@ ions.integerarithmetics.code.tex)
 code.tex)
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfloat
 .code.tex
-\c@pgfmathroundto@lastzeros=\count324
+\c@pgfmathroundto@lastzeros=\count326
 ))
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfint.code.
 tex)
@@ -668,7 +669,7 @@ File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfpic=\box58
 \pgf@hbox=\box59
 \pgf@layerbox@main=\box60
-\pgf@picture@serial@count=\count325
+\pgf@picture@serial@count=\count327
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfcor
 egraphicstate.code.tex
@@ -703,8 +704,8 @@ File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
 eshade.code.tex
 File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@max=\dimen279
-\pgf@sys@shading@range@num=\count326
-\pgf@shadingcount=\count327
+\pgf@sys@shading@range@num=\count328
+\pgf@shadingcount=\count329
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfcor
 eimage.code.tex
@@ -774,7 +775,7 @@ Package: tikz 2023-01-15 v3.1.10 (3.1.10)
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/pgflibr
 aryplothandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@plot@mark@count=\count328
+\pgf@plot@mark@count=\count330
 \pgfplotmarksize=\dimen284
 )
 \tikz@lastx=\dimen285
@@ -789,19 +790,19 @@ File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikz@figbox@bg=\box64
 \tikz@tempbox=\box65
 \tikz@tempbox@bg=\box66
-\tikztreelevel=\count329
-\tikznumberofchildren=\count330
-\tikznumberofcurrentchild=\count331
-\tikz@fig@count=\count332
+\tikztreelevel=\count331
+\tikznumberofchildren=\count332
+\tikznumberofcurrentchild=\count333
+\tikz@fig@count=\count334
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/modules/pgfmodule
 matrix.code.tex
 File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfmatrixcurrentrow=\count333
-\pgfmatrixcurrentcolumn=\count334
-\pgf@matrix@numberofcolumns=\count335
+\pgfmatrixcurrentrow=\count335
+\pgfmatrixcurrentcolumn=\count336
+\pgf@matrix@numberofcolumns=\count337
 )
-\tikz@expandcount=\count336
+\tikz@expandcount=\count338
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibrarytopaths.code.tex
@@ -835,17 +836,13 @@ File: pgflibrarycurvilinear.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 \pgf@arrows@the@rigidity=\dimen303
 )
-(C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/l3packages/l3keys2e/l3k
-eys2e.sty
-Package: l3keys2e 2024-08-16 LaTeX2e option processing using LaTeX3 keys
-)
 Package: witharrows 2024/10/19 v2.9a Draws arrows for explanations on the right
 
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box67
-\sift@deathcycles=\count337
+\sift@deathcycles=\count339
 \@vwid@loff=\dimen304
 \@vwid@roff=\dimen305
 )
@@ -856,14 +853,14 @@ Package: footnotehyper 2021/08/13 v1.1e hyperref aware footnote.sty (JFB)
 \FNH@width=\dimen306
 \FNH@toks=\toks40
 )
-\g__witharrows_last_env_int=\count338
-\l__witharrows_pos_env_int=\count339
-\l__witharrows_pos_arrow_int=\count340
-\g__witharrows_arrow_int=\count341
-\g__witharrows_line_int=\count342
-\g__witharrows_col_int=\count343
-\g__witharrows_static_col_int=\count344
-\l__witharrows_nb_cols_int=\count345
+\g__witharrows_last_env_int=\count340
+\l__witharrows_pos_env_int=\count341
+\l__witharrows_pos_arrow_int=\count342
+\g__witharrows_arrow_int=\count343
+\g__witharrows_line_int=\count344
+\g__witharrows_col_int=\count345
+\g__witharrows_static_col_int=\count346
+\l__witharrows_nb_cols_int=\count347
 \l__witharrows_arrow_width_dim=\dimen307
 \l__witharrows_up_and_down_radius_dim=\dimen308
 \l__witharrows_xoffset_for_o_arrows_dim=\dimen309
@@ -898,22 +895,22 @@ LaTeX Font Info:    Overwriting symbol font `stmry' in version `bold'
 (Font)                  U/stmry/m/n --> U/stmry/b/n on input line 89.
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/base/shortvrb.sty
-Package: shortvrb 2024/04/26 v3.0p Standard LaTeX documentation package V3 (FMi
+Package: shortvrb 2024/10/23 v3.0q Standard LaTeX documentation package V3 (FMi
 )
 )
 Package shortvrb Info: Made | a short reference for \verb on input line 25.
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2024/01/20 4.5c verbatim text (tvz,hv)
-\FV@CodeLineNo=\count346
+\FV@CodeLineNo=\count348
 \FV@InFile=\read5
 \FV@TabBox=\box69
-\c@FancyVerbLine=\count347
-\FV@StepNumber=\count348
+\c@FancyVerbLine=\count349
+\FV@StepNumber=\count350
 \FV@OutFile=\write4
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/titlesec/titlesec.sty
-Package: titlesec 2023/10/27 v2.16 Sectioning titles
+Package: titlesec 2025/01/04 v2.17 Sectioning titles
 \ttl@box=\box70
 \beforetitleunit=\skip61
 \aftertitleunit=\skip62
@@ -925,8 +922,12 @@ Package: titlesec 2023/10/27 v2.16 Sectioning titles
 \titlewidthfirst=\dimen320
 )
 (C:/Users/panti/Documents/Travail/texmf/tex/lualatex/piton/piton.sty
-Package: piton 2024/10/18 v4.1 Highlight informatic listings with LPEG on LuaLa
-TeX
+(C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/l3packages/l3keys2e/l3k
+eys2e.sty
+Package: l3keys2e 2024-08-16 LaTeX2e option processing using LaTeX3 keys
+)
+Package: piton 2025/03/04 v4.2c Highlight informatic listings with LPEG on LuaL
+aTeX
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/luatex/luatexbase/luatexbase.
 sty
@@ -935,7 +936,7 @@ Package: luatexbase 2015/10/04 v1.3 luatexbase interface to LuaTeX
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/luatex/ctablestack/ctablestac
 k.sty
 Package: ctablestack 2015/10/01 v1.0 Catcode table stable support
-\@catcodetablestackcnt=\count349
+\@catcodetablestackcnt=\count351
 )
 \CatcodeTableOther=\catcodetable16
 \CatcodeTableExpl=\catcodetable17
@@ -945,21 +946,21 @@ Package: luacode 2012/01/23 v1.2a lua-in-tex helpers (mpg)
 \luacode@lines=\toks42
 \luacode@table@soft=\catcodetable18
 )
-\l__piton_nb_lines_int=\count350
-\l__piton_nb_non_empty_lines_int=\count351
-\g__piton_line_int=\count352
-\l__piton_splittable_int=\count353
-\g__piton_env_int=\count354
+\l__piton_nb_lines_int=\count352
+\l__piton_nb_non_empty_lines_int=\count353
+\g__piton_line_int=\count354
+\l__piton_splittable_int=\count355
+\g__piton_env_int=\count356
 \l__piton_width_dim=\dimen321
 \l__piton_line_width_dim=\dimen322
 \g__piton_tmp_width_dim=\dimen323
 \l__piton_left_margin_dim=\dimen324
 \l__piton_numbers_sep_dim=\dimen325
-\l__piton_tab_size_int=\count355
-\l__piton_gobble_int=\count356
-\g__piton_indentation_int=\count357
-\l__piton_number_lines_start_int=\count358
-\g__piton_visual_line_int=\count359
+\l__piton_tab_size_int=\count357
+\l__piton_gobble_int=\count358
+\g__piton_indentation_int=\count359
+\l__piton_number_lines_start_int=\count360
+\g__piton_visual_line_int=\count361
 )
 \l__pantigny_width_dim=\dimen326
  (./witharrows-french.aux)
@@ -974,12 +975,6 @@ LaTeX Font Info:    ... okay on input line 109.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 109.
 LaTeX Font Info:    ... okay on input line 109.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 109.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
-09.
-
-(C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
 LaTeX Font Info:    ... okay on input line 109.
 LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 109.
 LaTeX Font Info:    ... okay on input line 109.
@@ -1092,16 +1087,16 @@ Package geometry Warning: Wrong driver setting: `xetex'; trying `pdftex' driver
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count360
+\scratchcounter=\count362
 \scratchdimen=\dimen327
 \scratchbox=\box71
-\nofMPsegments=\count361
-\nofMParguments=\count362
+\nofMPsegments=\count363
+\nofMParguments=\count364
 \everyMPshowfont=\toks43
-\MPscratchCnt=\count363
+\MPscratchCnt=\count365
 \MPscratchDim=\dimen328
-\MPnumerator=\count364
-\makeMPintoPDFobject=\count365
+\MPnumerator=\count366
+\makeMPintoPDFobject=\count367
 \everyMPtoPDFconversion=\toks44
 )
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/epstopdf-pkg/epstopdf-b
@@ -1143,17 +1138,17 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 1
 
 (C:/Users/panti/AppData/Local/Programs/MiKTeX/tex/latex/stmaryrd/ustmry.fd)
 \l__witharrows_x_dim=\dimen329
-\l__witharrows_initial_int=\count366
-\l__witharrows_final_int=\count367
-\l__witharrows_arrow_int=\count368
-\l__witharrows_pos_of_arrow_int=\count369
-\l__witharrows_jump_int=\count370
+\l__witharrows_initial_int=\count368
+\l__witharrows_final_int=\count369
+\l__witharrows_arrow_int=\count370
+\l__witharrows_pos_of_arrow_int=\count371
+\l__witharrows_jump_int=\count372
 \l__witharrows_env_box=\box72
-\l__witharrows_first_arrow_of_group_int=\count371
-\l__witharrows_first_line_of_group_int=\count372
-\l__witharrows_last_line_of_group_int=\count373
-\l__witharrows_first_arrow_int=\count374
-\l__witharrows_last_arrow_int=\count375
+\l__witharrows_first_arrow_of_group_int=\count373
+\l__witharrows_first_line_of_group_int=\count374
+\l__witharrows_last_line_of_group_int=\count375
+\l__witharrows_first_arrow_int=\count376
+\l__witharrows_last_arrow_int=\count377
 \g__witharrows_x_initial_dim=\dimen330
 \g__witharrows_x_final_dim=\dimen331
 \g__witharrows_y_initial_dim=\dimen332
@@ -1165,7 +1160,7 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 1
 {C:/Users/panti/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
 
 [2]
-\c@fnnohyphen=\count376
+\c@fnnohyphen=\count378
 
 
 [3]
@@ -1248,24 +1243,24 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 1
 
 [34] (./witharrows-french.aux)
  ***********
-LaTeX2e <2024-06-01> patch level 2
-L3 programming layer <2024-09-10>
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `witharrows-french.out' has not changed.
 (rerunfilecheck)             Checksum: 70FA8C967B5D521F3B872723203395BF;6509.
 )
 
 Here is how much of LuaTeX's memory you used:
- 36993 strings out of 475910
- 195329,1373583 words of node,token memory allocated
+ 37014 strings out of 475506
+ 195326,1373583 words of node,token memory allocated
  6008 words of node memory still in use:
    9 hlist, 3 vlist, 2 rule, 1 disc, 1 local_par, 2 math, 203 glue, 6 kern, 2 pe
 nalty, 8 glyph, 1734 attribute, 60 glue_spec, 249 attribute_list, 2 write nodes
-   avail lists: 1:3,2:22564,3:2396,4:376,5:627,6:144,7:9524,8:69,9:2365,10:13,11
-:673
- 58800 multiletter control sequences out of 65536+600000
+   avail lists: 1:3,2:22564,3:2396,4:376,5:618,6:144,7:9479,8:69,9:2365,10:13,11
+:670
+ 59201 multiletter control sequences out of 65536+600000
  100 fonts using 7989647 bytes
- 117i,28n,131p,470b,1376s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,28n,122p,470b,1388s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </users/panti/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman7-it
 alic.otf></users/panti/appdata/local/programs/miktex/fonts/opentype/public/lm/lm
 roman5-regular.otf></users/panti/appdata/local/programs/miktex/fonts/opentype/pu
@@ -1323,7 +1318,7 @@ msfonts/cm/cmsy9.pfb><C:/Users/panti/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/amsfonts/symbols/msam10.pfb><C:/Users/panti/AppData/Local/Programs/MiKTeX/
 fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/panti/AppData/Local/Pro
 grams/MiKTeX/fonts/type1/public/hoekwater/stmary8.pfb>
-Output written on witharrows-french.pdf (34 pages, 531626 bytes).
+Output written on witharrows-french.pdf (34 pages, 530963 bytes).
 
 PDF statistics: 610 PDF objects out of 1000 (max. 8388607)
  70 named destinations out of 1000 (max. 131072)

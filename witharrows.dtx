@@ -1,6 +1,6 @@
 %\iffalse meta-comment
 %
-% Copyright (C) 2017-2024 by F. Pantigny
+% Copyright (C) 2017-2025 by F. Pantigny
 % -----------------------------------
 %
 % This file may be distributed and/or modified under the
@@ -26,7 +26,7 @@
 \usedir{tex/latex/witharrows}
 \preamble
 
-Copyright (C) 2017-2024 by F. Pantigny
+Copyright (C) 2017-2025 by F. Pantigny
 -----------------------------------
 
 This file may be distributed and/or modified under the
@@ -169,7 +169,7 @@ version 2005/12/01 or later.
 % This package can be used with |xelatex|, |lualatex|, |pdflatex| but also by
 % the classical workflow |latex|-|dvips|-|ps2pdf| (or Adobe Distiller).
 % \textsl{However, the file witharrows.dtx of the present documentation should
-% be compiled with LuaLaTeX.} This package loads the packages \pkg{l3keys2e},
+% be compiled with LuaLaTeX.} This package loads the packages 
 % \pkg{varwidth}, \pkg{tikz} and the Tikz libraries \pkg{arrows.meta} and
 % \pkg{bending}. The final user only has to load the package with the classical
 % instruction: |\usepackage{witharrows}|.
@@ -2837,7 +2837,6 @@ version 2005/12/01 or later.
 % |L3|:
 %    \begin{macrocode}
 %<*LaTeX>
-\RequirePackage{l3keys2e}
 \ProvidesExplPackage
   {witharrows}
   {\myfiledate}
@@ -2845,6 +2844,20 @@ version 2005/12/01 or later.
   {Draws arrows for explanations on the right}
 %    \end{macrocode}
 %
+%    \begin{macrocode}
+\msg_new:nnn { witharrows } { latex-too-old }
+  { 
+    Your~LaTeX~release~is~too~old. \\
+    You~need~at~least~a~the~version~of~2023-11-01 
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\IfFormatAtLeastTF
+  { 2023-11-01 } 
+  { } 
+  { \msg_fatal:nn { witharrows } { latex-too-old } }
+%    \end{macrocode}
 % 
 % \bigskip
 %    \begin{macrocode}
@@ -2969,7 +2982,7 @@ version 2005/12/01 or later.
 % \bigskip
 % We process the options when the package is loaded (with |\usepackage|).
 %    \begin{macrocode}
-\ProcessKeysOptions { WithArrows / package }
+\ProcessKeyOptions [ WithArrows / package ]
 %    \end{macrocode}
 %
 %    \begin{macrocode}
