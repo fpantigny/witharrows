@@ -95,14 +95,14 @@ version 2005/12/01 or later.
     \keys_set:nn { pantigny } { #1 }
     \color{gray}
     \PitonOptions { gobble = 2 }
-    \dim_compare:nNnT \l__pantigny_width_dim > \c_zero_dim 
+    \dim_compare:nNnT { \l__pantigny_width_dim } > { \c_zero_dim }
       { 
         \PitonOptions { width = \l__pantigny_width_dim } 
         \begin{minipage}[c]{\l__pantigny_width_dim} 
       }
   }
   { 
-    \dim_compare:nNnT \l__pantigny_width_dim > \c_zero_dim 
+    \dim_compare:nNnT { \l__pantigny_width_dim } > { \c_zero_dim }
       { \end{minipage} }
     \medskip
   }
@@ -2875,10 +2875,10 @@ version 2005/12/01 or later.
 % 
 %    \begin{macrocode}
 %<*LaTeX>
-\ProvideDocumentCommand{\IfPackageLoadedT}{mm}
-  {\IfPackageLoadedTF{#1}{#2}{}}
-\ProvideDocumentCommand{\IfPackageLoadedF}{mm}
-  {\IfPackageLoadedTF{#1}{}{#2}}
+\ProvideDocumentCommand { \IfPackageLoadedT } { m m }
+  { \IfPackageLoadedTF { #1 } { #2 } { } }
+\ProvideDocumentCommand { \IfPackageLoadedF } { m m }
+  { \IfPackageLoadedTF { #1 } { } { #2 } } 
 %</LaTeX>
 %    \end{macrocode}
 % 
@@ -2894,19 +2894,19 @@ version 2005/12/01 or later.
 % |{WithArrows}|. Idem for the option |footnotehyper|.
 %
 % \medskip
-% The boolean |\c_@@_footnotehyper_bool| will indicate if the option
+% The boolean |\g_@@_footnotehyper_bool| will indicate if the option
 % |footnotehyper| is used.
 %    \begin{macrocode}
 %<*LaTeX>
-\bool_new:N \c_@@_footnotehyper_bool
+\bool_new:N \g_@@_footnotehyper_bool
 %    \end{macrocode}
 %
 % \medskip
-% The boolean |\c_@@_footnote_bool| will indicate if the option |footnote| is
+% The boolean |\g_@@_footnote_bool| will indicate if the option |footnote| is
 % used, but quicky, it will also be set to |true| if the option |footnotehyper|
 % is used.
 %    \begin{macrocode}
-\bool_new:N \c_@@_footnote_bool
+\bool_new:N \g_@@_footnote_bool
 %</LaTeX>
 %    \end{macrocode}
 %
@@ -2933,14 +2933,18 @@ version 2005/12/01 or later.
 % warning on Overleaf. The argument is given by currification.
 %    \begin{macrocode}
 \cs_new_protected:Npn \@@_error_or_warning:n 
-  { \bool_if:NTF \c_@@_messages_for_Overleaf_bool \@@_warning:n \@@_error:n }
+  { 
+    \bool_if:NTF \c_@@_messages_for_Overleaf_bool 
+      { \@@_warning:n } 
+      { \@@_error:n }
+  }
 %    \end{macrocode}
 %
 % We try to detect whether the compilation is done on Overleaf. We use
 % |\c_sys_jobname_str| because, with Overleaf, the value of |\c_sys_jobname_str|
 % is always ``|output|''.
 %    \begin{macrocode}
-\bool_set:Nn \c_@@_messages_for_Overleaf_bool
+\bool_const:Nn \c_@@_messages_for_Overleaf_bool
   { 
        \str_if_eq_p:on \c_sys_jobname_str { _region_ }  % for Emacs
     || \str_if_eq_p:on \c_sys_jobname_str { output }   % for Overleaf
@@ -2953,13 +2957,13 @@ version 2005/12/01 or later.
 %    \end{macrocode}
 % 
 % \medskip
-% We define a set of keys |WithArrows/package| for these options.
+% We define a set of keys |witharrows| for these options.
 %    \begin{macrocode}
 %<*LaTeX>
-\keys_define:nn { WithArrows / package }
+\keys_define:nn { witharrows }
   { 
-    footnote .bool_set:N = \c_@@_footnote_bool ,
-    footnotehyper .bool_set:N = \c_@@_footnotehyper_bool ,
+    footnote .bool_gset:N = \g_@@_footnote_bool ,
+    footnotehyper .bool_gset:N = \g_@@_footnotehyper_bool ,
     footnote .usage:n = load , 
     footnotehyper .usage:n = load ,
     beamer .bool_gset:N = \g_@@_beamer_bool ,
@@ -2982,7 +2986,7 @@ version 2005/12/01 or later.
 % \bigskip
 % We process the options when the package is loaded (with |\usepackage|).
 %    \begin{macrocode}
-\ProcessKeyOptions [ WithArrows / package ]
+\ProcessKeyOptions 
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -3018,14 +3022,14 @@ version 2005/12/01 or later.
 %
 % \medskip
 %    \begin{macrocode}
-\bool_if:NT \c_@@_footnote_bool 
+\bool_if:NT \g_@@_footnote_bool 
   { 
 %    \end{macrocode}
 % The class \cls{beamer} has its own system to extract footnotes and that's why
 % we have nothing to do if \cls{beamer} is used. 
 %    \begin{macrocode}
     \@ifclassloaded { beamer }
-      { \bool_set_false:N \c_@@_footnote_bool }
+      { \bool_gset_false:N \g_@@_footnote_bool }
       { 
         \@ifpackageloaded { footnotehyper }
           { \@@_error:n { footnote~with~footnotehyper~package } }
@@ -3035,24 +3039,24 @@ version 2005/12/01 or later.
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-\bool_if:NT \c_@@_footnotehyper_bool 
+\bool_if:NT \g_@@_footnotehyper_bool 
   { 
 %    \end{macrocode}
 % The class \cls{beamer} has its own system to extract footnotes and that's why
 % we have nothing to do if \cls{beamer} is used. 
 %    \begin{macrocode}
     \@ifclassloaded { beamer }
-      { \bool_set_false:N \c_@@_footnote_bool }
+      { \bool_gset_false:N \g_@@_footnote_bool }
       { 
         \@ifpackageloaded { footnote }
           { \@@_error:n { footnotehyper~with~footnote~package } }
           { \usepackage { footnotehyper } }
-        \bool_set_true:N \c_@@_footnote_bool 
+        \bool_gset_true:N \g_@@_footnote_bool 
       }
   }
 %    \end{macrocode}
-% The flag |\c_@@_footnote_bool| is raised and so, we will only have to test
-% |\c_@@_footnote_bool| in order to know if we have to insert an environment
+% The flag |\g_@@_footnote_bool| is raised and so, we will only have to test
+% |\g_@@_footnote_bool| in order to know if we have to insert an environment
 % |{savenotes}| (the |\begin{savenotes}| is in |\@@_pre_halign:n| and
 % |\end{savenotes}| at the end of the environments |{WithArrows}| and
 % |{DispWithArrows}|).
@@ -3185,13 +3189,13 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
     \str_set:Ne \l_tmpa_str { \seq_item:Nn \l_tmpa_seq { -1 } }
     \use:c { \l_tmpa_str _if_exist:cF }
-      { g _\seq_use:Nnnn \l_tmpa_seq _ _ _ }
+      { g _\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } }
       { 
         \use:c { \l_tmpa_str _new:c }
-          { g _\seq_use:Nnnn \l_tmpa_seq _ _ _ } 
+          { g _\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } } 
       }
     \use:c { \l_tmpa_str _gset_eq:cN } 
-      { g _\seq_use:Nnnn \l_tmpa_seq _ _ _ } #1 
+      { g _\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } } #1 
   }
 %    \end{macrocode}
 % 
@@ -3207,7 +3211,7 @@ version 2005/12/01 or later.
     \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
     \str_set:Ne \l_tmpa_str { \seq_item:Nn \l_tmpa_seq { -1 } }
     \use:c { \l_tmpa_str _set_eq:Nc } 
-      #1 { g_\seq_use:Nnnn \l_tmpa_seq _ _ _ } 
+      #1 { g_\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } } 
   }
 %    \end{macrocode}
 % 
@@ -3374,7 +3378,7 @@ version 2005/12/01 or later.
 % in the tree of the nested environments |{WithArrows}|.
 %    \begin{macrocode}
 \seq_new:N \g_@@_position_in_the_tree_seq
-\seq_gput_right:Nn \g_@@_position_in_the_tree_seq 1
+\seq_gput_right:Nn \g_@@_position_in_the_tree_seq { 1 }
 %    \end{macrocode}
 %
 % \bigskip
@@ -3414,7 +3418,7 @@ version 2005/12/01 or later.
 %
 %    \begin{macrocode}
 \int_new:N \l_@@_pos_arrow_int
-\int_set:Nn \l_@@_pos_arrow_int 3
+\int_set:Nn \l_@@_pos_arrow_int { 3 }
 %    \end{macrocode}
 %
 %
@@ -3535,6 +3539,7 @@ version 2005/12/01 or later.
 \tl_new:N \l_@@_initial_tl
 \tl_new:N \l_@@_final_tl
 \int_new:N \l_@@_nb_cols_int
+\tl_new:N \l_@@_replace_left_brace_by_tl
 %    \end{macrocode}
 % 
 % \bigskip
@@ -3681,7 +3686,7 @@ version 2005/12/01 or later.
         {
           \str_set:Nn \l_@@_previous_key_str { group }
           \seq_remove_all:Nn \l_@@_options_Arrow_seq { xoffset }
-          \int_set:Nn \l_@@_pos_arrow_int 7 
+          \int_set:Nn \l_@@_pos_arrow_int { 7 }
         }
         { \@@_error:n { Incompatible~options } } ,
     group .value_forbidden:n = true ,
@@ -3692,21 +3697,21 @@ version 2005/12/01 or later.
           \seq_if_in:NnF \l_@@_options_Arrow_seq { new-group }
             { \seq_put_right:Nn \l_@@_options_Arrow_seq { new-group } }
           \seq_remove_all:Nn \l_@@_options_Arrow_seq { xoffset }
-          \int_set:Nn \l_@@_pos_arrow_int 6
+          \int_set:Nn \l_@@_pos_arrow_int { 6 }
         }
         { \@@_error:n { Incompatible~options } } ,
     groups .value_forbidden:n = true ,
     tikz   .code:n = \tikzset { WithArrows / arrow / .append~style = { #1 } } , 
     tikz   .value_required:n  = true ,
-    rr     .code:n            = \@@_fix_pos_option:n 3 ,
+    rr     .code:n            = \@@_fix_pos_option:n { 3 } ,
     rr     .value_forbidden:n = true ,
-    ll     .code:n            = \@@_fix_pos_option:n 1 ,
+    ll     .code:n            = \@@_fix_pos_option:n { 1 } ,
     ll     .value_forbidden:n = true ,
-    rl     .code:n            = \@@_fix_pos_option:n 2 ,
+    rl     .code:n            = \@@_fix_pos_option:n { 2 } ,
     rl     .value_forbidden:n = true ,
-    lr     .code:n            = \@@_fix_pos_option:n 0 ,
+    lr     .code:n            = \@@_fix_pos_option:n { 0 } ,
     lr     .value_forbidden:n = true ,
-    i      .code:n            = \@@_fix_pos_option:n 5 ,
+    i      .code:n            = \@@_fix_pos_option:n { 5 } ,
     i      .value_forbidden:n = true ,
     xoffset .dim_set:N  = \l_@@_xoffset_dim ,
     xoffset .value_required:n  = true ,
@@ -3746,11 +3751,11 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
 \keys_define:nn { WithArrows / WithArrowsSpecific }
   { 
-    t   .code:n            = \int_set:Nn \l_@@_pos_env_int O ,
+    t   .code:n            = \int_set:Nn \l_@@_pos_env_int { O } ,
     t   .value_forbidden:n = true ,
-    c   .code:n            = \int_set:Nn \l_@@_pos_env_int 1 ,
+    c   .code:n            = \int_set:Nn \l_@@_pos_env_int { 1 } ,
     c   .value_forbidden:n = true ,
-    b   .code:n            = \int_set:Nn \l_@@_pos_env_int 2 ,
+    b   .code:n            = \int_set:Nn \l_@@_pos_env_int { 2 } ,
     b   .value_forbidden:n = true ,
     right-overlap .bool_set:N       = \l_@@_right_overlap_bool ,
     right-overlap .value_required:n = true 
@@ -3761,8 +3766,8 @@ version 2005/12/01 or later.
 % The following list of the (left) extensible delimiters of LaTeX is only for
 % the validation of the key |replace-left-brace-by|.
 %    \begin{macrocode}
-\clist_new:N \c_@@_ext_delimiters_clist
-\clist_set:Nn \c_@@_ext_delimiters_clist
+\clist_new:N \g_@@_ext_delimiters_clist
+\clist_gset:Nn \g_@@_ext_delimiters_clist
   { 
     ., \{, (, [, \lbrace, \lbrack, \lgroup, \langle, \lmoustache, \lceil, \lfloor
   }
@@ -3773,7 +3778,7 @@ version 2005/12/01 or later.
     \IfPackageLoadedT { amsmath } { \bool_set_true:N \l_tmpa_bool } 
     \IfPackageLoadedT { unicode-math } { \bool_set_true:N \l_tmpa_bool } 
     \bool_if:NT \l_tmpa_bool 
-      { \clist_put_right:Nn \c_@@_ext_delimiters_clist { \lvert, \lVert } }  
+      { \clist_gput_right:Nn \g_@@_ext_delimiters_clist { \lvert, \lVert } }  
   }
 %</LaTeX>
 %    \end{macrocode}
@@ -3805,13 +3810,7 @@ version 2005/12/01 or later.
     subequations .code:n = 
       \IfPackageLoadedTF { amsmath }
         { \bool_set_true:N \l_@@_subequations_bool }
-        { 
-          \@@_error:n { amsmath~not~loaded } 
-          \group_begin:
-          \globaldefs = 1
-          \@@_msg_redirect_name:nn { amsmath~not~loaded } { info }
-          \group_end:
-        } ,
+        { \@@_err_amsmath_not_loaded: } ,
     subequations .default:n = true ,
     subequations .value_forbidden:n = true ,
     nonumber .meta:n = notag ,
@@ -3823,7 +3822,7 @@ version 2005/12/01 or later.
       \clist_if_in:NnT \l_@@_tags_clist { first }
         {
           \clist_remove_all:Nn \l_@@_tags_clist { first }
-          \clist_put_left:Nn \l_@@_tags_clist 1
+          \clist_put_left:Nn \l_@@_tags_clist { 1 }
         } ,
     tagged-lines .value_required:n = true ,
 %</LaTeX>
@@ -3833,7 +3832,7 @@ version 2005/12/01 or later.
       {
         \tl_set:Ne \l_tmpa_tl { \tl_head:n { #1 } }
         \clist_if_in:NoTF 
-          \c_@@_ext_delimiters_clist
+          \g_@@_ext_delimiters_clist
           \l_tmpa_tl
           { \tl_set:Nn \l_@@_replace_left_brace_by_tl { #1 } }
           { \@@_error:n { Bad~value~for~replace~brace~by } }
@@ -4061,7 +4060,7 @@ version 2005/12/01 or later.
 \keys_define:nn { WithArrows / Arrow / FirstPass }
   { 
     jump .code:n = 
-      \int_compare:nNnTF { #1 } > \c_zero_int
+      \int_compare:nNnTF { #1 } > { \c_zero_int }
         { \int_set:Nn \l_@@_jump_int { #1 } }
         { \@@_error:n { Negative~jump } } ,
     jump .value_required:n  = true,
@@ -4083,7 +4082,7 @@ version 2005/12/01 or later.
     o .code:n = 
       \str_if_empty:NTF \l_@@_previous_key_str
         {
-          \int_compare:nNnTF \l_@@_pos_arrow_int < 6
+          \int_compare:nNnTF { \l_@@_pos_arrow_int } < { 6 }
             { \@@_error:n { invalid~key~o } }
             { 
               \str_set:Nn \l_@@_status_arrow_str { over } 
@@ -4154,7 +4153,7 @@ version 2005/12/01 or later.
 % already detected during the first pass.
 %
 %    \begin{macrocode} 
-\keys_define:nn {WithArrows / Arrow / SecondPass }
+\keys_define:nn { WithArrows / Arrow / SecondPass }
   { 
     tikz-code .tl_set:N = \l_@@_tikz_code_tl ,
     tikz-code .initial:n = \draw~(#1)~to~node{#3}~(#2)~; ,
@@ -4175,8 +4174,8 @@ version 2005/12/01 or later.
     xoffset .code:n  = 
       \bool_lazy_all:nTF 
         { 
-          { \int_compare_p:nNn \g_@@_arrow_int > 1 }
-          { \int_compare_p:nNn \l_@@_pos_arrow_int > 5 }
+          { \int_compare_p:nNn { \g_@@_arrow_int } > { 1 } }
+          { \int_compare_p:nNn { \l_@@_pos_arrow_int } > { 5 } }
           { ! \str_if_eq_p:on \l_@@_status_arrow_str { independent } }
         }
         { \@@_error:n { Option~xoffset~forbidden } }
@@ -4310,7 +4309,7 @@ version 2005/12/01 or later.
 % \item The ``status'' of the arrow, with 4 possible values: empty,
 % |independent|, |new-group| or |over|.
 %    \begin{macrocode} 
-    \prop_put:Nno \l_tmpa_linked_prop { status } \l_@@_status_arrow_str
+    \prop_put:Nno \l_tmpa_linked_prop { status } { \l_@@_status_arrow_str }
 %    \end{macrocode}
 % 
 % \item The options of the arrow (it's a token list):
@@ -4326,7 +4325,7 @@ version 2005/12/01 or later.
 % \item The number of the line where the command |\Arrow| is issued in the TeX
 % source (as of now, this is only useful for some error messages).
 %    \begin{macrocode}
-    \prop_put:Nne \l_tmpa_linked_prop { input-line } \msg_line_number:
+    \prop_put:Nne \l_tmpa_linked_prop { input-line } { \msg_line_number: }
 %    \end{macrocode}
 %
 % \item The total width of the arrow (with the label)... but we don't know it
@@ -4454,7 +4453,7 @@ version 2005/12/01 or later.
 % is a third column in the environment), we will have the following instructions :
 % \begin{Code}
 %  \int_gincr:N \g_@@_col_int
-%  \int_set:Nn \g_@@_static_col_int 3
+%  \int_set:Nn \g_@@_static_col_int { 3 }
 % \end{Code}
 %  The counter |\g_@@_col_int| is incremented dynamically and the second is
 %  static. If the user has used a command |\omit|, the dynamic incrementation is
@@ -4464,7 +4463,7 @@ version 2005/12/01 or later.
 % \bigskip
 % We also have to update the position on the nesting tree.
 %    \begin{macrocode}
-    \seq_gput_right:Nn \g_@@_position_in_the_tree_seq 1
+    \seq_gput_right:Nn \g_@@_position_in_the_tree_seq { 1 }
 %    \end{macrocode}
 %
 % The nesting tree is used to create a prefix which will be used in the names of
@@ -4478,7 +4477,8 @@ version 2005/12/01 or later.
     \seq_set_eq:NN \l_tmpa_seq \g_@@_position_in_the_tree_seq
     \seq_pop_right:NN \l_tmpa_seq \l_tmpa_tl
     \str_clear_new:N \l_@@_prefix_str
-    \str_set:Ne \l_@@_prefix_str { \seq_use:Nnnn \l_tmpa_seq - - - }
+    \str_set:Ne \l_@@_prefix_str 
+      { \seq_use:Nnnn \l_tmpa_seq { - } { - } { - } }
 %    \end{macrocode}
 % 
 % \bigskip
@@ -4502,7 +4502,7 @@ version 2005/12/01 or later.
 % The counter |\l_@@_jump_int| corresponds to the option |jump|. Now, we set the
 % initial value for this option.
 %    \begin{macrocode}
-    \int_set:Nn \l_@@_jump_int 1
+    \int_set:Nn \l_@@_jump_int { 1 }
 %    \end{macrocode}
 %
 % \medskip
@@ -4623,7 +4623,7 @@ version 2005/12/01 or later.
 % \pkg{footnote} or the package \pkg{footnotehyper}).
 %    \begin{macrocode}
 %<*LaTeX>
-    \bool_if:NT \c_@@_footnote_bool { \begin { savenotes } }
+    \bool_if:NT \g_@@_footnote_bool { \begin { savenotes } }
 %</LaTeX>
 %    \end{macrocode}
 %
@@ -4704,7 +4704,7 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
             \int_gdecr:N \g_@@_col_int
             \@@_construct_halign:
-            \int_compare:nNnT \g_@@_col_int = \l_@@_nb_cols_int
+            \int_compare:nNnT { \g_@@_col_int } = { \l_@@_nb_cols_int }
               { 
 %    \end{macrocode}
 % We redefine the command |\Arrow| (or the name given to the corresponding
@@ -4732,21 +4732,21 @@ version 2005/12/01 or later.
                   }
 %</LaTeX>
               }
-            \str_if_eq:onT \l_@@_type_col_str { c } \hfil
-            \str_if_eq:onT \l_@@_type_col_str { C } \hfil
-            \str_if_eq:onT \l_@@_type_col_str { r } \hfill
-            \str_if_eq:onT \l_@@_type_col_str { R } \hfill
+            \str_if_eq:onT \l_@@_type_col_str { c } { \hfil }
+            \str_if_eq:onT \l_@@_type_col_str { C } { \hfil }
+            \str_if_eq:onT \l_@@_type_col_str { r } { \hfill }
+            \str_if_eq:onT \l_@@_type_col_str { R } { \hfill }
             \int_gincr:N \g_@@_col_int
             \int_gset:Nn \g_@@_static_col_int { \int_use:N \g_@@_col_int }
             \c_math_toggle_token
             \str_if_eq:onT \l_@@_type_col_str { C } { { } }
             \str_if_eq:onT \l_@@_type_col_str { L } { { } }
-            \bool_if:NT \l_@@_displaystyle_bool \displaystyle
+            \bool_if:NT \l_@@_displaystyle_bool { \displaystyle }
             ##
             \str_if_eq:onT \l_@@_type_col_str { C } { { } }
             \str_if_eq:onT \l_@@_type_col_str { R } { { } }
             \c_math_toggle_token
-            \int_compare:nNnTF \g_@@_col_int = \l_@@_nb_cols_int
+            \int_compare:nNnTF { \g_@@_col_int } = { \l_@@_nb_cols_int }
               \@@_construct_nodes:
               {
 %    \end{macrocode}
@@ -4754,10 +4754,10 @@ version 2005/12/01 or later.
 % because, in the last cell, a glue (=skip) is added between the nodes (in
 % |\@@_construct_nodes:|). 
 %    \begin{macrocode}
-                \str_if_eq:onT \l_@@_type_col_str { l } \hfil
-                \str_if_eq:onT \l_@@_type_col_str { L } \hfil
-                \str_if_eq:onT \l_@@_type_col_str { c } \hfil
-                \str_if_eq:onT \l_@@_type_col_str { C } \hfil
+                \str_if_eq:onT \l_@@_type_col_str { l } { \hfil }
+                \str_if_eq:onT \l_@@_type_col_str { L } { \hfil }
+                \str_if_eq:onT \l_@@_type_col_str { c } { \hfil }
+                \str_if_eq:onT \l_@@_type_col_str { C } { \hfil }
                 \bool_if:NT \l_@@_in_DispWithArrows_bool { \tabskip = \c_zero_skip }
                 &
               }
@@ -4893,8 +4893,9 @@ version 2005/12/01 or later.
 % error is raised if the environment is used outside math mode.} and therefore,
 % we can use |\vcenter|.
 %    \begin{macrocode}
-    \int_compare:nNnT \l_@@_pos_env_int = 1 \c_math_toggle_token
-    \int_case:nn \l_@@_pos_env_int { 0 \vtop 1 \vcenter 2 \vbox }
+    \int_compare:nNnT { \l_@@_pos_env_int } = { 1 } 
+      { \c_math_toggle_token }
+    \int_case:nn { \l_@@_pos_env_int } { 0 \vtop 1 \vcenter 2 \vbox }
     \bgroup
 %    \end{macrocode}
 %
@@ -4928,7 +4929,7 @@ version 2005/12/01 or later.
     && 
     \@@_error:n { Too~much~columns~in~WithArrows }
     \c_math_toggle_token
-    \bool_if:NT \l_@@_displaystyle_bool \displaystyle 
+    \bool_if:NT \l_@@_displaystyle_bool { \displaystyle }
     { ## } 
     \c_math_toggle_token
     \cr
@@ -4948,7 +4949,8 @@ version 2005/12/01 or later.
     \\
     \egroup 
     \egroup
-    \int_compare:nNnT \l_@@_pos_env_int = 1 \c_math_toggle_token
+    \int_compare:nNnT { \l_@@_pos_env_int } = { 1 } 
+      { \c_math_toggle_token }
     \hbox_set_end:
     \@@_post_halign:
 %    \end{macrocode}
@@ -4969,7 +4971,7 @@ version 2005/12/01 or later.
 % \pkg{footnote} or the package \pkg{footnotehyper}).
 %    \begin{macrocode}
 %<*LaTeX>
-    \bool_if:NT \c_@@_footnote_bool { \end { savenotes } }
+    \bool_if:NT \g_@@_footnote_bool { \end { savenotes } }
 %</LaTeX>
 %<*plain-TeX>
     \group_end:
@@ -5015,10 +5017,10 @@ version 2005/12/01 or later.
 % make sense and it will be quicker to act as if we were in option |i| (moreover,
 % it allows the option |xoffset| for the unique arrow).
 %    \begin{macrocode}
-        \int_compare:nNnT \g_@@_arrow_int = 1 
+        \int_compare:nNnT { \g_@@_arrow_int } = { 1 }
           {
-            \int_compare:nNnT \l_@@_pos_arrow_int > 5
-              { \int_set:Nn \l_@@_pos_arrow_int 5 }
+            \int_compare:nNnT { \l_@@_pos_arrow_int } > { 5 }
+              { \int_set:Nn \l_@@_pos_arrow_int { 5 } }
           }
         \@@_scan_arrows:
       }
@@ -5064,7 +5066,7 @@ version 2005/12/01 or later.
 % We update the value of the counter |\g_@@_last_env_int|. This counter is used
 % only by the user function |\WithArrowsLastEnv|.
 %    \begin{macrocode}
-    \int_compare:nNnT { \seq_count:N \g_@@_position_in_the_tree_seq } = 1
+    \int_compare:nNnT { \seq_count:N \g_@@_position_in_the_tree_seq } = { 1 }
       { \int_gincr:N \g_@@_last_env_int }
 %    \end{macrocode}
 %
@@ -5105,7 +5107,7 @@ version 2005/12/01 or later.
 % We try to detect some |\omit| (as of now, an |\omit| in the last column is
 % not detected).
 %    \begin{macrocode}
-    \int_compare:nNnF \g_@@_col_int = \g_@@_static_col_int
+    \int_compare:nNnF { \g_@@_col_int } = { \g_@@_static_col_int }
       { \@@_error:n { omit~probably~used } }
     \prg_replicate:nn { \l_@@_nb_cols_int - \g_@@_static_col_int } { & { } } 
     \group_align_safe_begin:
@@ -5189,7 +5191,7 @@ version 2005/12/01 or later.
 % (after the |&|).
 %    \begin{macrocode}
             \cs_gset:Npe \g_tmpa_tl
-              { \tl_if_empty:NTF \l_@@_tag_tl \theequation \l_@@_tag_tl }
+              { \tl_if_empty:NTF \l_@@_tag_tl { \theequation } { \l_@@_tag_tl } }
 %    \end{macrocode}
 % It's possible to put several labels for the same line (it's not possible in
 % the environments of \pkg{amsmath}). That's why the differents labels of a same
@@ -5210,11 +5212,7 @@ version 2005/12/01 or later.
 % |\refstepcounter|.
 %    \begin{macrocode}
                 \IfPackageLoadedT { hyperref }
-                  { 
-                    % the following line is probably pointless (2022/05/16)
-                    % \str_set:Nn \This@name { equation }
-                    \hyper@refstepcounter { equation }
-                  }
+                  { \hyper@refstepcounter { equation } }
 %    \end{macrocode}
 % Then, an action done by \pkg{cleveref} in its redefinition of
 % |\refstepcounter|. The package \pkg{cleveref} creates in the |aux| file a
@@ -5252,7 +5250,7 @@ version 2005/12/01 or later.
             \@@_save:N \l_@@_qedhere_bool
             \bool_if:NT \l_@@_tag_next_line_bool 
               { 
-                \openup -\jot 
+                \openup - \jot 
                 \bool_set_false:N \l_@@_tag_next_line_bool 
                 \notag \\ & 
               }
@@ -5314,13 +5312,13 @@ version 2005/12/01 or later.
           }
 %</LaTeX>
       }
-    \dim_compare:nNnT { #1 } < \c_zero_dim
+    \dim_compare:nNnT { #1 } < { \c_zero_dim }
        { \@@_error:n { option~of~cr~negative } }
 
     \cr 
     \noalign 
       { 
-        \dim_set:Nn \l_tmpa_dim { \dim_max:nn { #1 } \c_zero_dim }
+        \dim_set:Nn \l_tmpa_dim { \dim_max:nn { #1 } { \c_zero_dim } }
         \skip_vertical:N \l_tmpa_dim 
         \skip_vertical:N \l_@@_interline_skip 
         \scan_stop: 
@@ -5342,13 +5340,7 @@ version 2005/12/01 or later.
 \cs_new_protected:Npn \@@_analyze_end:Nn #1 #2
   {
     \str_if_eq:onT \l_@@_type_env_str { #2 }
-      { 
-        \@@_error:n { newline~at~the~end~of~env } 
-        \group_begin:
-        \globaldefs = 1
-        \@@_msg_redirect_name:nn { newline~at~the~end~of~env } { none } 
-        \group_end:
-      }
+      { \@@_err_newline_at_the_end: }
 %    \end{macrocode}
 % We reput in the stream the |\end{...}| we have extracted.
 %    \begin{macrocode}
@@ -5510,7 +5502,7 @@ version 2005/12/01 or later.
             \group_begin:
               \cs_set_eq:NN \label \@@_old_label
               \c_math_toggle_token
-              \bool_if:NT \l_@@_displaystyle_bool \displaystyle 
+              \bool_if:NT \l_@@_displaystyle_bool { \displaystyle }
               \l_@@_left_brace_tl
               { } 
               \c_math_toggle_token
@@ -5595,7 +5587,7 @@ version 2005/12/01 or later.
     \setbox \l_@@_halign_box \vtop \bgroup
     \tabskip =
       \bool_if:NTF \l_@@_fleqn_bool
-        \c_zero_skip 
+        { \c_zero_skip }
         { 0 pt plus 1000 pt minus 1000 pt }
 %    \end{macrocode}
 %
@@ -5623,7 +5615,7 @@ version 2005/12/01 or later.
     \tabskip = \c_zero_skip
     && 
     \@@_fatal:n { Too~much~columns~in~DispWithArrows } 
-    \bool_if:nT \c_false_bool { ## }
+    \bool_if:nT { \c_false_bool } { ## }
     \cr
   }
 %    \end{macrocode}
@@ -5653,7 +5645,7 @@ version 2005/12/01 or later.
     \box_clear_new:N \l_@@_new_box
     \hbox_set:Nn \l_@@_new_box { \hbox_unpack_drop:N \l_tmpa_box } 
     \dim_compare:nNnT 
-      { \box_wd:N \l_@@_new_box } < \g_@@_alignment_dim
+      { \box_wd:N \l_@@_new_box } < { \g_@@_alignment_dim }
       { \dim_gset:Nn \g_@@_alignment_dim { \box_wd:N \l_@@_new_box } }
 %    \end{macrocode}
 % The |\egroup| is for the box |\l_@@_halign_box|.
@@ -5669,7 +5661,7 @@ version 2005/12/01 or later.
            {
             \bool_if:NTF \l_@@_fleqn_bool
               { \skip_horizontal:N \l_@@_mathindent_skip }
-              \hfil
+              { \hfil }
             \hbox_to_wd:nn \g_@@_alignment_dim 
               { 
                 \box_use_drop:N \l_@@_left_brace_box
@@ -5710,7 +5702,7 @@ version 2005/12/01 or later.
     \dim_gset_eq:NN \g_@@_right_x_dim \c_max_dim
     \pgfpicture
       \pgfrememberpicturepositiononpagetrue
-      \int_step_variable:nNn \g_@@_line_int \l_tmpa_int
+      \int_step_variable:nNn { \g_@@_line_int } \l_tmpa_int
         { 
           \cs_if_free:cTF 
             { pgf @ sh @ ns @ wa - \l_@@_prefix_str - \l_tmpa_int - v }
@@ -5719,7 +5711,7 @@ version 2005/12/01 or later.
               \pgfpointanchor 
                 { wa - \l_@@_prefix_str - \l_tmpa_int - v } 
                 { center } 
-              \dim_compare:nNnT \pgf@x < \g_@@_right_x_dim
+              \dim_compare:nNnT { \pgf@x } < { \g_@@_right_x_dim }
                 { \dim_gset_eq:NN \g_@@_right_x_dim \pgf@x } 
             } 
         }
@@ -5740,7 +5732,7 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
 %<*LaTeX>
     \IfPackageLoadedT { mathtools }
-      { \MH_if_boolean:nT { show_only_refs } \MT_showonlyrefs_true: }
+      { \MH_if_boolean:nT { show_only_refs } { \MT_showonlyrefs_true: } }
     \bool_if:NTF \l_@@_in_label_or_minipage_bool
       { 
         \c_math_toggle_token
@@ -5763,7 +5755,7 @@ version 2005/12/01 or later.
 % extract the footnotes with an environment |{savenotes}| (of the package
 % \pkg{footnote} or the package \pkg{footnotehyper}).
 %    \begin{macrocode}
-    \bool_if:NT \c_@@_footnote_bool { \end { savenotes } }
+    \bool_if:NT \g_@@_footnote_bool { \end { savenotes } }
 %</LaTeX>
 %<*plain-TeX>
     \group_end:
@@ -5807,7 +5799,7 @@ version 2005/12/01 or later.
     \bool_if:NTF \l_@@_in_WithArrows_bool
       { \@@_error:nn { Not~allowed~in~WithArrows } { #1 } }
       { 
-        \int_compare:nNnTF \g_@@_col_int < \l_@@_nb_cols_int
+        \int_compare:nNnTF { \g_@@_col_int } < { \l_@@_nb_cols_int }
           { \@@_error:nn { Not~allowed~in~DispWithArrows } { #1 } }
           { #2 }
       }
@@ -5828,7 +5820,11 @@ version 2005/12/01 or later.
 % in the environments |{WithArrows}| and |{DispWithArrows}|. 
 %    \begin{macrocode}
 \cs_new_protected:Npn \@@_nonumber: 
-  { \@@_if_in_last_col_of_disp:Nn \nonumber { \clist_clear:N \l_@@_tags_clist } }
+  { 
+    \@@_if_in_last_col_of_disp:Nn 
+      \nonumber 
+      { \clist_clear:N \l_@@_tags_clist } 
+  }
 %    \end{macrocode}
 %
 % \bigskip 
@@ -5980,10 +5976,10 @@ version 2005/12/01 or later.
 \cs_new_protected:Npn \@@_scan_arrows:
   { 
     \group_begin:
-    \int_compare:nNnT \l_@@_pos_arrow_int = 7
+    \int_compare:nNnT { \l_@@_pos_arrow_int } = { 7 }
       { 
         \@@_scan_arrows_i:
-        \int_set:Nn \l_@@_pos_arrow_int 8 
+        \int_set:Nn \l_@@_pos_arrow_int { 8 }
       }
     \@@_scan_arrows_i:
     \group_end:
@@ -6034,8 +6030,8 @@ version 2005/12/01 or later.
 % We begin a loop over all the arrows of the environment. Inside this loop, if a
 % group is finished, we will draw the arrows of that group.
 %    \begin{macrocode}
-    \int_set:Nn \l_@@_arrow_int 1
-    \int_until_do:nNnn \l_@@_arrow_int > \g_@@_arrow_int
+    \int_set:Nn \l_@@_arrow_int { 1 }
+    \int_until_do:nNnn { \l_@@_arrow_int } > { \g_@@_arrow_int }
       { 
 %    \end{macrocode}
 %
@@ -6047,11 +6043,11 @@ version 2005/12/01 or later.
         \prop_get:cnN 
           { g_@@_arrow _ \l_@@_prefix_str _ \int_use:N \l_@@_arrow_int _ prop }
           { initial } \l_tmpa_tl
-        \int_set:Nn \l_@@_initial_int \l_tmpa_tl
+        \int_set:Nn \l_@@_initial_int { \l_tmpa_tl }
         \prop_get:cnN 
           { g_@@_arrow _ \l_@@_prefix_str _ \int_use:N \l_@@_arrow_int _ prop }
           { final } \l_tmpa_tl
-        \int_set:Nn \l_@@_final_int \l_tmpa_tl
+        \int_set:Nn \l_@@_final_int { \l_tmpa_tl }
         \prop_get:cnN 
           { g_@@_arrow _ \l_@@_prefix_str _ \int_use:N \l_@@_arrow_int _ prop }
           { status } \l_@@_status_arrow_str
@@ -6069,9 +6065,9 @@ version 2005/12/01 or later.
 % second step of treatment for the option |group|). The arrow will be completely
 % ignored, even for the computation of |\l_@@_x_dim|.
 %    \begin{macrocode}
-        \int_compare:nNnTF \l_@@_final_int > \g_@@_line_int
+        \int_compare:nNnTF { \l_@@_final_int } > { \g_@@_line_int }
           { 
-            \int_compare:nNnF \l_@@_pos_arrow_int = 8
+            \int_compare:nNnF \l_@@_pos_arrow_int = { 8 }
               { \@@_error:n { Too~few~lines~for~an~arrow } }
           }
           \@@_treat_an_arrow_in_scan:
@@ -6093,9 +6089,16 @@ version 2005/12/01 or later.
 % last line of the environment).
 %    \begin{macrocode}
     \bool_lazy_and:nnT
-      { ! \int_compare_p:nNn \l_@@_pos_arrow_int = 7 }
-      { \int_compare_p:nNn \l_@@_first_arrow_of_group_int > \c_zero_int }
-      { \@@_draw_arrows:nn \l_@@_first_arrow_of_group_int \g_@@_arrow_int }
+      { ! \int_compare_p:nNn { \l_@@_pos_arrow_int } = { 7 } }
+      { 
+        \int_compare_p:nNn 
+          { \l_@@_first_arrow_of_group_int } > { \c_zero_int } 
+      }
+      { 
+        \@@_draw_arrows:nn 
+          { \l_@@_first_arrow_of_group_int } 
+          { \g_@@_arrow_int }
+      }
   }
 %    \end{macrocode}
 %
@@ -6114,16 +6117,19 @@ version 2005/12/01 or later.
 % 7). 
 %    \begin{macrocode}
     \bool_lazy_and:nnT 
-      { \int_compare_p:nNn \l_@@_arrow_int > 1 }
+      { \int_compare_p:nNn { \l_@@_arrow_int } > { 1 } }
       { 
         \bool_lazy_or_p:nn
           {
             \bool_lazy_and_p:nn
               { 
                 \int_compare_p:nNn 
-                  \l_@@_initial_int > \l_@@_last_line_of_group_int
+                  { \l_@@_initial_int } > { \l_@@_last_line_of_group_int }
               } 
-              { \bool_not_p:n { \int_compare_p:nNn \l_@@_pos_arrow_int = 7 } }
+              { 
+                \bool_not_p:n 
+                  { \int_compare_p:nNn { \l_@@_pos_arrow_int } = { 7 } }
+              }
           }
           { \str_if_eq_p:on \l_@@_status_arrow_str { new-group } }
       }
@@ -6131,7 +6137,7 @@ version 2005/12/01 or later.
         \int_if_zero:nF \l_@@_first_arrow_of_group_int 
           { 
             \@@_draw_arrows:nn 
-              \l_@@_first_arrow_of_group_int 
+              { \l_@@_first_arrow_of_group_int }
               { \l_@@_arrow_int - 1 } 
           }
         \bool_set_true:N \l_@@_new_group_bool
@@ -6167,7 +6173,7 @@ version 2005/12/01 or later.
 % to use the same value of |\l_@@_x_dim| (computed during the first step) for
 % all the groups.
 %    \begin{macrocode}
-        \int_compare:nNnF \l_@@_pos_arrow_int = 8 
+        \int_compare:nNnF { \l_@@_pos_arrow_int } = { 8 }
           { \dim_set:Nn \l_@@_x_dim { - \c_max_dim } }
       }
 %    \end{macrocode}
@@ -6212,8 +6218,8 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
     \str_if_eq:onF \l_@@_status_arrow_str { independent } 
       { 
-        \int_compare:nNnF \l_@@_pos_arrow_int = 8 
-          { \@@_update_x:nn \l_@@_initial_int \l_@@_final_int }
+        \int_compare:nNnF { \l_@@_pos_arrow_int } = { 8 }
+          { \@@_update_x:nn { \l_@@_initial_int } { \l_@@_final_int } }
       } 
   }
 %    \end{macrocode}
@@ -6240,8 +6246,8 @@ version 2005/12/01 or later.
 % |\l_@@_arrow_int| (local in the environment |{WithArrows}|) will be used as
 % index for the loop.
 %    \begin{macrocode}
-    \int_set:Nn \l_@@_arrow_int \l_@@_first_arrow_int
-    \int_until_do:nNnn \l_@@_arrow_int > \l_@@_last_arrow_int
+    \int_set_eq:NN \l_@@_arrow_int \l_@@_first_arrow_int
+    \int_until_do:nNnn { \l_@@_arrow_int } > { \l_@@_last_arrow_int }
       {
 %    \end{macrocode}
 %
@@ -6270,7 +6276,7 @@ version 2005/12/01 or later.
 % that, after the construction of the |\halign|, |\g_@@_line_int| is the total
 % number of lines of the environment).
 %    \begin{macrocode}
-        \int_compare:nNnF \l_@@_final_int > \g_@@_line_int 
+        \int_compare:nNnF { \l_@@_final_int } > { \g_@@_line_int }
 %    \end{macrocode}
 %
 % \bigskip
@@ -6326,7 +6332,7 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
     \bool_set_false:N \l_@@_initial_r_bool
     \bool_set_false:N \l_@@_final_r_bool
-    \int_case:nn \l_@@_pos_arrow_int 
+    \int_case:nn { \l_@@_pos_arrow_int }
       {
         0 { \bool_set_true:N \l_@@_final_r_bool }
         2 { \bool_set_true:N \l_@@_initial_r_bool }
@@ -6359,10 +6365,10 @@ version 2005/12/01 or later.
 % computed $x$-value is stored in |\l_@@_x_dim| (the same variable used when the
 % option |group| or the option |groups| is used).
 %    \begin{macrocode}
-    \int_compare:nNnT \l_@@_pos_arrow_int = 5
+    \int_compare:nNnT { \l_@@_pos_arrow_int } = { 5 }
       { 
         \dim_set:Nn \l_@@_x_dim { - \c_max_dim }
-        \@@_update_x:nn \l_@@_initial_int \l_@@_final_int 
+        \@@_update_x:nn { \l_@@_initial_int } { \l_@@_final_int }
       }
 %    \end{macrocode}
 %
@@ -6373,9 +6379,15 @@ version 2005/12/01 or later.
 % $x$-value --- but always the same $y$-value). Idem for |\l_@@_final_tl|.
 %    \begin{macrocode}
     \tl_set:Ne \l_@@_initial_tl 
-      { \int_use:N \l_@@_initial_int - \bool_if:NTF \l_@@_initial_r_bool rl } 
+      { 
+        \int_use:N \l_@@_initial_int - 
+        \bool_if:NTF \l_@@_initial_r_bool { r } { l }
+      } 
     \tl_set:Ne \l_@@_final_tl 
-      { \int_use:N \l_@@_final_int - \bool_if:NTF \l_@@_final_r_bool rl }
+      { 
+        \int_use:N \l_@@_final_int - 
+        \bool_if:NTF \l_@@_final_r_bool { r } { l }
+      }
 %    \end{macrocode}
 %
 % \bigskip
@@ -6405,7 +6417,7 @@ version 2005/12/01 or later.
       { \int_use:N \l_@@_arrow_int } 
       { \bool_set_true:N \l_tmpb_bool }
       { \bool_set_false:N \l_tmpb_bool }
-    \int_compare:nNnT \l_@@_pos_arrow_int = 5
+    \int_compare:nNnT { \l_@@_pos_arrow_int } = { 5 }
       { 
         \bool_set_true:N \l_tmpa_bool
         \bool_set_true:N \l_tmpb_bool 
@@ -6444,11 +6456,11 @@ version 2005/12/01 or later.
         \dim_compare_p:nNn { \g_@@_y_initial_dim - \g_@@_y_final_dim }  
                                 > \l_@@_max_length_of_arrow_dim 
       }
-      { \int_compare_p:nNn { \l_@@_final_int - \l_@@_initial_int } = 1 }
+      { \int_compare_p:nNn { \l_@@_final_int - \l_@@_initial_int } = { 1 } }
       {
         \tl_gset:Ne \g_tmpa_tl 
           {
-            \int_compare:nNnTF \l_@@_pos_arrow_int < 5
+            \int_compare:nNnTF { \l_@@_pos_arrow_int } < { 5 }
               { \dim_use:N \g_@@_x_initial_dim }
               { \dim_use:N \l_@@_x_dim } , 
             \dim_eval:n 
@@ -6459,7 +6471,7 @@ version 2005/12/01 or later.
           }
         \tl_gset:Ne \g_tmpb_tl 
           {
-            \int_compare:nNnTF \l_@@_pos_arrow_int < 5 
+            \int_compare:nNnTF { \l_@@_pos_arrow_int } < { 5 }
               { \dim_use:N \g_@@_x_final_dim }
               { \dim_use:N \l_@@_x_dim } , 
             \dim_eval:n 
@@ -6472,7 +6484,7 @@ version 2005/12/01 or later.
       {
         \tl_gset:Ne \g_tmpa_tl 
           {
-            \int_compare:nNnTF \l_@@_pos_arrow_int < 5
+            \int_compare:nNnTF { \l_@@_pos_arrow_int } < { 5 }
               { \dim_use:N \g_@@_x_initial_dim }
               { \dim_use:N \l_@@_x_dim } , 
             \bool_if:NTF \l_tmpa_bool
@@ -6481,7 +6493,7 @@ version 2005/12/01 or later.
           }
         \tl_gset:Ne \g_tmpb_tl 
           {
-            \int_compare:nNnTF \l_@@_pos_arrow_int < 5 
+            \int_compare:nNnTF { \l_@@_pos_arrow_int } < { 5 }
               { \dim_use:N \g_@@_x_final_dim }
               { \dim_use:N \l_@@_x_dim } , 
             \bool_if:NTF \l_tmpb_bool
@@ -6500,12 +6512,12 @@ version 2005/12/01 or later.
             \pgfpicture
             \pgfrememberpicturepositiononpagetrue
             \pgfpointanchor { wa - \l_@@_prefix_str - 1 - r } { south }
-            \int_compare:nNnTF \l_@@_pos_arrow_int < 5
+            \int_compare:nNnTF { \l_@@_pos_arrow_int } < { 5 }
               {
                 \dim_set:Nn \l_@@_delta_x_dim 
                   {
                     \pgf@x -
-                    ( \dim_min:nn \g_@@_x_initial_dim \g_@@_x_final_dim ) 
+                    ( \dim_min:nn { \g_@@_x_initial_dim } { \g_@@_x_final_dim } ) 
                   }
               }
               { \dim_set:Nn \l_@@_delta_x_dim { \pgf@x - \l_@@_x_dim } }
@@ -6548,13 +6560,12 @@ version 2005/12/01 or later.
 % That's why we create a function |\@@_def_function_arrow:n| which will create
 % the function |\@@_arrow:nnn|.
 %    \begin{macrocode}
-\cs_generate_variant:Nn \@@_def_function_arrow:n { o }
 \cs_new_protected:Npn \@@_def_function_arrow:n #1
   { 
     \cs_set:Npn \@@_arrow:nnn ##1 ##2 ##3
       { 
 %<*LaTeX>
-        \begin{tikzpicture} 
+        \begin { tikzpicture } 
 %</LaTeX>
 %<*plain-TeX>
         \tikzpicture
@@ -6567,14 +6578,14 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
         \pgf@relevantforpicturesizetrue
           #1 
-        \dim_compare:nNnTF \pgf@picminx = { 16000 pt }
+        \dim_compare:nNnTF { \pgf@picminx } = { 16000 pt }
           { \dim_zero:N \l_tmpa_dim }
           { \dim_set:Nn \l_tmpa_dim { \pgf@picmaxx - \pgf@picminx } }
         \dim_add:Nn \l_tmpa_dim \l_@@_xoffset_dim
 %    \end{macrocode}
 % |\l_@@_arrow_int = 0| probably means that we have an arrow in the |code-after|.
 %    \begin{macrocode}
-        \int_compare:nNnT \l_@@_arrow_int > 0 % added 2024/10/01
+        \int_compare:nNnT { \l_@@_arrow_int } > { 0 } % added 2024/10/01
           {
             \prop_gput:cnV
               { g_@@_arrow _ \l_@@_prefix_str _ \int_use:N \l_@@_arrow_int _ prop }  
@@ -6598,13 +6609,14 @@ version 2005/12/01 or later.
           }
         \pgfresetboundingbox
 %<*LaTeX>
-        \end{tikzpicture}
+        \end { tikzpicture }
 %</LaTeX>
 %<*plain-TeX>
         \endtikzpicture
 %</plain-TeX>
       }
   }
+\cs_generate_variant:Nn \@@_def_function_arrow:n { o }
 %    \end{macrocode}
 %
 % 
@@ -6612,7 +6624,6 @@ version 2005/12/01 or later.
 % When we draw the arrow (with |\@@_draw_arrow:nnn|), we first create the
 % function |\@@_arrow:nnn| and, then, we use the function |\@@_arrow:nnn| :
 %    \begin{macrocode}
-\cs_generate_variant:Nn \@@_draw_arrow:nnn { n n o }
 \cs_new_protected:Npn \@@_draw_arrow:nnn #1 #2 #3
   {
 %    \end{macrocode}
@@ -6631,6 +6642,7 @@ version 2005/12/01 or later.
     \@@_def_function_arrow:o \l_@@_tikz_code_tl
     \@@_arrow:nnn { #1 } { #2 } { #3 } 
   }
+\cs_generate_variant:Nn \@@_draw_arrow:nnn { n n o }
 %    \end{macrocode}
 % 
 % \bigskip
@@ -6670,14 +6682,14 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
     \tl_if_empty:NF \g_tmpa_tl
       {
-        \dim_set:Nn \l_tmpb_dim \g_tmpa_tl
-        \dim_compare:nNnT \l_tmpb_dim < \l_tmpa_dim
+        \dim_set_eq:NN \l_tmpb_dim \g_tmpa_tl 
+        \dim_compare:nNnT { \l_tmpb_dim } < { \l_tmpa_dim }
           { \dim_set_eq:NN \l_tmpa_dim \l_tmpb_dim }
       }
 %    \end{macrocode}
 % Now, we can put the label with the right value for ``|text width|''.
 %    \begin{macrocode}
-    \dim_compare:nNnT \l_tmpa_dim > \c_zero_dim
+    \dim_compare:nNnT { \l_tmpa_dim } > { \c_zero_dim }
       { 
         \path ( @@_label.west )
 %<*LaTeX> 
@@ -6727,7 +6739,7 @@ version 2005/12/01 or later.
     \int_step_inline:nnn { #1 } { #2 } 
       { 
         \pgfpointanchor { wa - \l_@@_prefix_str - ##1 - l } { center }
-        \dim_gset:Nn \g_tmpa_dim { \dim_max:nn \g_tmpa_dim \pgf@x }
+        \dim_gset:Nn \g_tmpa_dim { \dim_max:nn { \g_tmpa_dim } { \pgf@x } }
       } 
     \endpgfpicture
     \dim_set_eq:NN \l_@@_x_dim \g_tmpa_dim 
@@ -6809,10 +6821,10 @@ version 2005/12/01 or later.
         \prop_get:cnN 
           { g_@@_arrow _ \l_@@_prefix_str _ ##2 _ prop }
           { final } \l_tmpb_tl
-        \int_compare:nNnTF \l_tmpa_tl < \l_tmpb_tl
+        \int_compare:nNnTF { \l_tmpa_tl } < { \l_tmpb_tl }
           \sort_return_same:
           {
-            \int_compare:nNnTF \l_tmpa_tl > \l_tmpb_tl
+            \int_compare:nNnTF { \l_tmpa_tl } > { \l_tmpb_tl }
               \sort_return_swapped:
               {
                 \prop_get:cnN 
@@ -6821,7 +6833,7 @@ version 2005/12/01 or later.
                 \prop_get:cnN 
                   { g_@@_arrow _ \l_@@_prefix_str _ ##2 _ prop }
                   { initial } \l_tmpb_tl
-                \int_compare:nNnTF \l_tmpa_tl < \l_tmpb_tl
+                \int_compare:nNnTF { \l_tmpa_tl } < { \l_tmpb_tl }
                   \sort_return_swapped:
                   \sort_return_same:
               }
@@ -6882,8 +6894,8 @@ version 2005/12/01 or later.
             \bool_lazy_any:nF
               {
                 { \int_compare_p:n { ##1 = ####1 } }
-                { \int_compare_p:nNn \l_@@_initial_int > \l_tmpa_tl }
-                { \int_compare_p:nNn \l_tmpb_tl > \l_@@_final_int }
+                { \int_compare_p:nNn { \l_@@_initial_int } > { \l_tmpa_tl } }
+                { \int_compare_p:nNn { \l_tmpb_tl } > { \l_@@_final_int } }
 %    \end{macrocode}
 % We don't take into account the independent arrows because we have only
 % computed the \emph{width} of the arrows and that's why our arrow of type~|o|
@@ -6917,7 +6929,7 @@ version 2005/12/01 or later.
           {
             \int_set:Nn \l_@@_arrow_int { ##1 }
             \dim_set_eq:NN \l_@@_xoffset_dim \g_tmpa_dim  
-            \dim_add:Nn \l_@@_xoffset_dim \l_@@_xoffset_for_o_arrows_dim 
+            \dim_add:Nn \l_@@_xoffset_dim { \l_@@_xoffset_for_o_arrows_dim }
 %    \end{macrocode}
 %    \begin{macrocode}
             \@@_draw_arrow:
@@ -7015,7 +7027,7 @@ version 2005/12/01 or later.
         { #1, #5, tikz = { xshift = \l_@@_xoffset_dim } }
       \bool_set_false:N \l_@@_initial_r_bool
       \bool_set_false:N \l_@@_final_r_bool
-      \int_case:nn \l_@@_pos_arrow_int
+      \int_case:nn { \l_@@_pos_arrow_int }
         { 
           0
             { 
@@ -7041,7 +7053,7 @@ version 2005/12/01 or later.
               \cs_if_free:cTF { pgf@sh@ns@wa - \l_@@_prefix_str - #3 - l }
                 { \@@_error:ne { Wrong~line~in~Arrow } { #3 }  }
                 { 
-                  \int_compare:nNnTF \l_@@_pos_arrow_int = 4
+                  \int_compare:nNnTF { \l_@@_pos_arrow_int } = { 4 }
                     {
                       \pgfpicture
                         \pgfrememberpicturepositiononpagetrue
@@ -7065,7 +7077,7 @@ version 2005/12/01 or later.
                         \pgfpointanchor
                           { 
                             wa - \l_@@_prefix_str -
-                            #2 - \bool_if:NTF \l_@@_initial_r_bool r l  
+                            #2 - \bool_if:NTF \l_@@_initial_r_bool { r } { l }
                           }
                           { south }
                         \tl_gset:Ne \g_tmpa_tl 
@@ -7073,7 +7085,7 @@ version 2005/12/01 or later.
                         \pgfpointanchor
                           {
                             wa - \l_@@_prefix_str - 
-                            #3 - \bool_if:NTF \l_@@_final_r_bool r l 
+                            #3 - \bool_if:NTF \l_@@_final_r_bool { r } { l }
                           }
                           { north }
                         \tl_gset:Ne \g_tmpb_tl 
@@ -7131,7 +7143,7 @@ version 2005/12/01 or later.
 % We sort the list |\g_tmpa_clist| because we want to extract the minimum and
 % the maximum.
 %    \begin{macrocode}
-    \int_compare:nTF { \clist_count:N \g_tmpa_clist < 2 }
+    \int_compare:nNnTF { \clist_count:N \g_tmpa_clist } < { 2 }
       { \@@_error:n { Too~small~specification~for~MultiArrow } }
       {
         \clist_sort:Nn \g_tmpa_clist 
@@ -7183,12 +7195,12 @@ version 2005/12/01 or later.
           \pgfpointanchor { wa - \l_@@_prefix_str - @@_label } { west }
           \dim_set:Nn \l_tmpa_dim { 20 cm }
           \path \pgfextra { \tl_gset:Ne \g_tmpa_tl \tikz@text@width } ;
-          \tl_if_empty:NF \g_tmpa_tl { \dim_set:Nn \l_tmpa_dim \g_tmpa_tl }
+          \tl_if_empty:NF \g_tmpa_tl { \dim_set:Nn \l_tmpa_dim { \g_tmpa_tl } }
           \bool_lazy_and:nnT \l_@@_wrap_lines_bool \l_@@_in_DispWithArrows_bool 
             { 
               \dim_set:Nn \l_tmpb_dim 
                 { \g_@@_right_x_dim - \pgf@x - 0.3333 em }
-              \dim_compare:nNnT \l_tmpb_dim < \l_tmpa_dim
+              \dim_compare:nNnT { \l_tmpb_dim } < { \l_tmpa_dim }
                 { \dim_set_eq:NN \l_tmpa_dim \l_tmpb_dim } 
             }
           \path (@@_label.west) 
@@ -7222,7 +7234,7 @@ version 2005/12/01 or later.
             ( [xshift = \l_@@_xoffset_dim]\k-r.south ) -- ++(5mm,0) ; 
         } % ;
 %<*LaTeX>
-        \end{tikzpicture} 
+        \end { tikzpicture } 
 %</LaTeX>
 %<*plain-TeX>
         \endtikzpicture
@@ -7233,6 +7245,22 @@ version 2005/12/01 or later.
 %
 % \bigskip
 % \subsection{The error messages of the package}
+%
+%    \begin{macrocode}
+\cs_new_protected:Npn \@@_err_newline_at_the_end:
+  {
+    \@@_error:n { newline~at~the~end }
+    \cs_gset:Npn \@@_err_newline_at_the_end: { }
+  }
+%    \end{macrocode}
+% 
+% \begin{macrocode}
+\cs_new_protected:Npn \@@_err_amsmath_not_loaded:
+  {
+    \@@_error:n { amsmath~not~loaded }
+    \cs_gset:Npn \@@_err_amsmath_not_loaded: { \@@_info:n { amsmath~not~loaded } }
+  }
+%    \end{macrocode}
 %
 %    \begin{macrocode}
 \bool_if:NTF \c_@@_messages_for_Overleaf_bool
@@ -7330,7 +7358,7 @@ version 2005/12/01 or later.
 %
 %    \begin{macrocode}
 %<*LaTeX>
-\@@_msg_new:nnn { newline~at~the~end~of~env }
+\@@_msg_new:nnn { newline~at~the~end }
   { 
     Incorrect~end.\\
     The~environments~of~witharrows~(\{WithArrows\}~and~
@@ -7585,7 +7613,7 @@ version 2005/12/01 or later.
 % 
 %
 %    \begin{macrocode}          
-\@@_msg_new:nn { Incompatible~options a}
+\@@_msg_new:nn { Incompatible~options }
   { 
     Incompatible~options.\\
     You~try~to~use~the~option~'\l_keys_key_str'~but~
@@ -7751,7 +7779,7 @@ version 2005/12/01 or later.
     \l_@@_string_Arrow_for_msg_str\ in~the~row~\int_use:N \g_@@_line_int\ 
     of~your~environment~\{\l_@@_type_env_str\}~
     because~you~are~using~the~option~
-    ' \int_compare:nNnTF \l_@@_pos_arrow_int = 7
+    ' \int_compare:nNnTF { \l_@@_pos_arrow_int } = { 7 }
         { group } 
         { groups } '.~It's~possible~for~an~independent~arrow~or~if~there~is~
     only~one~arrow. \\
@@ -7927,7 +7955,7 @@ version 2005/12/01 or later.
 % First the case when the key |up| is used with |width=max| (that's the default
 % behaviour). 
 %    \begin{macrocode}
-    \dim_compare:nNnTF \l_@@_arrow_width_dim = \c_max_dim
+    \dim_compare:nNnTF { \l_@@_arrow_width_dim } = { \c_max_dim }
       {
         \draw [ rounded~corners = \l_@@_up_and_down_radius_dim ]
            let \p1 = ( #1 ) , \p2 = ( #2 )
@@ -7961,7 +7989,7 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
                 \dim_set:Nn \l_tmpa_dim 
                   { \x2 - \x1 - \l_@@_up_and_down_radius_dim } 
-                \dim_compare:nNnF \l_@@_arrow_width_dim = \c_zero_dim 
+                \dim_compare:nNnF { \l_@@_arrow_width_dim } = { \c_zero_dim }
                   {
                     \dim_set:Nn \l_tmpa_dim
                       { \dim_min:nn \l_tmpa_dim \l_@@_arrow_width_dim } 
@@ -7981,8 +8009,8 @@ version 2005/12/01 or later.
 % The length |\g_tmpa_dim| will be the width of the arrow (+ the radius of the
 % corner). 
 %    \begin{macrocode}
-                \dim_compare:nNnTF \l_@@_arrow_width_dim > \c_zero_dim
-                  { \dim_gset_eq:NN  \g_tmpa_dim \l_@@_arrow_width_dim }
+                \dim_compare:nNnTF { \l_@@_arrow_width_dim } > { \c_zero_dim }
+                  { \dim_gset_eq:NN \g_tmpa_dim \l_@@_arrow_width_dim }
                   { \dim_gset:Nn \g_tmpa_dim { \box_wd:N \g_tmpa_box } }
                 \dim_gadd:Nn \g_tmpa_dim \l_@@_up_and_down_radius_dim
               } ;
@@ -8044,7 +8072,7 @@ version 2005/12/01 or later.
 %<*LaTeX>
 \tl_const:Nn \c_@@_tikz_code_down_tl
   {
-    \dim_compare:nNnTF \l_@@_arrow_width_dim = \c_max_dim
+    \dim_compare:nNnTF { \l_@@_arrow_width_dim } = { \c_max_dim }
       {
         \draw [ rounded~corners = \l_@@_up_and_down_radius_dim ]
           let \p1 = ( #1 ) , \p2 = ( #2 )
@@ -8072,15 +8100,15 @@ version 2005/12/01 or later.
 % standard position, that is at the end of the arrow.).
 %    \begin{macrocode}
                       { \x1 - \x2 - \l_@@_up_and_down_radius_dim - 2 mm } 
-                    \begin { varwidth } \l_tmpa_dim
+                    \begin { varwidth } { \l_tmpa_dim }
                       \narrowragged
                       #3
                     \end { varwidth }
                   }
-                \dim_compare:nNnTF \l_@@_arrow_width_dim > \c_zero_dim
+                \dim_compare:nNnTF { \l_@@_arrow_width_dim } > { \c_zero_dim }
                   { \dim_gset_eq:NN  \g_tmpa_dim \l_@@_arrow_width_dim }
                   { \dim_gset:Nn \g_tmpa_dim { \box_wd:N \g_tmpa_box } }
-                \dim_gadd:Nn \g_tmpa_dim \l_@@_up_and_down_radius_dim
+                \dim_gadd:Nn \g_tmpa_dim { \l_@@_up_and_down_radius_dim }
               } ;
          
         \draw  
@@ -8455,5 +8483,4 @@ version 2005/12/01 or later.
 % TeX-fold-mode: t
 % TeX-fold-preserve-comments: nil
 % fill-column: 80
-% flyspell-mode: nil
 % End:
