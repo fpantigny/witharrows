@@ -1,10 +1,9 @@
 % -*- coding: utf-8 ; -*-
-\documentclass[dvipsnames]{article}% dvipsnames est pour xcolor (chargé par Tikz)
-\usepackage{xltxtra}
-\usepackage[french]{babel}
-\frenchsetup{og = « , fg = »}
+\documentclass[dvipsnames]{article}
+\usepackage{polyglossia}
+\setmainlanguage{french}
 
-\usepackage[xetex]{geometry}
+\usepackage{geometry}
 \geometry{left=2.8cm,right=2.8cm,top=2.5cm,bottom=2.5cm,papersize={21cm,29.7cm}}
 
 \usepackage{amsmath}
@@ -82,12 +81,10 @@
 
 \ExplSyntaxOff  
 
-
-
-
 \skip \footins = 2 \bigskipamount
 
 \usepackage[hyperfootnotes = false]{hyperref}
+\usepackage{bookmark}
 
 \hypersetup
   {
@@ -119,32 +116,32 @@ version~\myfileversion\space de \pkg{witharrows}, à la date du~\myfiledate.}}
 
 
 \begin{abstract}
-L'extension \pkg{witharrows} fournit des environments |{WithArrows}| et |{DispWithArrows}|
-similaires aux environnements |{aligned}| et |{align}| de l'extension \pkg{amsmath} mais
-avec la possibilité de dessiner des flèches sur le côté droit. Ces flèches sont
-habituellement utilisées pour donner des explications concernant le calcul mathématique
-présenté.
+L'extension \pkg{witharrows} fournit des environments |{WithArrows}| et
+|{DispWithArrows}| similaires aux environnements |{aligned}| et |{align}| de
+l'extension \pkg{amsmath} mais avec la possibilité de dessiner des flèches sur le côté
+droit. Ces flèches sont habituellement utilisées pour donner des explications
+concernant le calcul mathématique présenté.
 \end{abstract}
 
 
-\vspace{1cm} L'extension LaTeX \pkg{witharrows} est entièrement contenue dans le fichier
-|witharrows.sty|. Ce fichier peut être placé dans le répertoire courant ou dans une
-arborescence |texmf|. Le mieux reste néanmoins d'installer \pkg{witharrows} avec une
-distribution TeX comme MiKTeX, TeX~Live ou MacTeX.
+\vspace{1cm} L'extension LaTeX \pkg{witharrows} est entièrement contenue dans le
+fichier |witharrows.sty|. Ce fichier peut être placé dans le répertoire courant
+ou dans une arborescence |texmf|. Le mieux reste néanmoins d'installer \pkg{witharrows}
+avec une distribution TeX comme MiKTeX, TeX~Live ou MacTeX.
 
 \medskip
 En fait, \pkg{witharrows} est aussi une extension utilisable avec plain-TeX et dans ce
-cas, le seul fichier nécessaire est le fichier |witharrows.tex| : voir à ce sujet
-p.~\pageref{plain-TeX}. Dans la suite, on décrira l'extension LaTeX.
+cas, le seul fichier nécessaire est le fichier |witharrows.tex| : voir à ce
+sujet p.~\pageref{plain-TeX}. Dans la suite, on décrira l'extension LaTeX.
 
 \medskip
-Cette extension peut être utilisée avec |xelatex|, |lualatex|, |pdflatex| mais aussi avec
-le cheminement classique |latex|-|dvips|-|ps2pdf| (ou Adobe Distiller). \textsl{Néanmoins,
-  le fichier witharrows-french.tex de la présente documentation ne peut être compilé
-  qu'avec LuaLaTeX.} L'extension \pkg{witharrows} charge les extensions \pkg{tikz},
-\pkg{varwidth} ainsi que les bibliothèques Tikz \pkg{arrows.meta} et \pkg{bending}.
-L'utilisateur final n'a qu'à charger l'extension \pkg{witharrows} avec l'instruction
-habituelle : |\usepackage{witharrows}|.
+Cette extension peut être utilisée avec |xelatex|, |lualatex|, |pdflatex| mais
+aussi avec le cheminement classique |latex|-|dvips|-|ps2pdf| (ou Adobe
+Distiller). \textsl{Néanmoins, le fichier witharrows-french.tex de la présente documentation ne peut être compilé qu'avec LuaLaTeX.}
+L'extension \pkg{witharrows} charge les extensions \pkg{tikz}, \pkg{varwidth} ainsi que les
+bibliothèques Tikz \pkg{arrows.meta} et \pkg{bending}. L'utilisateur final n'a qu'à charger
+l'extension \pkg{witharrows} avec l'instruction habituelle :
+|\usepackage{witharrows}|.
 
 \medskip
 Les flèches sont tracées avec Tikz et donc \textbf{plusieurs compilations peuvent être
@@ -153,7 +150,8 @@ Les flèches sont tracées avec Tikz et donc \textbf{plusieurs compilations peuv
 
 \bigskip
 Cette extension fournit un environnement \Definition{\{WithArrows\}} pour construire des
-alignements d'équations avec des flèches pour les explications sur le côté droit.
+alignements d'équations avec des flèches pour les explications sur le côté
+droit.
 
 \begin{Code}
 $\begin{WithArrows}
@@ -170,22 +168,23 @@ A & = (a+1)^2 \Arrow{on développe} \\
 
 
 \medskip
-La flèche a été tracée avec la commande \DefinitionCommande{Arrow} dans la rangée dont la
-flèche part. La commande |\Arrow| doit être utilisée dans la seconde colonne (le mieux est
-de la mettre à la fin de la ligne comme dans l'exemple précédent).
+La flèche a été tracée avec la commande \DefinitionCommande{Arrow} dans la
+rangée dont la flèche part. La commande |\Arrow| doit être utilisée dans la
+seconde colonne (le mieux est de la mettre à la fin de la ligne comme dans
+l'exemple précédent).
 
 
 \medskip
-L'environnement |{WithArrows}| est proche de l'environnement |{aligned}|
-de \pkg{amsmath}. L'extension \pkg{witharrows} propose aussi des environnements
-|{DispWithArrows}| et |{DispWithArrows*}| qui sont similaires aux environnements |{align}|
-et |{align*}| de l'extension \pkg{amsmath}: cf. p.~\pageref{DispWithArrows}.
+L'environnement |{WithArrows}| est proche de l'environnement |{aligned}| de
+\pkg{amsmath}. L'extension \pkg{witharrows} propose aussi des environnements
+|{DispWithArrows}| et |{DispWithArrows*}| qui sont similaires aux environnements
+|{align}| et |{align*}| de l'extension \pkg{amsmath}: cf. p.~\pageref{DispWithArrows}.
 
 
 \section{Options pour la forme des flèches}
 
-La commande |\Arrow| a plusieurs options. Ces options peuvent être placées entre crochets,
-avant, ou après, l'argument obligatoire.
+La commande |\Arrow| a plusieurs options. Ces options peuvent être placées entre
+crochets, avant, ou après, l'argument obligatoire.
 
 \medskip
 L'option \Definition{jump} indique le nombre\footnote{Il n'est pas possible de donner une
@@ -224,8 +223,8 @@ A & = \bigl((a+b)+1\bigr)^2 \Arrow{}\Arrow{}[jump=2] \\
   & = a^2 + 2ab + b^2 + 2a + 2b +1 
 \end{WithArrows}$
 
-\interitem L'option \Definition{xoffset} décale la flèche vers la droite (habituellement,
-on ne souhaite pas que les flèches soient collées au texte). La valeur initiale de
+\interitem L'option \Definition{xoffset} décale la flèche vers la droite (habituellement, on
+ne souhaite pas que les flèches soient collées au texte). La valeur initiale de
 |xoffset| est de $3$~mm.
 \begin{Code}
 $\begin{WithArrows}
@@ -242,11 +241,10 @@ A & = \bigl((a+b)+1\bigr)^2
 \end{WithArrows}$
 
 
-\interitem 
-Les flèches sont tracées avec Tikz. C'est pourquoi la commande |\Arrow| a une option
-\Definition{tikz} qui peut être utilisée pour donner à la flèche (en fait, à la commande
-|\path| de Tikz) les options proposées par Tikz pour une telle flèche. L'exemple suivant
-fournit une flèche en trait épais. 
+\interitem Les flèches sont tracées avec Tikz. C'est pourquoi la commande
+|\Arrow| a une option \Definition{tikz} qui peut être utilisée pour donner à la flèche (en
+fait, à la commande |\path| de Tikz) les options proposées par Tikz pour une
+telle flèche. L'exemple suivant fournit une flèche en trait épais.
 \begin{Code}
 $\begin{WithArrows}
 A & = (a+1)^2 \Arrow[\emph{tikz=thick}]{on développe} \\
@@ -259,9 +257,9 @@ A & = (a+1)^2 \Arrow[tikz=thick]{on développe} \\
   & = a^2 + 2a + 1 
 \end{WithArrows}$
 
-\interitem 
-Il est également possible de changer les pointes de flèche. Par exemple, nous pouvons
-tracer une flèche qui remonte vers le haut avec l'option Tikz~|<-|.\label{Backwards}
+\interitem Il est également possible de changer les pointes de flèche. Par
+exemple, nous pouvons tracer une flèche qui remonte vers le haut avec l'option
+Tikz~|<-|.\label{Backwards}
 
 \begin{Code}
 $\begin{WithArrows}
@@ -357,15 +355,16 @@ A & = (a+1)^2 \Arrow{\bfseries on développe} \\
   & = a^2 + 2a + 1 
 \end{WithArrows}$
 
-\interitem 
-Il est possible de placer des commandes |\\| dans le texte pour forcer des retours à la ligne\footnote{Par
-défaut, ce n'est pas possible dans un nœud Tikz. Néanmoins, dans \pkg{witharrows},
-les nœuds sont construits avec l'option |align=left|, et, ainsi, cela devient possible.}. Néanmoins, si on utilise des commandes |\\|, une instruction de fonte placée au début
-du texte aura un effet seulement jusqu'à la première occurrence de~|\\| (comme
-dans un environnement |{tabular}|). C'est pourquoi Tikz fournit une option
-\Definition{font} pour modifier la fonte de tout le texte de l'étiquette. Cette fois-ci, si on
-utilise une option |tikz={font={\bfseries}}|, la spécification par défaut constituée par
-|\small| et |\itshape| va être écrasée. 
+\interitem Il est possible de placer des commandes |\\| dans le texte pour
+forcer des retours à la ligne\footnote{Par défaut, ce n'est pas possible dans un
+  nœud Tikz. Néanmoins, dans \pkg{witharrows}, les nœuds sont construits avec
+  l'option |align=left|, et, ainsi, cela devient possible.}. Néanmoins, si on
+utilise des commandes |\\|, une instruction de fonte placée au début du texte
+aura un effet seulement jusqu'à la première occurrence de~|\\| (comme dans un
+environnement |{tabular}|). C'est pourquoi Tikz fournit une option
+\Definition{font} pour modifier la fonte de tout le texte de l'étiquette. Cette
+fois-ci, si on utilise une option |tikz={font={\bfseries}}|, la spécification
+par défaut constituée par |\small| et |\itshape| va être écrasée.
 %
 \begin{Code}
 $\begin{WithArrows}
@@ -486,11 +485,11 @@ La commande |\Arrow| est reconnue seulement dans les environnements de \pkg{with
 Si on dispose d'une commande |\Arrow| précédemment définie, il est possible de continuer à
 l'utiliser à l'extérieur des environnements de \pkg{witharrows}.
 
-Néanmoins, une commande |\Arrow| définie précédemment pourrait encore être utile dans un
-environnement |{WithArrows}|. Si vous voulez l'utiliser dans un tel environnement, il est
-possible de changer le nom de la commande |\Arrow| de l'extension \pkg{witharrows} grâce à
-une option \Definition{command-name} dédiée. Le nouveau nom de la commande doit être
-fourni à l'option \emph{sans} la contre-oblique.
+Néanmoins, une commande |\Arrow| définie précédemment pourrait encore être utile
+dans un environnement |{WithArrows}|. Si vous voulez l'utiliser dans un tel
+environnement, il est possible de changer le nom de la commande |\Arrow| de
+l'extension \pkg{witharrows} grâce à une option \Definition{command-name} dédiée. Le nouveau nom de
+la commande doit être fourni à l'option \emph{sans} la contre-oblique.
 %
 \begin{Code}
 \NewDocumentCommand {\Arrow} {} {\longmapsto}
@@ -2678,7 +2677,7 @@ E & \Longleftrightarrow \frac{(x+4)}{3} + \frac{5x+3}{5} = 7
 \subsection{Boucle numérotée automatique}
 
 Supposons que nous voulions tracer une boucle avec des flèches numérotées. Dans ce but, il
-est possible d'écrire une commande dédiée |\NumberedLoop| qui fera le travail quand elle
+est possible d'écrire une commande dédiée |\NumberedLoop| qui fera le travail quand elle 
 sera utilisée dans le |code-after|. Dans l'exemple suivant, nous avons écrit cette
 commande avec |\foreach| de \pkg{pgffor} (cette extension est chargée quand \pkg{witharrows} est chargé.).
 
@@ -2725,10 +2724,10 @@ e.\;& f \text{ est lipschitzienne}
 
 
 \bigskip
-Comme d'habitude, il est possible changer les caractéristiques des flèches et des nœuds 
-avec l'option |tikz|. Néanmoins, si nous voulons changer le style pour avoir, par
-exemple, les numéros entre parenthèses, le moyen le plus rapide est de changer la valeur de
-|tikz-code|:
+Comme d'habitude, il est possible changer les caractéristiques des flèches et
+des nœuds avec l'option |tikz|. Néanmoins, si nous voulons changer le style pour
+avoir, par exemple, les numéros entre parenthèses, le moyen le plus rapide est
+de changer la valeur de |tikz-code|:
 
 \begin{Code}
 tikz-code = {\draw (#1) to node {\footnotesize (#3)} (#2) ;}
@@ -2756,3 +2755,6 @@ un historique des versions.
 \tableofcontents
 
 \end{document}
+% Local Variables:
+% fill-column: 80
+% End:

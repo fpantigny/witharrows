@@ -1,30 +1,30 @@
-\babel@toc {french}{}\relax 
+\xpg@aux {}{french}
 \contentsline {section}{\numberline {1}Options pour la forme des flèches}{2}{section.1}%
 \contentsline {section}{\numberline {2}Nombre et formats des colonnes}{6}{section.2}%
 \contentsline {section}{\numberline {3}Positionnement précis des flèches}{7}{section.3}%
-\contentsline {section}{\numberline {4}L'option « o » pour des flèches individuelles}{10}{section.4}%
-\contentsline {section}{\numberline {5}Les options « up » et « down » pour des flèches individuelles}{11}{section.5}%
+\contentsline {section}{\numberline {4}L'option « o » pour des flèches individuelles}{9}{section.4}%
+\contentsline {section}{\numberline {5}Les options « up » et « down » pour des flèches individuelles}{10}{section.5}%
 \contentsline {section}{\numberline {6}Comparaison avec l'environnement \{aligned\}}{12}{section.6}%
 \contentsline {section}{\numberline {7}Les flèches dans les environnements imbriqués}{14}{section.7}%
 \contentsline {section}{\numberline {8}Dessiner des flèches depuis l'extérieur des environnements \{WithArrows\}}{16}{section.8}%
 \contentsline {section}{\numberline {9}L'environnement \{DispWithArrows\}}{18}{section.9}%
-\contentsline {section}{\numberline {10}Fonctionnalités avancées}{23}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Utilisation avec Beamer}{23}{subsection.10.1}%
+\contentsline {section}{\numberline {10}Fonctionnalités avancées}{24}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Utilisation avec Beamer}{24}{subsection.10.1}%
 \contentsline {subsection}{\numberline {10.2}Utilisation avec plain-TeX}{24}{subsection.10.2}%
 \contentsline {subsection}{\numberline {10.3}L'option tikz-code : comment changer la forme des flèches}{24}{subsection.10.3}%
 \contentsline {subsection}{\numberline {10.4}La commande \textbackslash WithArrowsNewStyle}{25}{subsection.10.4}%
-\contentsline {subsection}{\numberline {10.5}La clé right-overlap}{25}{subsection.10.5}%
+\contentsline {subsection}{\numberline {10.5}La clé right-overlap}{26}{subsection.10.5}%
 \contentsline {subsection}{\numberline {10.6}Positionnement vertical des flèches}{26}{subsection.10.6}%
 \contentsline {subsection}{\numberline {10.7}Notes de pied de page dans les environnements de witharrows}{27}{subsection.10.7}%
 \contentsline {subsection}{\numberline {10.8}L'option no-arrows}{28}{subsection.10.8}%
 \contentsline {subsection}{\numberline {10.9}Note pour les utilisateurs de AUCTeX}{28}{subsection.10.9}%
 \contentsline {subsection}{\numberline {10.10}Note pour les développeurs}{28}{subsection.10.10}%
-\contentsline {section}{\numberline {11}Exemples}{28}{section.11}%
-\contentsline {subsection}{\numberline {11.1}\textbackslash MoveEqLeft}{28}{subsection.11.1}%
+\contentsline {section}{\numberline {11}Exemples}{29}{section.11}%
+\contentsline {subsection}{\numberline {11.1}\textbackslash MoveEqLeft}{29}{subsection.11.1}%
 \contentsline {subsection}{\numberline {11.2}Une commande \textbackslash DoubleArrow}{29}{subsection.11.2}%
-\contentsline {subsection}{\numberline {11.3}Modifier la forme des nœuds}{29}{subsection.11.3}%
+\contentsline {subsection}{\numberline {11.3}Modifier la forme des nœuds}{30}{subsection.11.3}%
 \contentsline {subsection}{\numberline {11.4}Exemples avec l'option tikz-code}{30}{subsection.11.4}%
 \contentsline {subsubsection}{\numberline {11.4.1}Exemple 1}{30}{subsubsection.11.4.1}%
 \contentsline {subsubsection}{\numberline {11.4.2}Exemple 2}{31}{subsubsection.11.4.2}%
-\contentsline {subsubsection}{\numberline {11.4.3}Exemple 3}{31}{subsubsection.11.4.3}%
-\contentsline {subsection}{\numberline {11.5}Boucle numérotée automatique}{32}{subsection.11.5}%
+\contentsline {subsubsection}{\numberline {11.4.3}Exemple 3}{32}{subsubsection.11.4.3}%
+\contentsline {subsection}{\numberline {11.5}Boucle numérotée automatique}{33}{subsection.11.5}%

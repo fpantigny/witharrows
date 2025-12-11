@@ -18,8 +18,8 @@
 %% and version 1.3 or later is part of all distributions of
 %% LaTeX version 2005/12/01 or later.
 %% 
-\def\myfileversion{2.9a}
-\def\myfiledate{2024/10/19}
+\def\myfileversion{2.9x}
+\def\myfiledate{2025/11/03}
 
 \RequirePackage{tikz}
 \usetikzlibrary{arrows.meta}
@@ -32,19 +32,23 @@
 \msg_new:nnn { witharrows } { latex-too-old }
   {
     Your~LaTeX~release~is~too~old. \\
-    You~need~at~least~a~the~version~of~2023-11-01
+    You~need~at~least~a~the~version~of~2025-06-01
   }
+\providecommand { \IfFormatAtLeastTF } { \@ifl@t@r \fmtversion }
 \IfFormatAtLeastTF
-  { 2023-11-01 }
+  { 2025-06-01 }
   { }
   { \msg_fatal:nn { witharrows } { latex-too-old } }
+\msg_new:nnn { witharrows } { tag~active }
+  {
+    witharrows~and~tagged~PDF\\
+    As~of~now,~witharrows~is~not~fully~compatible~with~tagging.~
+    You~will~have~fatal~errors~if~you~use~\{DispWithArrows\}.
+  }
+\tag_if_active:T { \msg_error:nn { witharrows } { tag~active } }
 \RequirePackage { varwidth }
-\ProvideDocumentCommand{\IfPackageLoadedT}{mm}
-  {\IfPackageLoadedTF{#1}{#2}{}}
-\ProvideDocumentCommand{\IfPackageLoadedF}{mm}
-  {\IfPackageLoadedTF{#1}{}{#2}}
-\bool_new:N \c__witharrows_footnotehyper_bool
-\bool_new:N \c__witharrows_footnote_bool
+\bool_new:N \g__witharrows_footnotehyper_bool
+\bool_new:N \g__witharrows_footnote_bool
 \cs_new_protected:Npn \__witharrows_msg_new:nn { \msg_new:nnn { witharrows } }
 \cs_new_protected:Npn \__witharrows_msg_new:nnn #1 #2 #3
   {
@@ -60,17 +64,21 @@
 \cs_new_protected:Npn \__witharrows_error:nn  { \msg_error:nnn { witharrows } }
 \cs_generate_variant:Nn \__witharrows_error:nn { n e }
 \cs_new_protected:Npn \__witharrows_error_or_warning:n
-  { \bool_if:NTF \c__witharrows_messages_for_Overleaf_bool \__witharrows_warning:n \__witharrows_error:n }
-\bool_set:Nn \c__witharrows_messages_for_Overleaf_bool
+  {
+    \bool_if:NTF \c__witharrows_messages_for_Overleaf_bool
+      { \__witharrows_warning:n }
+      { \__witharrows_error:n }
+  }
+\bool_const:Nn \c__witharrows_messages_for_Overleaf_bool
   {
        \str_if_eq_p:on \c_sys_jobname_str { _region_ }  % for Emacs
     || \str_if_eq_p:on \c_sys_jobname_str { output }   % for Overleaf
   }
 \bool_new:N \g__witharrows_beamer_bool
-\keys_define:nn { WithArrows / package }
+\keys_define:nn { witharrows }
   {
-    footnote .bool_set:N = \c__witharrows_footnote_bool ,
-    footnotehyper .bool_set:N = \c__witharrows_footnotehyper_bool ,
+    footnote .bool_gset:N = \g__witharrows_footnote_bool ,
+    footnotehyper .bool_gset:N = \g__witharrows_footnotehyper_bool ,
     footnote .usage:n = load ,
     footnotehyper .usage:n = load ,
     beamer .bool_gset:N = \g__witharrows_beamer_bool ,
@@ -82,9 +90,9 @@
   {
     You~can't~use~the~option~'\l_keys_key_str'~when~loading~the~
     package~witharrows.~Try~to~use~the~command~
-    \token_to_str:N\WithArrowsOptions.
+    \token_to_str:N \WithArrowsOptions.
   }
-\ProcessKeyOptions [ WithArrows / package ]
+\ProcessKeyOptions
 \IfClassLoadedT { beamer } { \bool_gset_true:N \g__witharrows_beamer_bool }
 \IfPackageLoadedT { beamerarticle } { \bool_gset_true:N \g__witharrows_beamer_bool }
 \__witharrows_msg_new:nn { footnote~with~footnotehyper~package }
@@ -106,25 +114,25 @@
     of~the~package~footnote.\\
     If~you~go~on,~the~package~footnotehyper~won't~be~loaded.
   }
-\bool_if:NT \c__witharrows_footnote_bool
+\bool_if:NT \g__witharrows_footnote_bool
   {
-    \@ifclassloaded { beamer }
-      { \bool_set_false:N \c__witharrows_footnote_bool }
+    \IfClassLoadedTF { beamer }
+      { \bool_gset_false:N \g__witharrows_footnote_bool }
       {
-        \@ifpackageloaded { footnotehyper }
+        \IfPackageLoadedTF { footnotehyper }
           { \__witharrows_error:n { footnote~with~footnotehyper~package } }
           { \usepackage { footnote } }
       }
   }
-\bool_if:NT \c__witharrows_footnotehyper_bool
+\bool_if:NT \g__witharrows_footnotehyper_bool
   {
-    \@ifclassloaded { beamer }
-      { \bool_set_false:N \c__witharrows_footnote_bool }
+    \IfClassLoadedTF { beamer }
+      { \bool_gset_false:N \g__witharrows_footnote_bool }
       {
-        \@ifpackageloaded { footnote }
+        \IfPackageLoadedTF { footnote }
           { \__witharrows_error:n { footnotehyper~with~footnote~package } }
           { \usepackage { footnotehyper } }
-        \bool_set_true:N \c__witharrows_footnote_bool
+        \bool_gset_true:N \g__witharrows_footnote_bool
       }
   }
 \bool_new:N \c__witharrows_leqno_bool
@@ -147,7 +155,7 @@
       { #1 { #2 } }
   }
 
-\cs_new_protected:Npn \__witharrows_collect_options:nnw #1#2[#3]
+\cs_new_protected:Npn \__witharrows_collect_options:nnw #1 #2 [ #3 ]
   { \__witharrows_collect_options:nn { #1 } { #2 , #3 } }
 \cs_generate_variant:Nn \seq_set_split:Nnn { N e e }
 \cs_generate_variant:Nn \keys_precompile:nnN { n n c }
@@ -176,13 +184,13 @@
     \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
     \str_set:Ne \l_tmpa_str { \seq_item:Nn \l_tmpa_seq { -1 } }
     \use:c { \l_tmpa_str _if_exist:cF }
-      { g _\seq_use:Nnnn \l_tmpa_seq _ _ _ }
+      { g _\seq_use:Nn \l_tmpa_seq { _ } }
       {
         \use:c { \l_tmpa_str _new:c }
-          { g _\seq_use:Nnnn \l_tmpa_seq _ _ _ }
+          { g _\seq_use:Nn \l_tmpa_seq { _ } }
       }
     \use:c { \l_tmpa_str _gset_eq:cN }
-      { g _\seq_use:Nnnn \l_tmpa_seq _ _ _ } #1
+      { g _\seq_use:Nn \l_tmpa_seq { _ } } #1
   }
 \cs_new_protected:Npn \__witharrows_restore:N #1
   {
@@ -192,7 +200,7 @@
     \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
     \str_set:Ne \l_tmpa_str { \seq_item:Nn \l_tmpa_seq { -1 } }
     \use:c { \l_tmpa_str _set_eq:Nc }
-      #1 { g_\seq_use:Nnnn \l_tmpa_seq _ _ _ }
+      #1 { g_\seq_use:Nn \l_tmpa_seq { _ } }
   }
 \tikzset
   {
@@ -264,11 +272,11 @@
 \bool_new:N \l__witharrows_in_DispWithArrows_bool
 \bool_new:N \l__witharrows_in_code_after_bool
 \seq_new:N \g__witharrows_position_in_the_tree_seq
-\seq_gput_right:Nn \g__witharrows_position_in_the_tree_seq 1
+\seq_gput_right:Nn \g__witharrows_position_in_the_tree_seq { 1 }
 \int_new:N \g__witharrows_last_env_int
 \int_new:N \l__witharrows_pos_env_int
 \int_new:N \l__witharrows_pos_arrow_int
-\int_set:Nn \l__witharrows_pos_arrow_int 3
+\int_set:Nn \l__witharrows_pos_arrow_int { 3 }
 \seq_new:N \g__witharrows_arrow_int_seq
 \int_new:N \g__witharrows_arrow_int
 \seq_new:N \g__witharrows_line_int_seq
@@ -300,6 +308,7 @@
 \tl_new:N \l__witharrows_initial_tl
 \tl_new:N \l__witharrows_final_tl
 \int_new:N \l__witharrows_nb_cols_int
+\tl_new:N \l__witharrows_replace_left_brace_by_tl
 \str_new:N \l__witharrows_format_str
 \bool_new:N \l__witharrows_subequations_bool
 \dim_new:N \l__witharrows_arrow_width_dim
@@ -334,7 +343,7 @@
     ystart .value_required:n = true ,
     ystart .initial:n = 0.4 ex ,
     more-columns .code:n =
-      \__witharrows_msg_redirect_name:nn { Too~much~columns~in~WithArrows } { none } ,
+      \__witharrows_msg_redirect_name:nn { Too~many~columns~in~WithArrows } { none } ,
     more-columns .value_forbidden:n = true ,
     command-name .code:n =
       \str_set:Nn \l__witharrows_command_name_str { #1 }
@@ -355,7 +364,7 @@
         {
           \str_set:Nn \l__witharrows_previous_key_str { group }
           \seq_remove_all:Nn \l__witharrows_options_Arrow_seq { xoffset }
-          \int_set:Nn \l__witharrows_pos_arrow_int 7
+          \int_set:Nn \l__witharrows_pos_arrow_int { 7 }
         }
         { \__witharrows_error:n { Incompatible~options } } ,
     group .value_forbidden:n = true ,
@@ -366,21 +375,21 @@
           \seq_if_in:NnF \l__witharrows_options_Arrow_seq { new-group }
             { \seq_put_right:Nn \l__witharrows_options_Arrow_seq { new-group } }
           \seq_remove_all:Nn \l__witharrows_options_Arrow_seq { xoffset }
-          \int_set:Nn \l__witharrows_pos_arrow_int 6
+          \int_set:Nn \l__witharrows_pos_arrow_int { 6 }
         }
         { \__witharrows_error:n { Incompatible~options } } ,
     groups .value_forbidden:n = true ,
     tikz   .code:n = \tikzset { WithArrows / arrow / .append~style = { #1 } } ,
     tikz   .value_required:n  = true ,
-    rr     .code:n            = \__witharrows_fix_pos_option:n 3 ,
+    rr     .code:n            = \__witharrows_fix_pos_option:n { 3 } ,
     rr     .value_forbidden:n = true ,
-    ll     .code:n            = \__witharrows_fix_pos_option:n 1 ,
+    ll     .code:n            = \__witharrows_fix_pos_option:n { 1 } ,
     ll     .value_forbidden:n = true ,
-    rl     .code:n            = \__witharrows_fix_pos_option:n 2 ,
+    rl     .code:n            = \__witharrows_fix_pos_option:n { 2 } ,
     rl     .value_forbidden:n = true ,
-    lr     .code:n            = \__witharrows_fix_pos_option:n 0 ,
+    lr     .code:n            = \__witharrows_fix_pos_option:n { 0 } ,
     lr     .value_forbidden:n = true ,
-    i      .code:n            = \__witharrows_fix_pos_option:n 5 ,
+    i      .code:n            = \__witharrows_fix_pos_option:n { 5 } ,
     i      .value_forbidden:n = true ,
     xoffset .dim_set:N  = \l__witharrows_xoffset_dim ,
     xoffset .value_required:n  = true ,
@@ -405,17 +414,17 @@
   }
 \keys_define:nn { WithArrows / WithArrowsSpecific }
   {
-    t   .code:n            = \int_set:Nn \l__witharrows_pos_env_int O ,
+    t   .code:n            = \int_set:Nn \l__witharrows_pos_env_int { O } ,
     t   .value_forbidden:n = true ,
-    c   .code:n            = \int_set:Nn \l__witharrows_pos_env_int 1 ,
+    c   .code:n            = \int_set:Nn \l__witharrows_pos_env_int { 1 } ,
     c   .value_forbidden:n = true ,
-    b   .code:n            = \int_set:Nn \l__witharrows_pos_env_int 2 ,
+    b   .code:n            = \int_set:Nn \l__witharrows_pos_env_int { 2 } ,
     b   .value_forbidden:n = true ,
     right-overlap .bool_set:N       = \l__witharrows_right_overlap_bool ,
     right-overlap .value_required:n = true
   }
-\clist_new:N \c__witharrows_ext_delimiters_clist
-\clist_set:Nn \c__witharrows_ext_delimiters_clist
+\clist_new:N \g__witharrows_ext_delimiters_clist
+\clist_gset:Nn \g__witharrows_ext_delimiters_clist
   {
     ., \{, (, [, \lbrace, \lbrack, \lgroup, \langle, \lmoustache, \lceil, \lfloor
   }
@@ -425,7 +434,7 @@
     \IfPackageLoadedT { amsmath } { \bool_set_true:N \l_tmpa_bool }
     \IfPackageLoadedT { unicode-math } { \bool_set_true:N \l_tmpa_bool }
     \bool_if:NT \l_tmpa_bool
-      { \clist_put_right:Nn \c__witharrows_ext_delimiters_clist { \lvert, \lVert } }
+      { \clist_gput_right:Nn \g__witharrows_ext_delimiters_clist { \lvert, \lVert } }
   }
 \keys_define:nn { WithArrows / DispWithArrowsSpecific }
   {
@@ -442,13 +451,7 @@
     subequations .code:n =
       \IfPackageLoadedTF { amsmath }
         { \bool_set_true:N \l__witharrows_subequations_bool }
-        {
-          \__witharrows_error:n { amsmath~not~loaded }
-          \group_begin:
-          \globaldefs = 1
-          \__witharrows_msg_redirect_name:nn { amsmath~not~loaded } { info }
-          \group_end:
-        } ,
+        { \__witharrows_err_amsmath_not_loaded: } ,
     subequations .default:n = true ,
     subequations .value_forbidden:n = true ,
     nonumber .meta:n = notag ,
@@ -460,7 +463,7 @@
       \clist_if_in:NnT \l__witharrows_tags_clist { first }
         {
           \clist_remove_all:Nn \l__witharrows_tags_clist { first }
-          \clist_put_left:Nn \l__witharrows_tags_clist 1
+          \clist_put_left:Nn \l__witharrows_tags_clist { 1 }
         } ,
     tagged-lines .value_required:n = true ,
     wrap-lines .bool_set:N = \l__witharrows_wrap_lines_bool ,
@@ -469,7 +472,7 @@
       {
         \tl_set:Ne \l_tmpa_tl { \tl_head:n { #1 } }
         \clist_if_in:NoTF
-          \c__witharrows_ext_delimiters_clist
+          \g__witharrows_ext_delimiters_clist
           \l_tmpa_tl
           { \tl_set:Nn \l__witharrows_replace_left_brace_by_tl { #1 } }
           { \__witharrows_error:n { Bad~value~for~replace~brace~by } }
@@ -497,7 +500,7 @@
       \tl_if_empty:nTF { #1 }
         { \__witharrows_error:n { Invalid~option~format } }
         {
-          \regex_match:nnTF { \A[rclRCL]*\Z } { #1 }
+          \regex_if_match:nnTF { \A[rclRCL]*\Z } { #1 }
             { \tl_set:Nn \l__witharrows_format_str { #1 } }
             { \__witharrows_error:n { Invalid~option~format } }
         } ,
@@ -604,7 +607,7 @@
 \keys_define:nn { WithArrows / Arrow / FirstPass }
   {
     jump .code:n =
-      \int_compare:nNnTF { #1 } > \c_zero_int
+      \int_compare:nNnTF { #1 } > { \c_zero_int }
         { \int_set:Nn \l__witharrows_jump_int { #1 } }
         { \__witharrows_error:n { Negative~jump } } ,
     jump .value_required:n  = true,
@@ -626,7 +629,7 @@
     o .code:n =
       \str_if_empty:NTF \l__witharrows_previous_key_str
         {
-          \int_compare:nNnTF \l__witharrows_pos_arrow_int < 6
+          \int_compare:nNnTF { \l__witharrows_pos_arrow_int } < { 6 }
             { \__witharrows_error:n { invalid~key~o } }
             {
               \str_set:Nn \l__witharrows_status_arrow_str { over }
@@ -669,7 +672,7 @@
         \int_set:Nn \l__witharrows_pos_arrow_int { #1 }
       }
   }
-\keys_define:nn {WithArrows / Arrow / SecondPass }
+\keys_define:nn { WithArrows / Arrow / SecondPass }
   {
     tikz-code .tl_set:N = \l__witharrows_tikz_code_tl ,
     tikz-code .initial:n = \draw~(#1)~to~node{#3}~(#2)~; ,
@@ -683,8 +686,8 @@
     xoffset .code:n  =
       \bool_lazy_all:nTF
         {
-          { \int_compare_p:nNn \g__witharrows_arrow_int > 1 }
-          { \int_compare_p:nNn \l__witharrows_pos_arrow_int > 5 }
+          { \int_compare_p:nNn { \g__witharrows_arrow_int } > { 1 } }
+          { \int_compare_p:nNn { \l__witharrows_pos_arrow_int } > { 5 } }
           { ! \str_if_eq_p:on \l__witharrows_status_arrow_str { independent } }
         }
         { \__witharrows_error:n { Option~xoffset~forbidden } }
@@ -725,10 +728,10 @@
     \prop_put:NnV \l_tmpa_linked_prop { initial } \g__witharrows_line_int
     \int_set:Nn \l_tmpa_int { \g__witharrows_line_int + \l__witharrows_jump_int }
     \prop_put:NnV \l_tmpa_linked_prop { final } \l_tmpa_int
-    \prop_put:Nno \l_tmpa_linked_prop { status } \l__witharrows_status_arrow_str
+    \prop_put:Nno \l_tmpa_linked_prop { status } { \l__witharrows_status_arrow_str }
     \prop_put:Nnn \l_tmpa_linked_prop { options } { #1 , #3 }
     \prop_put:Nnn \l_tmpa_linked_prop { label } { #2 }
-    \prop_put:Nne \l_tmpa_linked_prop { input-line } \msg_line_number:
+    \prop_put:Nne \l_tmpa_linked_prop { input-line } { \msg_line_number: }
     \prop_put:Nnn \l_tmpa_linked_prop { width } { 0 pt }
     \prop_gclear_new_linked:c
       { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \g__witharrows_arrow_int _ prop }
@@ -757,11 +760,11 @@
     \int_gzero:N \g__witharrows_col_int
     \seq_gput_right:NV \g__witharrows_static_col_int_seq \g__witharrows_static_col_int
     \int_gzero:N \g__witharrows_static_col_int
-    \seq_gput_right:Nn \g__witharrows_position_in_the_tree_seq 1
+    \seq_gput_right:Nn \g__witharrows_position_in_the_tree_seq { 1 }
     \seq_set_eq:NN \l_tmpa_seq \g__witharrows_position_in_the_tree_seq
     \seq_pop_right:NN \l_tmpa_seq \l_tmpa_tl
     \str_clear_new:N \l__witharrows_prefix_str
-    \str_set:Ne \l__witharrows_prefix_str { \seq_use:Nnnn \l_tmpa_seq - - - }
+    \str_set:Ne \l__witharrows_prefix_str { \seq_use:Nn \l_tmpa_seq { - } }
     \cs_set_eq:NN \\ \__witharrows_cr:
     \dim_zero:N \mathsurround
     \int_zero_new:N \l__witharrows_initial_int
@@ -769,7 +772,7 @@
     \int_zero_new:N \l__witharrows_arrow_int
     \int_zero_new:N \l__witharrows_pos_of_arrow_int
     \int_zero_new:N \l__witharrows_jump_int
-    \int_set:Nn \l__witharrows_jump_int 1
+    \int_set:Nn \l__witharrows_jump_int { 1 }
     \str_set:Nn \l__witharrows_format_str { rL }
     \seq_clear_new:N \l__witharrows_labels_seq
     \bool_set_false:N \l__witharrows_tag_next_line_bool
@@ -794,7 +797,7 @@
     \int_gset_eq:NN \g__witharrows_col_int \l__witharrows_nb_cols_int
     \seq_clear_new:N \l__witharrows_format_seq
     \seq_set_split:NnV \l__witharrows_format_seq { } \l__witharrows_format_str
-    \bool_if:NT \c__witharrows_footnote_bool { \begin { savenotes } }
+    \bool_if:NT \g__witharrows_footnote_bool { \begin { savenotes } }
     \l__witharrows_code_before_tl
     \cs_set_eq:NN \notag \__witharrows_notag:
     \cs_set_eq:NN \nonumber \__witharrows_nonumber:
@@ -811,7 +814,7 @@
           {
             \int_gdecr:N \g__witharrows_col_int
             \__witharrows_construct_halign:
-            \int_compare:nNnT \g__witharrows_col_int = \l__witharrows_nb_cols_int
+            \int_compare:nNnT { \g__witharrows_col_int } = { \l__witharrows_nb_cols_int }
               {
                 \cs_set_eq:cN { \l__witharrows_command_name_str } \__witharrows_Arrow
                 \bool_if:NT \l__witharrows_in_DispWithArrows_bool
@@ -820,27 +823,27 @@
                     \IfPackageLoadedT { amsmath } { \__witharrows_set_qedhere: }
                   }
               }
-            \str_if_eq:onT \l__witharrows_type_col_str { c } \hfil
-            \str_if_eq:onT \l__witharrows_type_col_str { C } \hfil
-            \str_if_eq:onT \l__witharrows_type_col_str { r } \hfill
-            \str_if_eq:onT \l__witharrows_type_col_str { R } \hfill
+            \str_if_eq:onT \l__witharrows_type_col_str { c } { \hfil }
+            \str_if_eq:onT \l__witharrows_type_col_str { C } { \hfil }
+            \str_if_eq:onT \l__witharrows_type_col_str { r } { \hfill }
+            \str_if_eq:onT \l__witharrows_type_col_str { R } { \hfill }
             \int_gincr:N \g__witharrows_col_int
             \int_gset:Nn \g__witharrows_static_col_int { \int_use:N \g__witharrows_col_int }
-            \c_math_toggle_token
+            $ % $
             \str_if_eq:onT \l__witharrows_type_col_str { C } { { } }
             \str_if_eq:onT \l__witharrows_type_col_str { L } { { } }
-            \bool_if:NT \l__witharrows_displaystyle_bool \displaystyle
+            \bool_if:NT \l__witharrows_displaystyle_bool { \displaystyle }
             ##
             \str_if_eq:onT \l__witharrows_type_col_str { C } { { } }
             \str_if_eq:onT \l__witharrows_type_col_str { R } { { } }
-            \c_math_toggle_token
-            \int_compare:nNnTF \g__witharrows_col_int = \l__witharrows_nb_cols_int
+            $ % $
+            \int_compare:nNnTF { \g__witharrows_col_int } = { \l__witharrows_nb_cols_int }
               \__witharrows_construct_nodes:
               {
-                \str_if_eq:onT \l__witharrows_type_col_str { l } \hfil
-                \str_if_eq:onT \l__witharrows_type_col_str { L } \hfil
-                \str_if_eq:onT \l__witharrows_type_col_str { c } \hfil
-                \str_if_eq:onT \l__witharrows_type_col_str { C } \hfil
+                \str_if_eq:onT \l__witharrows_type_col_str { l } { \hfil }
+                \str_if_eq:onT \l__witharrows_type_col_str { L } { \hfil }
+                \str_if_eq:onT \l__witharrows_type_col_str { c } { \hfil }
+                \str_if_eq:onT \l__witharrows_type_col_str { C } { \hfil }
                 \bool_if:NT \l__witharrows_in_DispWithArrows_bool { \tabskip = \c_zero_skip }
                 &
               }
@@ -914,24 +917,26 @@
     \fi:
     \box_clear_new:N \l__witharrows_env_box
     \hbox_set:Nw \l__witharrows_env_box
-    \int_compare:nNnT \l__witharrows_pos_env_int = 1 \c_math_toggle_token
-    \int_case:nn \l__witharrows_pos_env_int { 0 \vtop 1 \vcenter 2 \vbox }
+    \int_compare:nNnT { \l__witharrows_pos_env_int } = { 1 }
+      { $ } % $
+    \int_case:nn { \l__witharrows_pos_env_int } { 0 \vtop 1 \vcenter 2 \vbox }
     \bgroup
     \spread@equation
     \__witharrows_construct_halign:
     &&
-    \__witharrows_error:n { Too~much~columns~in~WithArrows }
-    \c_math_toggle_token
-    \bool_if:NT \l__witharrows_displaystyle_bool \displaystyle
+    \__witharrows_error:n { Too~many~columns~in~WithArrows }
+    $ % $
+    \bool_if:NT \l__witharrows_displaystyle_bool { \displaystyle }
     { ## }
-    \c_math_toggle_token
+    $ % $
     \cr
   }
   {
     \\
     \egroup
     \egroup
-    \int_compare:nNnT \l__witharrows_pos_env_int = 1 \c_math_toggle_token
+    \int_compare:nNnT { \l__witharrows_pos_env_int } = { 1 }
+      { $ } % $
     \hbox_set_end:
     \__witharrows_post_halign:
     \bool_if:NF \l__witharrows_right_overlap_bool
@@ -940,7 +945,7 @@
           { \g__witharrows_overlap_x_dim + \box_wd:N \l__witharrows_env_box }
       }
     \box_use_drop:N \l__witharrows_env_box
-    \bool_if:NT \c__witharrows_footnote_bool { \end { savenotes } }
+    \bool_if:NT \g__witharrows_footnote_bool { \end { savenotes } }
   }
 \cs_new_protected:Npn \__witharrows_post_halign:
   {
@@ -948,10 +953,10 @@
     \normalbaselines
     \int_if_zero:nF \g__witharrows_arrow_int
       {
-        \int_compare:nNnT \g__witharrows_arrow_int = 1
+        \int_compare:nNnT { \g__witharrows_arrow_int } = { 1 }
           {
-            \int_compare:nNnT \l__witharrows_pos_arrow_int > 5
-              { \int_set:Nn \l__witharrows_pos_arrow_int 5 }
+            \int_compare:nNnT { \l__witharrows_pos_arrow_int } > { 5 }
+              { \int_set:Nn \l__witharrows_pos_arrow_int { 5 } }
           }
         \__witharrows_scan_arrows:
       }
@@ -967,7 +972,7 @@
     \seq_gpop_right:NN \g__witharrows_position_in_the_tree_seq \l_tmpa_tl
     \seq_gput_right:Ne \g__witharrows_position_in_the_tree_seq
       { \int_eval:n { \l_tmpa_tl + 1 } }
-    \int_compare:nNnT { \seq_count:N \g__witharrows_position_in_the_tree_seq } = 1
+    \int_compare:nNnT { \seq_count:N \g__witharrows_position_in_the_tree_seq } = { 1 }
       { \int_gincr:N \g__witharrows_last_env_int }
     \seq_gpop_right:NN \g__witharrows_arrow_int_seq \l_tmpa_tl
     \int_gset:Nn \g__witharrows_arrow_int \l_tmpa_tl
@@ -981,7 +986,7 @@
 \cs_new_protected:Npn \__witharrows_cr:
   {
     \scan_stop:
-    \int_compare:nNnF \g__witharrows_col_int = \g__witharrows_static_col_int
+    \int_compare:nNnF { \g__witharrows_col_int } = { \g__witharrows_static_col_int }
       { \__witharrows_error:n { omit~probably~used } }
     \prg_replicate:nn { \l__witharrows_nb_cols_int - \g__witharrows_static_col_int } { & { } }
     \group_align_safe_begin:
@@ -1010,16 +1015,12 @@
           {
             \tl_if_empty:NT \l__witharrows_tag_tl { \int_gincr:N \c@equation }
             \cs_gset:Npe \g_tmpa_tl
-              { \tl_if_empty:NTF \l__witharrows_tag_tl \theequation \l__witharrows_tag_tl }
+              { \tl_if_empty:NTF \l__witharrows_tag_tl { \theequation } { \l__witharrows_tag_tl } }
             \seq_if_empty:NF \l__witharrows_labels_seq
               {
                 \cs_set:Npe \@currentlabel { \p@equation \g_tmpa_tl }
                 \IfPackageLoadedT { hyperref }
-                  {
-                    % the following line is probably pointless (2022/05/16)
-                    % \str_set:Nn \This@name { equation }
-                    \hyper@refstepcounter { equation }
-                  }
+                  { \hyper@refstepcounter { equation } }
                 \IfPackageLoadedT { cleveref }
                   {
                     \cref@constructprefix { equation } \cref@result
@@ -1040,7 +1041,7 @@
             \__witharrows_save:N \l__witharrows_qedhere_bool
             \bool_if:NT \l__witharrows_tag_next_line_bool
               {
-                \openup -\jot
+                \openup - \jot
                 \bool_set_false:N \l__witharrows_tag_next_line_bool
                 \notag \\ &
               }
@@ -1090,13 +1091,12 @@
             \endpgfpicture
           }
       }
-    \dim_compare:nNnT { #1 } < \c_zero_dim
+    \dim_compare:nNnT { #1 } < { \c_zero_dim }
        { \__witharrows_error:n { option~of~cr~negative } }
-
     \cr
     \noalign
       {
-        \dim_set:Nn \l_tmpa_dim { \dim_max:nn { #1 } \c_zero_dim }
+        \dim_set:Nn \l_tmpa_dim { \dim_max:nn { #1 } { \c_zero_dim } }
         \skip_vertical:N \l_tmpa_dim
         \skip_vertical:N \l__witharrows_interline_skip
         \scan_stop:
@@ -1105,19 +1105,14 @@
 \cs_new_protected:Npn \__witharrows_analyze_end:Nn #1 #2
   {
     \str_if_eq:onT \l__witharrows_type_env_str { #2 }
-      {
-        \__witharrows_error:n { newline~at~the~end~of~env }
-        \group_begin:
-        \globaldefs = 1
-        \__witharrows_msg_redirect_name:nn { newline~at~the~end~of~env } { none }
-        \group_end:
-      }
+      { \__witharrows_err_newline_at_the_end: }
     \end { #2 }
   }
 \bool_new:N \l__witharrows_in_label_or_minipage_bool
 \NewDocumentEnvironment { DispWithArrows } { ! d < > ! O { } }
   {
     \bool_set_true:N \l__witharrows_in_DispWithArrows_bool
+    \tag_if_active:T { \__witharrows_fatal:n { DispWithArrows~with~tagging } }
     \bool_if:NF \l__witharrows_sbwi_bool
       {
         \legacy_if:nT { @inlabel }
@@ -1146,9 +1141,9 @@
           {
             \group_begin:
             \dim_zero:N \nulldelimiterspace
-            \c_math_toggle_token
+            $ % $
             \left \l__witharrows_replace_left_brace_by_tl \vcenter to 1 cm { } \right.
-            \c_math_toggle_token
+            $ % $
             \group_end:
           }
         \dim_zero_new:N \l__witharrows_delim_wd_dim
@@ -1158,11 +1153,11 @@
           {
             \group_begin:
               \cs_set_eq:NN \label \__witharrows_old_label
-              \c_math_toggle_token
-              \bool_if:NT \l__witharrows_displaystyle_bool \displaystyle
+              $ % $
+              \bool_if:NT \l__witharrows_displaystyle_bool { \displaystyle }
               \l__witharrows_left_brace_tl
               { }
-              \c_math_toggle_token
+              $ % $
             \group_end:
           }
       }
@@ -1175,14 +1170,14 @@
     \bool_if:NTF \l__witharrows_in_label_or_minipage_bool
       {
         \noindent
-        \c_math_toggle_token
+        $ % $
       }
       {
         \if_mode_vertical:
         \nointerlineskip
         \hbox_to_wd:nn { .6 \linewidth } { }
         \fi:
-        \c_math_toggle_token \c_math_toggle_token
+        $$ % $$
       }
     \dim_zero_new:N \l__witharrows_linewidth_dim
     \bool_if:NTF \l__witharrows_in_label_or_minipage_bool
@@ -1192,7 +1187,7 @@
     \setbox \l__witharrows_halign_box \vtop \bgroup
     \tabskip =
       \bool_if:NTF \l__witharrows_fleqn_bool
-        \c_zero_skip
+        { \c_zero_skip }
         { 0 pt plus 1000 pt minus 1000 pt }
     \spread@equation
     \__witharrows_construct_halign:
@@ -1201,8 +1196,8 @@
     $ ## $
     \tabskip = \c_zero_skip
     &&
-    \__witharrows_fatal:n { Too~much~columns~in~DispWithArrows }
-    \bool_if:nT \c_false_bool { ## }
+    \__witharrows_fatal:n { Too~many~columns~in~DispWithArrows }
+    \bool_if:nT { \c_false_bool } { ## }
     \cr
   }
   {
@@ -1219,7 +1214,7 @@
     \box_clear_new:N \l__witharrows_new_box
     \hbox_set:Nn \l__witharrows_new_box { \hbox_unpack_drop:N \l_tmpa_box }
     \dim_compare:nNnT
-      { \box_wd:N \l__witharrows_new_box } < \g__witharrows_alignment_dim
+      { \box_wd:N \l__witharrows_new_box } < { \g__witharrows_alignment_dim }
       { \dim_gset:Nn \g__witharrows_alignment_dim { \box_wd:N \l__witharrows_new_box } }
     \egroup
      \tl_if_eq:NNTF \l__witharrows_left_brace_tl \c_novalue_tl
@@ -1229,22 +1224,19 @@
            {
             \bool_if:NTF \l__witharrows_fleqn_bool
               { \skip_horizontal:N \l__witharrows_mathindent_skip }
-              \hfil
+              { \hfil }
             \hbox_to_wd:nn \g__witharrows_alignment_dim
               {
                 \box_use_drop:N \l__witharrows_left_brace_box
                 \dim_set:Nn \l_tmpa_dim
-                  {
-                    \box_ht:N \l__witharrows_halign_box
-                    + \box_dp:N \l__witharrows_halign_box
-                  }
+                  { \box_ht_plus_dp:N \l__witharrows_halign_box }
                 \group_begin:
                 \dim_zero:N \nulldelimiterspace
-                \c_math_toggle_token
+                $ % $
                   \left \l__witharrows_replace_left_brace_by_tl
                     \vcenter to \l_tmpa_dim { \vfil }
                   \right.
-                \c_math_toggle_token
+                $ % $
                 \group_end:
                 \hfil
               }
@@ -1257,7 +1249,7 @@
     \dim_gset_eq:NN \g__witharrows_right_x_dim \c_max_dim
     \pgfpicture
       \pgfrememberpicturepositiononpagetrue
-      \int_step_variable:nNn \g__witharrows_line_int \l_tmpa_int
+      \int_step_variable:nNn { \g__witharrows_line_int } \l_tmpa_int
         {
           \cs_if_free:cTF
             { pgf @ sh @ ns @ wa - \l__witharrows_prefix_str - \l_tmpa_int - v }
@@ -1266,22 +1258,22 @@
               \pgfpointanchor
                 { wa - \l__witharrows_prefix_str - \l_tmpa_int - v }
                 { center }
-              \dim_compare:nNnT \pgf@x < \g__witharrows_right_x_dim
+              \dim_compare:nNnT { \pgf@x } < { \g__witharrows_right_x_dim }
                 { \dim_gset_eq:NN \g__witharrows_right_x_dim \pgf@x }
             }
         }
     \endpgfpicture
     \__witharrows_post_halign:
     \IfPackageLoadedT { mathtools }
-      { \MH_if_boolean:nT { show_only_refs } \MT_showonlyrefs_true: }
+      { \MH_if_boolean:nT { show_only_refs } { \MT_showonlyrefs_true: } }
     \bool_if:NTF \l__witharrows_in_label_or_minipage_bool
       {
-        \c_math_toggle_token
+        $ % $
         \skip_vertical:N \belowdisplayskip
       }
-      { \c_math_toggle_token \c_math_toggle_token }
+      { $$ } % $$
     \bool_if:NT \l__witharrows_subequations_bool { \end { subequations } }
-    \bool_if:NT \c__witharrows_footnote_bool { \end { savenotes } }
+    \bool_if:NT \g__witharrows_footnote_bool { \end { savenotes } }
     \ignorespacesafterend
   }
 \NewDocumentEnvironment { DispWithArrows* } { }
@@ -1295,7 +1287,7 @@
     \bool_if:NTF \l__witharrows_in_WithArrows_bool
       { \__witharrows_error:nn { Not~allowed~in~WithArrows } { #1 } }
       {
-        \int_compare:nNnTF \g__witharrows_col_int < \l__witharrows_nb_cols_int
+        \int_compare:nNnTF { \g__witharrows_col_int } < { \l__witharrows_nb_cols_int }
           { \__witharrows_error:nn { Not~allowed~in~DispWithArrows } { #1 } }
           { #2 }
       }
@@ -1303,8 +1295,12 @@
 \cs_new_protected:Npn \__witharrows_notag:
   { \__witharrows_if_in_last_col_of_disp:Nn \notag { \clist_clear:N \l__witharrows_tags_clist } }
 \cs_new_protected:Npn \__witharrows_nonumber:
-  { \__witharrows_if_in_last_col_of_disp:Nn \nonumber { \clist_clear:N \l__witharrows_tags_clist } }
-\NewDocumentCommand \__witharrows_tag { s m }
+  {
+    \__witharrows_if_in_last_col_of_disp:Nn
+      \nonumber
+      { \clist_clear:N \l__witharrows_tags_clist }
+  }
+\NewDocumentCommand { \__witharrows_tag } { s m }
   {
     \__witharrows_if_in_last_col_of_disp:Nn \tag
       {
@@ -1374,10 +1370,10 @@
 \cs_new_protected:Npn \__witharrows_scan_arrows:
   {
     \group_begin:
-    \int_compare:nNnT \l__witharrows_pos_arrow_int = 7
+    \int_compare:nNnT { \l__witharrows_pos_arrow_int } = { 7 }
       {
         \__witharrows_scan_arrows_i:
-        \int_set:Nn \l__witharrows_pos_arrow_int 8
+        \int_set:Nn \l__witharrows_pos_arrow_int { 8 }
       }
     \__witharrows_scan_arrows_i:
     \group_end:
@@ -1390,49 +1386,59 @@
     \seq_clear_new:N \l__witharrows_first_arrows_seq
     \seq_clear_new:N \l__witharrows_last_arrows_seq
     \bool_set_true:N \l__witharrows_new_group_bool
-    \int_set:Nn \l__witharrows_arrow_int 1
-    \int_until_do:nNnn \l__witharrows_arrow_int > \g__witharrows_arrow_int
+    \int_set:Nn \l__witharrows_arrow_int { 1 }
+    \int_until_do:nNnn { \l__witharrows_arrow_int } > { \g__witharrows_arrow_int }
       {
         \prop_get:cnN
           { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
           { initial } \l_tmpa_tl
-        \int_set:Nn \l__witharrows_initial_int \l_tmpa_tl
+        \int_set:Nn \l__witharrows_initial_int { \l_tmpa_tl }
         \prop_get:cnN
           { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
           { final } \l_tmpa_tl
-        \int_set:Nn \l__witharrows_final_int \l_tmpa_tl
+        \int_set:Nn \l__witharrows_final_int { \l_tmpa_tl }
         \prop_get:cnN
           { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
           { status } \l__witharrows_status_arrow_str
         \prop_get:cnN
           { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
           { input-line } \l__witharrows_input_line_str
-        \int_compare:nNnTF \l__witharrows_final_int > \g__witharrows_line_int
+        \int_compare:nNnTF { \l__witharrows_final_int } > { \g__witharrows_line_int }
           {
-            \int_compare:nNnF \l__witharrows_pos_arrow_int = 8
+            \int_compare:nNnF \l__witharrows_pos_arrow_int = { 8 }
               { \__witharrows_error:n { Too~few~lines~for~an~arrow } }
           }
           \__witharrows_treat_an_arrow_in_scan:
         \int_incr:N \l__witharrows_arrow_int
       }
     \bool_lazy_and:nnT
-      { ! \int_compare_p:nNn \l__witharrows_pos_arrow_int = 7 }
-      { \int_compare_p:nNn \l__witharrows_first_arrow_of_group_int > \c_zero_int }
-      { \__witharrows_draw_arrows:nn \l__witharrows_first_arrow_of_group_int \g__witharrows_arrow_int }
+      { ! \int_compare_p:nNn { \l__witharrows_pos_arrow_int } = { 7 } }
+      {
+        \int_compare_p:nNn
+          { \l__witharrows_first_arrow_of_group_int } > { \c_zero_int }
+      }
+      {
+        \__witharrows_draw_arrows:nn
+          { \l__witharrows_first_arrow_of_group_int }
+          { \g__witharrows_arrow_int }
+      }
   }
 \cs_new_protected:Npn \__witharrows_treat_an_arrow_in_scan:
   {
     \bool_lazy_and:nnT
-      { \int_compare_p:nNn \l__witharrows_arrow_int > 1 }
+      { \int_compare_p:nNn { \l__witharrows_arrow_int } > { 1 } }
       {
         \bool_lazy_or_p:nn
           {
             \bool_lazy_and_p:nn
               {
                 \int_compare_p:nNn
-                  \l__witharrows_initial_int > \l__witharrows_last_line_of_group_int
+                  { \l__witharrows_initial_int } > { \l__witharrows_last_line_of_group_int }
               }
-              { \bool_not_p:n { \int_compare_p:nNn \l__witharrows_pos_arrow_int = 7 } }
+              {
+                \bool_not_p:n
+                  { \int_compare_p:nNn { \l__witharrows_pos_arrow_int } = { 7 } }
+              }
           }
           { \str_if_eq_p:on \l__witharrows_status_arrow_str { new-group } }
       }
@@ -1440,7 +1446,7 @@
         \int_if_zero:nF \l__witharrows_first_arrow_of_group_int
           {
             \__witharrows_draw_arrows:nn
-              \l__witharrows_first_arrow_of_group_int
+              { \l__witharrows_first_arrow_of_group_int }
               { \l__witharrows_arrow_int - 1 }
           }
         \bool_set_true:N \l__witharrows_new_group_bool
@@ -1455,7 +1461,7 @@
         \seq_put_left:NV \l__witharrows_first_arrows_seq \l__witharrows_arrow_int
         \seq_clear:N \l__witharrows_last_arrows_seq
         \seq_put_left:NV \l__witharrows_last_arrows_seq \l__witharrows_arrow_int
-        \int_compare:nNnF \l__witharrows_pos_arrow_int = 8
+        \int_compare:nNnF { \l__witharrows_pos_arrow_int } = { 8 }
           { \dim_set:Nn \l__witharrows_x_dim { - \c_max_dim } }
       }
       {
@@ -1477,8 +1483,8 @@
       }
     \str_if_eq:onF \l__witharrows_status_arrow_str { independent }
       {
-        \int_compare:nNnF \l__witharrows_pos_arrow_int = 8
-          { \__witharrows_update_x:nn \l__witharrows_initial_int \l__witharrows_final_int }
+        \int_compare:nNnF { \l__witharrows_pos_arrow_int } = { 8 }
+          { \__witharrows_update_x:nn { \l__witharrows_initial_int } { \l__witharrows_final_int } }
       }
   }
 \cs_new_protected:Npn \__witharrows_draw_arrows:nn #1 #2
@@ -1488,8 +1494,8 @@
     \int_set:Nn \l__witharrows_first_arrow_int { #1 }
     \int_zero_new:N \l__witharrows_last_arrow_int
     \int_set:Nn \l__witharrows_last_arrow_int { #2 }
-    \int_set:Nn \l__witharrows_arrow_int \l__witharrows_first_arrow_int
-    \int_until_do:nNnn \l__witharrows_arrow_int > \l__witharrows_last_arrow_int
+    \int_set_eq:NN \l__witharrows_arrow_int \l__witharrows_first_arrow_int
+    \int_until_do:nNnn { \l__witharrows_arrow_int } > { \l__witharrows_last_arrow_int }
       {
         \prop_get:cnN
           { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
@@ -1502,7 +1508,7 @@
         \prop_get:cnN
           { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
           { status } \l__witharrows_status_arrow_str
-        \int_compare:nNnF \l__witharrows_final_int > \g__witharrows_line_int
+        \int_compare:nNnF { \l__witharrows_final_int } > { \g__witharrows_line_int }
           {
             \str_if_eq:onTF \l__witharrows_status_arrow_str { over }
               { \seq_put_right:NV \l__witharrows_o_arrows_seq \l__witharrows_arrow_int }
@@ -1527,7 +1533,7 @@
       { \l_tmpa_tl , tikz = { xshift = \l__witharrows_xoffset_dim } }
     \bool_set_false:N \l__witharrows_initial_r_bool
     \bool_set_false:N \l__witharrows_final_r_bool
-    \int_case:nn \l__witharrows_pos_arrow_int
+    \int_case:nn { \l__witharrows_pos_arrow_int }
       {
         0 { \bool_set_true:N \l__witharrows_final_r_bool }
         2 { \bool_set_true:N \l__witharrows_initial_r_bool }
@@ -1537,15 +1543,21 @@
             \bool_set_true:N \l__witharrows_final_r_bool
           }
       }
-    \int_compare:nNnT \l__witharrows_pos_arrow_int = 5
+    \int_compare:nNnT { \l__witharrows_pos_arrow_int } = { 5 }
       {
         \dim_set:Nn \l__witharrows_x_dim { - \c_max_dim }
-        \__witharrows_update_x:nn \l__witharrows_initial_int \l__witharrows_final_int
+        \__witharrows_update_x:nn { \l__witharrows_initial_int } { \l__witharrows_final_int }
       }
     \tl_set:Ne \l__witharrows_initial_tl
-      { \int_use:N \l__witharrows_initial_int - \bool_if:NTF \l__witharrows_initial_r_bool rl }
+      {
+        \int_use:N \l__witharrows_initial_int -
+        \bool_if:NTF \l__witharrows_initial_r_bool { r } { l }
+      }
     \tl_set:Ne \l__witharrows_final_tl
-      { \int_use:N \l__witharrows_final_int - \bool_if:NTF \l__witharrows_final_r_bool rl }
+      {
+        \int_use:N \l__witharrows_final_int -
+        \bool_if:NTF \l__witharrows_final_r_bool { r } { l }
+      }
     \prop_get:cnN
       { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
       { label }
@@ -1558,7 +1570,7 @@
       { \int_use:N \l__witharrows_arrow_int }
       { \bool_set_true:N \l_tmpb_bool }
       { \bool_set_false:N \l_tmpb_bool }
-    \int_compare:nNnT \l__witharrows_pos_arrow_int = 5
+    \int_compare:nNnT { \l__witharrows_pos_arrow_int } = { 5 }
       {
         \bool_set_true:N \l_tmpa_bool
         \bool_set_true:N \l_tmpb_bool
@@ -1581,11 +1593,11 @@
         \dim_compare_p:nNn { \g__witharrows_y_initial_dim - \g__witharrows_y_final_dim }
                                 > \l__witharrows_max_length_of_arrow_dim
       }
-      { \int_compare_p:nNn { \l__witharrows_final_int - \l__witharrows_initial_int } = 1 }
+      { \int_compare_p:nNn { \l__witharrows_final_int - \l__witharrows_initial_int } = { 1 } }
       {
         \tl_gset:Ne \g_tmpa_tl
           {
-            \int_compare:nNnTF \l__witharrows_pos_arrow_int < 5
+            \int_compare:nNnTF { \l__witharrows_pos_arrow_int } < { 5 }
               { \dim_use:N \g__witharrows_x_initial_dim }
               { \dim_use:N \l__witharrows_x_dim } ,
             \dim_eval:n
@@ -1596,7 +1608,7 @@
           }
         \tl_gset:Ne \g_tmpb_tl
           {
-            \int_compare:nNnTF \l__witharrows_pos_arrow_int < 5
+            \int_compare:nNnTF { \l__witharrows_pos_arrow_int } < { 5 }
               { \dim_use:N \g__witharrows_x_final_dim }
               { \dim_use:N \l__witharrows_x_dim } ,
             \dim_eval:n
@@ -1609,7 +1621,7 @@
       {
         \tl_gset:Ne \g_tmpa_tl
           {
-            \int_compare:nNnTF \l__witharrows_pos_arrow_int < 5
+            \int_compare:nNnTF { \l__witharrows_pos_arrow_int } < { 5 }
               { \dim_use:N \g__witharrows_x_initial_dim }
               { \dim_use:N \l__witharrows_x_dim } ,
             \bool_if:NTF \l_tmpa_bool
@@ -1618,7 +1630,7 @@
           }
         \tl_gset:Ne \g_tmpb_tl
           {
-            \int_compare:nNnTF \l__witharrows_pos_arrow_int < 5
+            \int_compare:nNnTF { \l__witharrows_pos_arrow_int } < { 5 }
               { \dim_use:N \g__witharrows_x_final_dim }
               { \dim_use:N \l__witharrows_x_dim } ,
             \bool_if:NTF \l_tmpb_bool
@@ -1633,12 +1645,12 @@
             \pgfpicture
             \pgfrememberpicturepositiononpagetrue
             \pgfpointanchor { wa - \l__witharrows_prefix_str - 1 - r } { south }
-            \int_compare:nNnTF \l__witharrows_pos_arrow_int < 5
+            \int_compare:nNnTF { \l__witharrows_pos_arrow_int } < { 5 }
               {
                 \dim_set:Nn \l__witharrows_delta_x_dim
                   {
                     \pgf@x -
-                    ( \dim_min:nn \g__witharrows_x_initial_dim \g__witharrows_x_final_dim )
+                    ( \dim_min:nn { \g__witharrows_x_initial_dim } { \g__witharrows_x_final_dim } )
                   }
               }
               { \dim_set:Nn \l__witharrows_delta_x_dim { \pgf@x - \l__witharrows_x_dim } }
@@ -1648,20 +1660,19 @@
     \__witharrows_draw_arrow:nno \g_tmpa_tl \g_tmpb_tl \l_tmpa_tl
     \group_end:
   }
-\cs_generate_variant:Nn \__witharrows_def_function_arrow:n { o }
 \cs_new_protected:Npn \__witharrows_def_function_arrow:n #1
   {
     \cs_set:Npn \__witharrows_arrow:nnn ##1 ##2 ##3
       {
-        \begin{tikzpicture}
+        \begin { tikzpicture }
         [ __witharrows_standard_arrow ]
         \pgf@relevantforpicturesizetrue
           #1
-        \dim_compare:nNnTF \pgf@picminx = { 16000 pt }
+        \dim_compare:nNnTF { \pgf@picminx } = { 16000 pt }
           { \dim_zero:N \l_tmpa_dim }
           { \dim_set:Nn \l_tmpa_dim { \pgf@picmaxx - \pgf@picminx } }
         \dim_add:Nn \l_tmpa_dim \l__witharrows_xoffset_dim
-        \int_compare:nNnT \l__witharrows_arrow_int > 0 % added 2024/10/01
+        \int_compare:nNnT { \l__witharrows_arrow_int } > { 0 } % added 2024/10/01
           {
             \prop_gput:cnV
               { g__witharrows_arrow _ \l__witharrows_prefix_str _ \int_use:N \l__witharrows_arrow_int _ prop }
@@ -1681,10 +1692,10 @@
               }
           }
         \pgfresetboundingbox
-        \end{tikzpicture}
+        \end { tikzpicture }
       }
   }
-\cs_generate_variant:Nn \__witharrows_draw_arrow:nnn { n n o }
+\cs_generate_variant:Nn \__witharrows_def_function_arrow:n { o }
 \cs_new_protected:Npn \__witharrows_draw_arrow:nnn #1 #2 #3
   {
     \bool_lazy_and:nnT \l__witharrows_wrap_lines_bool \l__witharrows_in_DispWithArrows_bool
@@ -1692,20 +1703,21 @@
     \__witharrows_def_function_arrow:o \l__witharrows_tikz_code_tl
     \__witharrows_arrow:nnn { #1 } { #2 } { #3 }
   }
+\cs_generate_variant:Nn \__witharrows_draw_arrow:nnn { n n o }
 \tl_const:Nn \c__witharrows_tikz_code_wrap_lines_tl
   {
-     \pgfset { inner~sep = 0pt }
+    \pgfset { inner~sep = \c_zero_dim }
     \draw ( #1 ) to node ( __witharrows_label ) { } ( #2 ) ;
     \pgfpointanchor { wa - \l__witharrows_prefix_str - __witharrows_label } { west }
     \dim_set:Nn \l_tmpa_dim { \g__witharrows_right_x_dim - \pgf@x - 0.33333 em  }
     \path \pgfextra { \tl_gset:Ne \g_tmpa_tl \tikz@text@width } ;
     \tl_if_empty:NF \g_tmpa_tl
       {
-        \dim_set:Nn \l_tmpb_dim \g_tmpa_tl
-        \dim_compare:nNnT \l_tmpb_dim < \l_tmpa_dim
+        \dim_set_eq:NN \l_tmpb_dim \g_tmpa_tl
+        \dim_compare:nNnT { \l_tmpb_dim } < { \l_tmpa_dim }
           { \dim_set_eq:NN \l_tmpa_dim \l_tmpb_dim }
       }
-    \dim_compare:nNnT \l_tmpa_dim > \c_zero_dim
+    \dim_compare:nNnT { \l_tmpa_dim } > { \c_zero_dim }
       {
         \path ( __witharrows_label.west )
            node [ anchor = west ]
@@ -1737,7 +1749,7 @@
     \int_step_inline:nnn { #1 } { #2 }
       {
         \pgfpointanchor { wa - \l__witharrows_prefix_str - ##1 - l } { center }
-        \dim_gset:Nn \g_tmpa_dim { \dim_max:nn \g_tmpa_dim \pgf@x }
+        \dim_gset:Nn \g_tmpa_dim { \dim_max:nn { \g_tmpa_dim } { \pgf@x } }
       }
     \endpgfpicture
     \dim_set_eq:NN \l__witharrows_x_dim \g_tmpa_dim
@@ -1763,10 +1775,10 @@
         \prop_get:cnN
           { g__witharrows_arrow _ \l__witharrows_prefix_str _ ##2 _ prop }
           { final } \l_tmpb_tl
-        \int_compare:nNnTF \l_tmpa_tl < \l_tmpb_tl
+        \int_compare:nNnTF { \l_tmpa_tl } < { \l_tmpb_tl }
           \sort_return_same:
           {
-            \int_compare:nNnTF \l_tmpa_tl > \l_tmpb_tl
+            \int_compare:nNnTF { \l_tmpa_tl } > { \l_tmpb_tl }
               \sort_return_swapped:
               {
                 \prop_get:cnN
@@ -1775,7 +1787,7 @@
                 \prop_get:cnN
                   { g__witharrows_arrow _ \l__witharrows_prefix_str _ ##2 _ prop }
                   { initial } \l_tmpb_tl
-                \int_compare:nNnTF \l_tmpa_tl < \l_tmpb_tl
+                \int_compare:nNnTF { \l_tmpa_tl } < { \l_tmpb_tl }
                   \sort_return_swapped:
                   \sort_return_same:
               }
@@ -1812,8 +1824,8 @@
             \bool_lazy_any:nF
               {
                 { \int_compare_p:n { ##1 = ####1 } }
-                { \int_compare_p:nNn \l__witharrows_initial_int > \l_tmpa_tl }
-                { \int_compare_p:nNn \l_tmpb_tl > \l__witharrows_final_int }
+                { \int_compare_p:nNn { \l__witharrows_initial_int } > { \l_tmpa_tl } }
+                { \int_compare_p:nNn { \l_tmpb_tl } > { \l__witharrows_final_int } }
                 { \str_if_eq_p:on \l__witharrows_status_arrow_str { independent } }
               }
               {
@@ -1830,7 +1842,7 @@
           {
             \int_set:Nn \l__witharrows_arrow_int { ##1 }
             \dim_set_eq:NN \l__witharrows_xoffset_dim \g_tmpa_dim
-            \dim_add:Nn \l__witharrows_xoffset_dim \l__witharrows_xoffset_for_o_arrows_dim
+            \dim_add:Nn \l__witharrows_xoffset_dim { \l__witharrows_xoffset_for_o_arrows_dim }
             \__witharrows_draw_arrow:
           }
           { \__witharrows_error:n { o~arrow~with~no~arrow~under } }
@@ -1873,7 +1885,7 @@
         { #1, #5, tikz = { xshift = \l__witharrows_xoffset_dim } }
       \bool_set_false:N \l__witharrows_initial_r_bool
       \bool_set_false:N \l__witharrows_final_r_bool
-      \int_case:nn \l__witharrows_pos_arrow_int
+      \int_case:nn { \l__witharrows_pos_arrow_int }
         {
           0
             {
@@ -1892,7 +1904,7 @@
               \cs_if_free:cTF { pgf@sh@ns@wa - \l__witharrows_prefix_str - #3 - l }
                 { \__witharrows_error:ne { Wrong~line~in~Arrow } { #3 }  }
                 {
-                  \int_compare:nNnTF \l__witharrows_pos_arrow_int = 4
+                  \int_compare:nNnTF { \l__witharrows_pos_arrow_int } = { 4 }
                     {
                       \pgfpicture
                         \pgfrememberpicturepositiononpagetrue
@@ -1916,7 +1928,7 @@
                         \pgfpointanchor
                           {
                             wa - \l__witharrows_prefix_str -
-                            #2 - \bool_if:NTF \l__witharrows_initial_r_bool r l
+                            #2 - \bool_if:NTF \l__witharrows_initial_r_bool { r } { l }
                           }
                           { south }
                         \tl_gset:Ne \g_tmpa_tl
@@ -1924,7 +1936,7 @@
                         \pgfpointanchor
                           {
                             wa - \l__witharrows_prefix_str -
-                            #3 - \bool_if:NTF \l__witharrows_final_r_bool r l
+                            #3 - \bool_if:NTF \l__witharrows_final_r_bool { r } { l }
                           }
                           { north }
                         \tl_gset:Ne \g_tmpb_tl
@@ -1940,7 +1952,7 @@
 \cs_new_protected:Npn \__witharrows_MultiArrow:nn #1 #2
   {
     \exp_args:Nne
-      \regex_match:nnTF
+      \regex_if_match:nnTF
       { \A \d+ (\,\d+)* ( \, \.\.\. (\,\d+)+ )* \Z }
       { #1 }
       { \__witharrows_MultiArrow_i:nn { #1 } { #2 } }
@@ -1954,7 +1966,7 @@
           { \__witharrows_error:ne { Wrong~line~specification~in~MultiArrow } \x }
           { \clist_gput_right:Ne \g_tmpa_clist \x }
       }
-    \int_compare:nTF { \clist_count:N \g_tmpa_clist < 2 }
+    \int_compare:nNnTF { \clist_count:N \g_tmpa_clist } < { 2 }
       { \__witharrows_error:n { Too~small~specification~for~MultiArrow } }
       {
         \clist_sort:Nn \g_tmpa_clist
@@ -1980,12 +1992,12 @@
           \pgfpointanchor { wa - \l__witharrows_prefix_str - __witharrows_label } { west }
           \dim_set:Nn \l_tmpa_dim { 20 cm }
           \path \pgfextra { \tl_gset:Ne \g_tmpa_tl \tikz@text@width } ;
-          \tl_if_empty:NF \g_tmpa_tl { \dim_set:Nn \l_tmpa_dim \g_tmpa_tl }
+          \tl_if_empty:NF \g_tmpa_tl { \dim_set:Nn \l_tmpa_dim { \g_tmpa_tl } }
           \bool_lazy_and:nnT \l__witharrows_wrap_lines_bool \l__witharrows_in_DispWithArrows_bool
             {
               \dim_set:Nn \l_tmpb_dim
                 { \g__witharrows_right_x_dim - \pgf@x - 0.3333 em }
-              \dim_compare:nNnT \l_tmpb_dim < \l_tmpa_dim
+              \dim_compare:nNnT { \l_tmpb_dim } < { \l_tmpa_dim }
                 { \dim_set_eq:NN \l_tmpa_dim \l_tmpb_dim }
             }
           \path (__witharrows_label.west)
@@ -1995,7 +2007,7 @@
   }
 \cs_new_protected:Npn \__witharrows_MultiArrow_i:n #1
   {
-        \begin { tikzpicture }
+    \begin { tikzpicture }
       [
         __witharrows_standard ,
         every~path / .style = { WithArrows / arrow }
@@ -2004,14 +2016,232 @@
         {
           \draw [ <- ]
             ( [xshift = \l__witharrows_xoffset_dim]\k-r.south ) -- ++(5mm,0) ;
-        } % ;
-        \end{tikzpicture}
+        }
+    \end { tikzpicture }
+  }
+\NewDocumentCommand \WithArrowsNewStyle { m m }
+  {
+    \keys_if_exist:nnTF { WithArrows / Global } { #1 }
+      { \__witharrows_error:nn { Key~already~defined } { #1 } }
+      {
+        \seq_clear:N \l_tmpa_seq
+        \keyval_parse:NNn \__witharrows_valid_key:n \__witharrows_valid_key:nn { #2 }
+        \seq_if_empty:NTF \l_tmpa_seq
+          {
+            \seq_put_right:Ne \l__witharrows_options_WithArrows_seq
+              { \tl_to_str:n { #1 } }
+            \seq_put_right:Ne \l__witharrows_options_DispWithArrows_seq
+              { \tl_to_str:n { #1 } }
+            \seq_put_right:Ne \l__witharrows_options_WithArrowsOptions_seq
+              { \tl_to_str:N { #1 } }
+            \keys_precompile:nnc
+              { WithArrows / WithArrowsOptions }
+              { #2 }
+              { __witharrows _ style _ #1 _ tl }
+            \keys_define:nn { WithArrows / Global }
+              { #1 .code:n = \use:c { __witharrows _ style _ #1 _ tl } }
+          }
+          { \__witharrows_error:nn { Impossible~style } { #1 } }
+      }
+  }
+\__witharrows_msg_new:nn { Impossible~style }
+  {
+    Impossible~style.\\
+    It's~impossible~to~define~the~style~'#1'~
+    because~it~contains~unknown~keys:~'
+    \seq_use:Nnnn \l_tmpa_seq { '~and~' } { ',~'} { ',~and~}'.
+  }
+\cs_new_protected:Npn \__witharrows_valid_key:n #1
+  {
+    \keys_if_exist:nnF { WithArrows / Global } { #1 }
+      { \seq_put_right:Nn \l_tmpa_seq { #1 } }
+  }
+\cs_new_protected:Npn \__witharrows_valid_key:nn #1 #2
+  {
+    \keys_if_exist:nnF { WithArrows / Global } { #1 }
+      { \seq_put_right:Nn \l_tmpa_seq { #1 } }
+  }
+\__witharrows_msg_new:nn { Key~already~defined }
+  {
+    Key~already~defined.\\
+    The~key~'#1'~is~already~defined. \\
+    If~you~go~on,~your~instruction~\token_to_str:N\WithArrowsNewStyle\
+    will~be~ignored.
+  }
+\keys_define:nn { WithArrows / up-and-down }
+  {
+    radius .dim_set:N = \l__witharrows_up_and_down_radius_dim ,
+    radius .value_required:n = true ,
+    width .code:n =
+      \str_case:nnF { #1 }
+        {
+          { min } { \dim_zero:N \l__witharrows_arrow_width_dim }
+          { max } { \dim_set_eq:NN \l__witharrows_arrow_width_dim \c_max_dim }
+        }
+        { \dim_set:Nn \l__witharrows_arrow_width_dim { #1 } } ,
+    width .value_required:n = true ,
+    unknown .code:n = \__witharrows_error:n { Option~unknown~for~up-and-down }
+  }
+\__witharrows_msg_new:nn { Option~unknown~for~up-and-down }
+  {
+    Unknown~option.\\
+    The~option~'\l_keys_key_str'~is~unknown.~\c__witharrows_option_ignored_str
+  }
+\tl_const:Nn \c__witharrows_tikz_code_up_tl
+  {
+    \dim_compare:nNnTF { \l__witharrows_arrow_width_dim } = { \c_max_dim }
+      {
+        \draw [ rounded~corners = \l__witharrows_up_and_down_radius_dim ]
+           let \p1 = ( #1 ) , \p2 = ( #2 )
+           in (\p1) -- node
+              {
+                \dim_set:Nn \l_tmpa_dim { \x2 - \x1 }
+                \begin { varwidth } \l_tmpa_dim
+                  \narrowragged
+                  #3
+                \end { varwidth }
+              }
+              (\x2,\y1) -- (\p2) ;
+      }
+      {
+        \path
+          let \p1 = ( #1 ) , \p2 = ( #2 )
+          in node
+              {
+                \dim_set:Nn \l_tmpa_dim
+                  { \x2 - \x1 - \l__witharrows_up_and_down_radius_dim }
+                \dim_compare:nNnF { \l__witharrows_arrow_width_dim } = { \c_zero_dim }
+                  {
+                    \dim_set:Nn \l_tmpa_dim
+                      { \dim_min:nn \l_tmpa_dim \l__witharrows_arrow_width_dim }
+                  }
+                \hbox_gset:Nn \g_tmpa_box
+                  {
+                    \begin { varwidth } \l_tmpa_dim
+                      \narrowragged
+                      #3
+                    \end { varwidth }
+                  }
+                \dim_compare:nNnTF { \l__witharrows_arrow_width_dim } > { \c_zero_dim }
+                  { \dim_gset_eq:NN \g_tmpa_dim \l__witharrows_arrow_width_dim }
+                  { \dim_gset:Nn \g_tmpa_dim { \box_wd:N \g_tmpa_box } }
+                \dim_gadd:Nn \g_tmpa_dim \l__witharrows_up_and_down_radius_dim
+              } ;
+       \draw
+         let \p1 = ( #1 ) , \p2 = ( #2 )
+         in (\x2-\g_tmpa_dim,\y1)
+            -- node { \box_use:N \g_tmpa_box }
+            (\x2-\l__witharrows_up_and_down_radius_dim,\y1)
+            [ rounded~corners = \l__witharrows_up_and_down_radius_dim ]
+            -| (\p2) ;
+      }
+  }
+\tl_const:Nn \c__witharrows_tikz_code_down_tl
+  {
+    \dim_compare:nNnTF { \l__witharrows_arrow_width_dim } = { \c_max_dim }
+      {
+        \draw [ rounded~corners = \l__witharrows_up_and_down_radius_dim ]
+          let \p1 = ( #1 ) , \p2 = ( #2 )
+          in (\p1) -- (\x1,\y2) -- node
+             {
+               \dim_set:Nn \l_tmpa_dim { \x1 - \x2 }
+               \begin { varwidth } \l_tmpa_dim
+                 \narrowragged
+                 #3
+               \end { varwidth }
+             }
+             (\p2) ;
+      }
+      {
+        \path
+          let \p1 = ( #1 ) , \p2 = ( #2 )
+          in node
+              {
+                \hbox_gset:Nn \g_tmpa_box
+                  {
+                    \dim_set:Nn \l_tmpa_dim
+                      { \x1 - \x2 - \l__witharrows_up_and_down_radius_dim - 2 mm }
+                    \begin { varwidth } { \l_tmpa_dim }
+                      \narrowragged
+                      #3
+                    \end { varwidth }
+                  }
+                \dim_compare:nNnTF { \l__witharrows_arrow_width_dim } > { \c_zero_dim }
+                  { \dim_gset_eq:NN  \g_tmpa_dim \l__witharrows_arrow_width_dim }
+                  { \dim_gset:Nn \g_tmpa_dim { \box_wd:N \g_tmpa_box } }
+                \dim_gadd:Nn \g_tmpa_dim { \l__witharrows_up_and_down_radius_dim }
+              } ;
+
+        \draw
+          let \p1 = ( #1 ) , \p2 = ( #2 )
+          in (\p1)
+             { [ rounded~corners = \l__witharrows_up_and_down_radius_dim ] -- (\x1,\y2) }
+             -- (\x1-\l__witharrows_up_and_down_radius_dim,\y2)
+             -- node { \box_use:N \g_tmpa_box } (\x1-\g_tmpa_dim,\y2)
+             -- ++ (-2mm,0) ;
+      }
+  }
+\keys_define:nn { WithArrows / Arrow / FirstPass }
+  {
+    up   .code:n = \__witharrows_set_independent_bis: ,
+    down .code:n = \__witharrows_set_independent_bis: ,
+    up   .default:n = NoValue ,
+    down .default:n = NoValue
+  }
+\keys_define:nn { WithArrows / Arrow / SecondPass }
+  {
+    up .code:n =
+      \str_if_empty:NT \l__witharrows_previous_key_str
+        {
+          \str_set:Nn \l__witharrows_previous_key_str { up }
+          \cs_if_exist:NTF \tikz@library@calc@loaded
+            {
+              \keys_set:no { WithArrows / up-and-down } \l_keys_value_tl
+              \int_set:Nn \l__witharrows_pos_arrow_int 1
+              \bool_set_false:N \l__witharrows_wrap_lines_bool
+              \tl_set_eq:NN \l__witharrows_tikz_code_tl \c__witharrows_tikz_code_up_tl
+            }
+            { \__witharrows_error:n { calc~not~loaded } }
+        } ,
+    down .code:n =
+      \str_if_empty:NT \l__witharrows_previous_key_str
+        {
+          \str_set:Nn \l__witharrows_previous_key_str { down }
+          \cs_if_exist:NTF \tikz@library@calc@loaded
+            {
+              \keys_set:no { WithArrows / up-and-down } \l_keys_value_tl
+              \int_set:Nn \l__witharrows_pos_arrow_int 1
+              \bool_set_false:N \l__witharrows_wrap_lines_bool
+              \tl_set_eq:NN \l__witharrows_tikz_code_tl \c__witharrows_tikz_code_down_tl
+            }
+            { \__witharrows_error:n { calc~not~loaded } }
+        }
+  }
+\seq_put_right:Nn \l__witharrows_options_Arrow_seq { down }
+\seq_put_right:Nn \l__witharrows_options_Arrow_seq { up }
+\cs_new_protected:Npn \__witharrows_err_newline_at_the_end:
+  {
+    \__witharrows_error:n { newline~at~the~end }
+    \cs_gset:Npn \__witharrows_err_newline_at_the_end: { }
+  }
+\cs_new_protected:Npn \__witharrows_err_amsmath_not_loaded:
+  {
+    \__witharrows_error:n { amsmath~not~loaded }
+    \cs_gset:Npn \__witharrows_err_amsmath_not_loaded: { \__witharrows_info:n { amsmath~not~loaded } }
   }
 \bool_if:NTF \c__witharrows_messages_for_Overleaf_bool
   { \str_const:Nn \c__witharrows_available_keys_str { } }
   {
     \str_const:Nn \c__witharrows_available_keys_str
       { For~a~list~of~the~available~keys,~type~H~<return>. }
+  }
+\__witharrows_msg_new:nn { calc~not~loaded }
+  {
+    calc~not~loaded.\\
+    You~can't~use~the~option~'\l_keys_key_str'~because~you~don't~have~loaded~the~
+    TikZ~library~'calc'.You~should~add~'\token_to_str:N\usetikzlibrary{calc}'~
+    ~in~the~preamble~of~your~document. \\
+    \c__witharrows_option_ignored_str
   }
 \str_new:N \l_witharrows_body_str
 \cs_new:Npn \__witharrows_potential_body_i:
@@ -2027,6 +2257,11 @@
         The~body~of~your~environment~was:\\
         \l_witharrows_body_str
       }
+  }
+\__witharrows_msg_new:nn { DispWithArrows~with~tagging }
+  {
+    You~can't~use~\{DispWithArrows\}~since~tagging~is~active.\\
+    That~error~is~fatal.
   }
 \str_const:Nn \c__witharrows_option_ignored_str
   { If~you~go~on,~this~option~will~be~ignored. }
@@ -2069,7 +2304,7 @@
     (or~another~line)~of~your~environment~\{\l__witharrows_type_env_str\}.\\
     You~can~go~on~but~you~may~have~others~errors.
   }
-\__witharrows_msg_new:nnn { newline~at~the~end~of~env }
+\__witharrows_msg_new:nnn { newline~at~the~end }
   {
     Incorrect~end.\\
     The~environments~of~witharrows~(\{WithArrows\}~and~
@@ -2174,9 +2409,9 @@
     The~available~keys~are~(in~alphabetic~order):~
     \seq_use:Nnnn \l__witharrows_options_Arrow_code_after_seq {~and~} {,~} {~and~}.
   }
-\__witharrows_msg_new:nnn { Too~much~columns~in~WithArrows }
+\__witharrows_msg_new:nnn { Too~many~columns~in~WithArrows }
   {
-    Too~much~columns.\\
+    Too~many~columns.\\
     Your~environment~\{\l__witharrows_type_env_str\}~has~\int_use:N
     \l__witharrows_nb_cols_int\ columns~and~you~try~to~use~one~more.~
     Maybe~you~have~forgotten~a~\c_backslash_str\c_backslash_str.~
@@ -2186,9 +2421,9 @@
     \__witharrows_potential_body_i:
   }
   { \__witharrows_potential_body_ii: }
-\__witharrows_msg_new:nnn { Too~much~columns~in~DispWithArrows }
+\__witharrows_msg_new:nnn { Too~many~columns~in~DispWithArrows }
   {
-    Too~much~columns.\\
+    Too~many~columns.\\
     Your~environment~\{\l__witharrows_type_env_str\}~has~\int_use:N
     \l__witharrows_nb_cols_int\ columns~and~you~try~to~use~one~more.~
     Maybe~you~have~forgotten~a~\c_backslash_str\c_backslash_str\
@@ -2262,7 +2497,7 @@
     \l__witharrows_string_Arrow_for_msg_str. \\
     \c__witharrows_option_ignored_str
   }
-\__witharrows_msg_new:nn { Incompatible~options a}
+\__witharrows_msg_new:nn { Incompatible~options }
   {
     Incompatible~options.\\
     You~try~to~use~the~option~'\l_keys_key_str'~but~
@@ -2378,7 +2613,7 @@
     \l__witharrows_string_Arrow_for_msg_str\ in~the~row~\int_use:N \g__witharrows_line_int\
     of~your~environment~\{\l__witharrows_type_env_str\}~
     because~you~are~using~the~option~
-    ' \int_compare:nNnTF \l__witharrows_pos_arrow_int = 7
+    ' \int_compare:nNnTF { \l__witharrows_pos_arrow_int } = { 7 }
         { group }
         { groups } '.~It's~possible~for~an~independent~arrow~or~if~there~is~
     only~one~arrow. \\
@@ -2404,214 +2639,6 @@
     The~specification~of~rows~for~\token_to_str:N\MultiArrow\
     (i.e.~#1)~is~invalid. \\
     \c__witharrows_command_ignored_str
-  }
-\NewDocumentCommand \WithArrowsNewStyle { m m }
-  {
-    \keys_if_exist:nnTF { WithArrows / Global } { #1 }
-      { \__witharrows_error:nn { Key~already~defined } { #1 } }
-      {
-        \seq_clear:N \l_tmpa_seq
-        \keyval_parse:NNn \__witharrows_valid_key:n \__witharrows_valid_key:nn { #2 }
-        \seq_if_empty:NTF \l_tmpa_seq
-          {
-            \seq_put_right:Ne \l__witharrows_options_WithArrows_seq
-              { \tl_to_str:n { #1 } }
-            \seq_put_right:Ne \l__witharrows_options_DispWithArrows_seq
-              { \tl_to_str:n { #1 } }
-            \seq_put_right:Ne \l__witharrows_options_WithArrowsOptions_seq
-              { \tl_to_str:N { #1 } }
-            \keys_precompile:nnc
-              { WithArrows / WithArrowsOptions }
-              { #2 }
-              { __witharrows _ style _ #1 _ tl }
-            \keys_define:nn { WithArrows / Global }
-              { #1 .code:n = \use:c { __witharrows _ style _ #1 _ tl } }
-          }
-          { \__witharrows_error:nn { Impossible~style } { #1 } }
-      }
-  }
-\__witharrows_msg_new:nn { Impossible~style }
-  {
-    Impossible~style.\\
-    It's~impossible~to~define~the~style~'#1'~
-    because~it~contains~unknown~keys:~'
-    \seq_use:Nnnn \l_tmpa_seq { '~and~' } { ',~'} { ',~and~}'.
-  }
-\cs_new_protected:Npn \__witharrows_valid_key:n #1
-  {
-    \keys_if_exist:nnF { WithArrows / Global } { #1 }
-      { \seq_put_right:Nn \l_tmpa_seq { #1 } }
-  }
-\cs_new_protected:Npn \__witharrows_valid_key:nn #1 #2
-  {
-    \keys_if_exist:nnF { WithArrows / Global } { #1 }
-      { \seq_put_right:Nn \l_tmpa_seq { #1 } }
-  }
-\__witharrows_msg_new:nn { Key~already~defined }
-  {
-    Key~already~defined.\\
-    The~key~'#1'~is~already~defined. \\
-    If~you~go~on,~your~instruction~\token_to_str:N\WithArrowsNewStyle\
-    will~be~ignored.
-  }
-\keys_define:nn { WithArrows / up-and-down }
-  {
-    radius .dim_set:N = \l__witharrows_up_and_down_radius_dim ,
-    radius .value_required:n = true ,
-    width .code:n =
-      \str_case:nnF { #1 }
-        {
-          { min } { \dim_zero:N \l__witharrows_arrow_width_dim }
-          { max } { \dim_set_eq:NN \l__witharrows_arrow_width_dim \c_max_dim }
-        }
-        { \dim_set:Nn \l__witharrows_arrow_width_dim { #1 } } ,
-    width .value_required:n = true ,
-    unknown .code:n = \__witharrows_error:n { Option~unknown~for~up-and-down }
-  }
-\__witharrows_msg_new:nn { Option~unknown~for~up-and-down }
-  {
-    Unknown~option.\\
-    The~option~'\l_keys_key_str'~is~unknown.~\c__witharrows_option_ignored_str
-  }
-\tl_const:Nn \c__witharrows_tikz_code_up_tl
-  {
-    \dim_compare:nNnTF \l__witharrows_arrow_width_dim = \c_max_dim
-      {
-        \draw [ rounded~corners = \l__witharrows_up_and_down_radius_dim ]
-           let \p1 = ( #1 ) , \p2 = ( #2 )
-           in (\p1) -- node
-              {
-                \dim_set:Nn \l_tmpa_dim { \x2 - \x1 }
-                \begin { varwidth } \l_tmpa_dim
-                  \narrowragged
-                  #3
-                \end { varwidth }
-              }
-              (\x2,\y1) -- (\p2) ;
-      }
-      {
-        \path
-          let \p1 = ( #1 ) , \p2 = ( #2 )
-          in node
-              {
-                \dim_set:Nn \l_tmpa_dim
-                  { \x2 - \x1 - \l__witharrows_up_and_down_radius_dim }
-                \dim_compare:nNnF \l__witharrows_arrow_width_dim = \c_zero_dim
-                  {
-                    \dim_set:Nn \l_tmpa_dim
-                      { \dim_min:nn \l_tmpa_dim \l__witharrows_arrow_width_dim }
-                  }
-                \hbox_gset:Nn \g_tmpa_box
-                  {
-                    \begin { varwidth } \l_tmpa_dim
-                      \narrowragged
-                      #3
-                    \end { varwidth }
-                  }
-                \dim_compare:nNnTF \l__witharrows_arrow_width_dim > \c_zero_dim
-                  { \dim_gset_eq:NN  \g_tmpa_dim \l__witharrows_arrow_width_dim }
-                  { \dim_gset:Nn \g_tmpa_dim { \box_wd:N \g_tmpa_box } }
-                \dim_gadd:Nn \g_tmpa_dim \l__witharrows_up_and_down_radius_dim
-              } ;
-       \draw
-         let \p1 = ( #1 ) , \p2 = ( #2 )
-         in (\x2-\g_tmpa_dim,\y1)
-            -- node { \box_use:N \g_tmpa_box }
-            (\x2-\l__witharrows_up_and_down_radius_dim,\y1)
-            [ rounded~corners = \l__witharrows_up_and_down_radius_dim ]
-            -| (\p2) ;
-      }
-  }
-\tl_const:Nn \c__witharrows_tikz_code_down_tl
-  {
-    \dim_compare:nNnTF \l__witharrows_arrow_width_dim = \c_max_dim
-      {
-        \draw [ rounded~corners = \l__witharrows_up_and_down_radius_dim ]
-          let \p1 = ( #1 ) , \p2 = ( #2 )
-          in (\p1) -- (\x1,\y2) -- node
-             {
-               \dim_set:Nn \l_tmpa_dim { \x1 - \x2 }
-               \begin { varwidth } \l_tmpa_dim
-                 \narrowragged
-                 #3
-               \end { varwidth }
-             }
-             (\p2) ;
-      }
-      {
-        \path
-          let \p1 = ( #1 ) , \p2 = ( #2 )
-          in node
-              {
-                \hbox_gset:Nn \g_tmpa_box
-                  {
-                    \dim_set:Nn \l_tmpa_dim
-                      { \x1 - \x2 - \l__witharrows_up_and_down_radius_dim - 2 mm }
-                    \begin { varwidth } \l_tmpa_dim
-                      \narrowragged
-                      #3
-                    \end { varwidth }
-                  }
-                \dim_compare:nNnTF \l__witharrows_arrow_width_dim > \c_zero_dim
-                  { \dim_gset_eq:NN  \g_tmpa_dim \l__witharrows_arrow_width_dim }
-                  { \dim_gset:Nn \g_tmpa_dim { \box_wd:N \g_tmpa_box } }
-                \dim_gadd:Nn \g_tmpa_dim \l__witharrows_up_and_down_radius_dim
-              } ;
-
-        \draw
-          let \p1 = ( #1 ) , \p2 = ( #2 )
-          in (\p1)
-             { [ rounded~corners = \l__witharrows_up_and_down_radius_dim ] -- (\x1,\y2) }
-             -- (\x1-\l__witharrows_up_and_down_radius_dim,\y2)
-             -- node { \box_use:N \g_tmpa_box } (\x1-\g_tmpa_dim,\y2)
-             -- ++ (-2mm,0) ;
-      }
-  }
-\keys_define:nn { WithArrows / Arrow / FirstPass }
-  {
-    up   .code:n = \__witharrows_set_independent_bis: ,
-    down .code:n = \__witharrows_set_independent_bis: ,
-    up   .default:n = NoValue ,
-    down .default:n = NoValue
-  }
-\keys_define:nn { WithArrows / Arrow / SecondPass }
-  {
-    up .code:n =
-      \str_if_empty:NT \l__witharrows_previous_key_str
-        {
-          \str_set:Nn \l__witharrows_previous_key_str { up }
-          \cs_if_exist:NTF \tikz@library@calc@loaded
-            {
-              \keys_set:no { WithArrows / up-and-down } \l_keys_value_tl
-              \int_set:Nn \l__witharrows_pos_arrow_int 1
-              \bool_set_false:N \l__witharrows_wrap_lines_bool
-              \tl_set_eq:NN \l__witharrows_tikz_code_tl \c__witharrows_tikz_code_up_tl
-            }
-            { \__witharrows_error:n { calc~not~loaded } }
-        } ,
-    down .code:n =
-      \str_if_empty:NT \l__witharrows_previous_key_str
-        {
-          \str_set:Nn \l__witharrows_previous_key_str { down }
-          \cs_if_exist:NTF \tikz@library@calc@loaded
-            {
-              \keys_set:no { WithArrows / up-and-down } \l_keys_value_tl
-              \int_set:Nn \l__witharrows_pos_arrow_int 1
-              \bool_set_false:N \l__witharrows_wrap_lines_bool
-              \tl_set_eq:NN \l__witharrows_tikz_code_tl \c__witharrows_tikz_code_down_tl
-            }
-            { \__witharrows_error:n { calc~not~loaded } }
-        }
-  }
-\seq_put_right:Nn \l__witharrows_options_Arrow_seq { down }
-\seq_put_right:Nn \l__witharrows_options_Arrow_seq { up }
-\__witharrows_msg_new:nn { calc~not~loaded }
-  {
-    calc~not~loaded.\\
-    You~can't~use~the~option~'\l_keys_key_str'~because~you~don't~have~loaded~the~
-    Tikz~library~'calc'.You~should~add~'\token_to_str:N\usetikzlibrary{calc}'~
-    ~in~the~preamble~of~your~document. \\
-    \c__witharrows_option_ignored_str
   }
 \endinput
 %%

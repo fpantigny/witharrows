@@ -15,8 +15,8 @@
 %
 % \fi
 % \iffalse
-\def\myfileversion{2.9a}
-\def\myfiledate{2024/10/19}
+\def\myfileversion{2.9x}
+\def\myfiledate{2025/11/03}
 %
 %
 %<*batchfile>
@@ -110,15 +110,12 @@ version 2005/12/01 or later.
 \ExplSyntaxOff  
 
 
-
-
-
 \def\interitem{\vspace{7mm plus 2 mm minus 3mm}}
 \def\emphase{\bgroup\color{RoyalPurple}\let\next=}
 \fvset{commandchars=\~\#\@,formatcom={\color{gray}}}
 \DeclareMathOperator{\re}{Re}
 \skip \footins = 2 \bigskipamount
-\parindent 0pt
+\parindent = 0pt
 \DisableCrossrefs
 \begin{document}
 \DocInput{witharrows.dtx}
@@ -2356,7 +2353,7 @@ version 2005/12/01 or later.
 % \subsection{Option no-arrows}
 %
 % The option \Definition{no-arrows} is a convenience given to the user. With
-% this option the arrows are not drawn. However, an analyse of the arrows is
+% this option the arrows are not drawn. However, an analysis of the arrows is
 % done and some errors can be raised, for example if an arrow would arrive after
 % the last row of the environment.
 %
@@ -2848,15 +2845,29 @@ version 2005/12/01 or later.
 \msg_new:nnn { witharrows } { latex-too-old }
   { 
     Your~LaTeX~release~is~too~old. \\
-    You~need~at~least~a~the~version~of~2023-11-01 
+    You~need~at~least~a~the~version~of~2025-06-01 
   }
 %    \end{macrocode}
 %
 %    \begin{macrocode}
+\providecommand { \IfFormatAtLeastTF } { \@ifl@t@r \fmtversion }
 \IfFormatAtLeastTF
-  { 2023-11-01 } 
+  { 2025-06-01 } 
   { } 
   { \msg_fatal:nn { witharrows } { latex-too-old } }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\msg_new:nnn { witharrows } { tag~active }
+  {
+    witharrows~and~tagged~PDF\\
+    As~of~now,~witharrows~is~not~fully~compatible~with~tagging.~
+    You~will~have~fatal~errors~if~you~use~\{DispWithArrows\}.
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\tag_if_active:T { \msg_error:nn { witharrows } { tag~active } } 
 %    \end{macrocode}
 % 
 % \bigskip
@@ -2872,15 +2883,6 @@ version 2005/12/01 or later.
 %</plain-TeX>
 %    \end{macrocode}
 %
-% 
-%    \begin{macrocode}
-%<*LaTeX>
-\ProvideDocumentCommand { \IfPackageLoadedT } { m m }
-  { \IfPackageLoadedTF { #1 } { #2 } { } }
-\ProvideDocumentCommand { \IfPackageLoadedF } { m m }
-  { \IfPackageLoadedTF { #1 } { } { #2 } } 
-%</LaTeX>
-%    \end{macrocode}
 % 
 %
 % \bigskip
@@ -2978,7 +2980,7 @@ version 2005/12/01 or later.
   { 
     You~can't~use~the~option~'\l_keys_key_str'~when~loading~the~
     package~witharrows.~Try~to~use~the~command~
-    \token_to_str:N\WithArrowsOptions. 
+    \token_to_str:N \WithArrowsOptions. 
   }
 %    \end{macrocode}
 %
@@ -3028,10 +3030,10 @@ version 2005/12/01 or later.
 % The class \cls{beamer} has its own system to extract footnotes and that's why
 % we have nothing to do if \cls{beamer} is used. 
 %    \begin{macrocode}
-    \@ifclassloaded { beamer }
+    \IfClassLoadedTF { beamer }
       { \bool_gset_false:N \g_@@_footnote_bool }
       { 
-        \@ifpackageloaded { footnotehyper }
+        \IfPackageLoadedTF { footnotehyper }
           { \@@_error:n { footnote~with~footnotehyper~package } }
           { \usepackage { footnote } }
       }
@@ -3045,10 +3047,10 @@ version 2005/12/01 or later.
 % The class \cls{beamer} has its own system to extract footnotes and that's why
 % we have nothing to do if \cls{beamer} is used. 
 %    \begin{macrocode}
-    \@ifclassloaded { beamer }
+    \IfClassLoadedTF { beamer }
       { \bool_gset_false:N \g_@@_footnote_bool }
       { 
-        \@ifpackageloaded { footnote }
+        \IfPackageLoadedTF { footnote }
           { \@@_error:n { footnotehyper~with~footnote~package } }
           { \usepackage { footnotehyper } }
         \bool_gset_true:N \g_@@_footnote_bool 
@@ -3088,8 +3090,9 @@ version 2005/12/01 or later.
 % command.
 %
 % \medskip
-% \emph{Exemple} :\par\nobreak
+% \emph{Exemple} :\nobreak
 %
+% \nobreak
 % |\@@_collect_options:n { \F } [x=a,y=b] [z=c,t=d] { arg }|
 %
 % will be transformed in :\quad |\F{x=a,y=b,z=c,t=d}{arg}|
@@ -3125,7 +3128,7 @@ version 2005/12/01 or later.
       { #1 { #2 } }
   }
 
-\cs_new_protected:Npn \@@_collect_options:nnw #1#2[#3]
+\cs_new_protected:Npn \@@_collect_options:nnw #1 #2 [ #3 ]
   { \@@_collect_options:nn { #1 } { #2 , #3 } }
 %</LaTeX>
 %    \end{macrocode}
@@ -3189,13 +3192,12 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
     \str_set:Ne \l_tmpa_str { \seq_item:Nn \l_tmpa_seq { -1 } }
     \use:c { \l_tmpa_str _if_exist:cF }
-      { g _\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } }
+      { g _\seq_use:Nn \l_tmpa_seq { _ } }
       { 
-        \use:c { \l_tmpa_str _new:c }
-          { g _\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } } 
+        \use:c { \l_tmpa_str _new:c } { g _\seq_use:Nn \l_tmpa_seq { _ } } 
       }
     \use:c { \l_tmpa_str _gset_eq:cN } 
-      { g _\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } } #1 
+      { g _\seq_use:Nn \l_tmpa_seq { _ } } #1 
   }
 %    \end{macrocode}
 % 
@@ -3211,7 +3213,7 @@ version 2005/12/01 or later.
     \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
     \str_set:Ne \l_tmpa_str { \seq_item:Nn \l_tmpa_seq { -1 } }
     \use:c { \l_tmpa_str _set_eq:Nc } 
-      #1 { g_\seq_use:Nnnn \l_tmpa_seq { _ } { _ } { _ } } 
+      #1 { g_\seq_use:Nn \l_tmpa_seq { _ } } 
   }
 %    \end{macrocode}
 % 
@@ -3665,7 +3667,7 @@ version 2005/12/01 or later.
     ystart .value_required:n = true ,
     ystart .initial:n = 0.4 ex ,
     more-columns .code:n = 
-      \@@_msg_redirect_name:nn { Too~much~columns~in~WithArrows } { none } ,
+      \@@_msg_redirect_name:nn { Too~many~columns~in~WithArrows } { none } ,
     more-columns .value_forbidden:n = true ,
     command-name .code:n =
       \str_set:Nn \l_@@_command_name_str { #1 }
@@ -3881,7 +3883,7 @@ version 2005/12/01 or later.
       \tl_if_empty:nTF { #1 } 
         { \@@_error:n { Invalid~option~format } }
         {
-          \regex_match:nnTF { \A[rclRCL]*\Z } { #1 }
+          \regex_if_match:nnTF { \A[rclRCL]*\Z } { #1 }
             { \tl_set:Nn \l_@@_format_str { #1 } }
             { \@@_error:n { Invalid~option~format } }
         } ,
@@ -4477,8 +4479,7 @@ version 2005/12/01 or later.
     \seq_set_eq:NN \l_tmpa_seq \g_@@_position_in_the_tree_seq
     \seq_pop_right:NN \l_tmpa_seq \l_tmpa_tl
     \str_clear_new:N \l_@@_prefix_str
-    \str_set:Ne \l_@@_prefix_str 
-      { \seq_use:Nnnn \l_tmpa_seq { - } { - } { - } }
+    \str_set:Ne \l_@@_prefix_str { \seq_use:Nn \l_tmpa_seq { - } }
 %    \end{macrocode}
 % 
 % \bigskip
@@ -4738,14 +4739,14 @@ version 2005/12/01 or later.
             \str_if_eq:onT \l_@@_type_col_str { R } { \hfill }
             \int_gincr:N \g_@@_col_int
             \int_gset:Nn \g_@@_static_col_int { \int_use:N \g_@@_col_int }
-            \c_math_toggle_token
+            $ % $
             \str_if_eq:onT \l_@@_type_col_str { C } { { } }
             \str_if_eq:onT \l_@@_type_col_str { L } { { } }
             \bool_if:NT \l_@@_displaystyle_bool { \displaystyle }
             ##
             \str_if_eq:onT \l_@@_type_col_str { C } { { } }
             \str_if_eq:onT \l_@@_type_col_str { R } { { } }
-            \c_math_toggle_token
+            $ % $
             \int_compare:nNnTF { \g_@@_col_int } = { \l_@@_nb_cols_int }
               \@@_construct_nodes:
               {
@@ -4894,7 +4895,7 @@ version 2005/12/01 or later.
 % we can use |\vcenter|.
 %    \begin{macrocode}
     \int_compare:nNnT { \l_@@_pos_env_int } = { 1 } 
-      { \c_math_toggle_token }
+      { $ } % $
     \int_case:nn { \l_@@_pos_env_int } { 0 \vtop 1 \vcenter 2 \vbox }
     \bgroup
 %    \end{macrocode}
@@ -4927,11 +4928,11 @@ version 2005/12/01 or later.
 % it's possible with the option |more-columns|.
 %    \begin{macrocode}
     && 
-    \@@_error:n { Too~much~columns~in~WithArrows }
-    \c_math_toggle_token
+    \@@_error:n { Too~many~columns~in~WithArrows }
+    $ % $
     \bool_if:NT \l_@@_displaystyle_bool { \displaystyle }
     { ## } 
-    \c_math_toggle_token
+    $ % $
     \cr
   }
 %    \end{macrocode}
@@ -4950,7 +4951,7 @@ version 2005/12/01 or later.
     \egroup 
     \egroup
     \int_compare:nNnT { \l_@@_pos_env_int } = { 1 } 
-      { \c_math_toggle_token }
+      { $ } % $
     \hbox_set_end:
     \@@_post_halign:
 %    \end{macrocode}
@@ -5138,7 +5139,7 @@ version 2005/12/01 or later.
           { 
             \@@_cr_iii:n { #1 } 
 %    \end{macrocode}
-% The analyse of the argument of the token |\end| must be after the
+% The analysis of the argument of the token |\end| must be after the
 % |\group_align_safe_end:| which is the beginning of |\@@_cr_iii:n|.
 %    \begin{macrocode}
             \@@_analyze_end:Nn 
@@ -5218,7 +5219,7 @@ version 2005/12/01 or later.
 % |\refstepcounter|. The package \pkg{cleveref} creates in the |aux| file a
 % command |\cref@currentlabel| similar to |\@currentlabel| but with more
 % informations.
-%    \begin{macrocode}        
+%    \begin{macrocode} 
                 \IfPackageLoadedT { cleveref }
                   {
                     \cref@constructprefix { equation } \cref@result
@@ -5314,7 +5315,6 @@ version 2005/12/01 or later.
       }
     \dim_compare:nNnT { #1 } < { \c_zero_dim }
        { \@@_error:n { option~of~cr~negative } }
-
     \cr 
     \noalign 
       { 
@@ -5395,8 +5395,12 @@ version 2005/12/01 or later.
   }
 \cs_new_protected:Npn \DispWithArrows_ii < #1 > [ #2 ]
 %</plain-TeX>
-  { 
+  {
     \bool_set_true:N \l_@@_in_DispWithArrows_bool
+%<*LaTeX>    
+    \tag_if_active:T { \@@_fatal:n { DispWithArrows~with~tagging } }
+%</LaTeX>
+%
 %<*plain-TeX>
     \str_clear_new:N \l_@@_type_env_str
     \str_set:Nn \l_@@_type_env_str { DispWithArrows }
@@ -5489,9 +5493,9 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
             \group_begin:
             \dim_zero:N \nulldelimiterspace 
-            \c_math_toggle_token
+            $ % $
             \left \l_@@_replace_left_brace_by_tl \vcenter to 1 cm { } \right.
-            \c_math_toggle_token
+            $ % $
             \group_end:
           }
         \dim_zero_new:N \l_@@_delim_wd_dim
@@ -5501,11 +5505,11 @@ version 2005/12/01 or later.
           { 
             \group_begin:
               \cs_set_eq:NN \label \@@_old_label
-              \c_math_toggle_token
+              $ % $
               \bool_if:NT \l_@@_displaystyle_bool { \displaystyle }
               \l_@@_left_brace_tl
               { } 
-              \c_math_toggle_token
+              $ % $
             \group_end:
           }  
       }
@@ -5550,7 +5554,7 @@ version 2005/12/01 or later.
     \bool_if:NTF \l_@@_in_label_or_minipage_bool
       { 
         \noindent 
-        \c_math_toggle_token 
+        $ % $
       } 
       {  
 %</LaTeX>
@@ -5563,7 +5567,7 @@ version 2005/12/01 or later.
         \nointerlineskip
         \hbox_to_wd:nn { .6 \linewidth } { }
         \fi:
-        \c_math_toggle_token \c_math_toggle_token
+        $$ % $$
 %<*LaTeX>
       }
 %</LaTeX>
@@ -5614,7 +5618,7 @@ version 2005/12/01 or later.
     $ ## $
     \tabskip = \c_zero_skip
     && 
-    \@@_fatal:n { Too~much~columns~in~DispWithArrows } 
+    \@@_fatal:n { Too~many~columns~in~DispWithArrows } 
     \bool_if:nT { \c_false_bool } { ## }
     \cr
   }
@@ -5665,22 +5669,15 @@ version 2005/12/01 or later.
             \hbox_to_wd:nn \g_@@_alignment_dim 
               { 
                 \box_use_drop:N \l_@@_left_brace_box
-%    \end{macrocode}
-% Here, you should use |\box_ht_plus_dp:N| when TeXLive 2021 will be available
-% on Overleaf. 
-%    \begin{macrocode}
                 \dim_set:Nn \l_tmpa_dim 
-                  { 
-                    \box_ht:N \l_@@_halign_box
-                    + \box_dp:N \l_@@_halign_box
-                  }
+                  { \box_ht_plus_dp:N \l_@@_halign_box }
                 \group_begin:
                 \dim_zero:N \nulldelimiterspace 
-                \c_math_toggle_token
+                $ % $
                   \left \l_@@_replace_left_brace_by_tl 
                     \vcenter to \l_tmpa_dim { \vfil } 
                   \right. 
-                \c_math_toggle_token
+                $ % $
                 \group_end:
                 \hfil
               }
@@ -5735,13 +5732,13 @@ version 2005/12/01 or later.
       { \MH_if_boolean:nT { show_only_refs } { \MT_showonlyrefs_true: } }
     \bool_if:NTF \l_@@_in_label_or_minipage_bool
       { 
-        \c_math_toggle_token
+        $ % $
         \skip_vertical:N \belowdisplayskip
       }
-      { \c_math_toggle_token \c_math_toggle_token }
+      { $$ } % $$
 %</LaTeX>
 %<*plain-TeX>
-      \c_math_toggle_token \c_math_toggle_token
+      $$
 %</plain-TeX>
 %    \end{macrocode}
 %
@@ -5832,7 +5829,7 @@ version 2005/12/01 or later.
 % |{DispWithArrows}|. We do the definition with |\NewDocumentCommand| because
 % this command has a starred version.
 %    \begin{macrocode}
-\NewDocumentCommand \@@_tag { s m } 
+\NewDocumentCommand { \@@_tag } { s m } 
   { 
     \@@_if_in_last_col_of_disp:Nn \tag
       { 
@@ -6651,7 +6648,7 @@ version 2005/12/01 or later.
 %    \begin{macrocode}
 \tl_const:Nn \c_@@_tikz_code_wrap_lines_tl
   { 
-     \pgfset { inner~sep = 0pt }
+    \pgfset { inner~sep = \c_zero_dim }
 %    \end{macrocode}
 % First, we draw the arrow without the label.
 %    \begin{macrocode}
@@ -7116,7 +7113,7 @@ version 2005/12/01 or later.
 % lines is correct.
 %    \begin{macrocode}
     \exp_args:Nne 
-      \regex_match:nnTF 
+      \regex_if_match:nnTF 
       { \A \d+ (\,\d+)* ( \, \.\.\. (\,\d+)+ )* \Z }  
       { #1 } 
       { \@@_MultiArrow_i:nn { #1 } { #2 } }    
@@ -7219,7 +7216,7 @@ version 2005/12/01 or later.
 \cs_new_protected:Npn \@@_MultiArrow_i:n #1
   { 
 %<*LaTeX>
-        \begin { tikzpicture }
+    \begin { tikzpicture }
 %</LaTeX>
 %<*plain-TeX>
         \tikzpicture
@@ -7232,9 +7229,9 @@ version 2005/12/01 or later.
         { 
           \draw [ <- ] 
             ( [xshift = \l_@@_xoffset_dim]\k-r.south ) -- ++(5mm,0) ; 
-        } % ;
+        } 
 %<*LaTeX>
-        \end { tikzpicture } 
+    \end { tikzpicture } 
 %</LaTeX>
 %<*plain-TeX>
         \endtikzpicture
@@ -7242,578 +7239,6 @@ version 2005/12/01 or later.
   }
 %    \end{macrocode}
 %
-%
-% \bigskip
-% \subsection{The error messages of the package}
-%
-%    \begin{macrocode}
-\cs_new_protected:Npn \@@_err_newline_at_the_end:
-  {
-    \@@_error:n { newline~at~the~end }
-    \cs_gset:Npn \@@_err_newline_at_the_end: { }
-  }
-%    \end{macrocode}
-% 
-% \begin{macrocode}
-\cs_new_protected:Npn \@@_err_amsmath_not_loaded:
-  {
-    \@@_error:n { amsmath~not~loaded }
-    \cs_gset:Npn \@@_err_amsmath_not_loaded: { \@@_info:n { amsmath~not~loaded } }
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\bool_if:NTF \c_@@_messages_for_Overleaf_bool
-  { \str_const:Nn \c_@@_available_keys_str { } }
-  {
-    \str_const:Nn \c_@@_available_keys_str
-      { For~a~list~of~the~available~keys,~type~H~<return>. }
-  }
-%    \end{macrocode}
-% 
-%    \begin{macrocode}
-\str_new:N \l_witharrows_body_str
-%    \end{macrocode}
-%
-% The following commands must \emph{not} be protected since they will be used in
-% error messages.
-%    \begin{macrocode}
-\cs_new:Npn \@@_potential_body_i:
-  {
-    \str_if_empty:NF \l_witharrows_body_str
-      { \\ If~you~want~to~see~the~body~of~the~environment,~type~H~<return>. } 
-  }
-%    \end{macrocode}
-% 
-%    \begin{macrocode}
-\cs_new:Npn \@@_potential_body_ii:
-  {
-    \str_if_empty:NTF \l_witharrows_body_str
-      { No~further~help~available }
-      {
-        The~body~of~your~environment~was:\\ 
-        \l_witharrows_body_str
-      }
-  }
-%    \end{macrocode}
-% 
-%
-%    \begin{macrocode}
-\str_const:Nn \c_@@_option_ignored_str
-  { If~you~go~on,~this~option~will~be~ignored. }
-\str_const:Nn \c_@@_command_ignored_str
-  { If~you~go~on,~this~command~will~be~ignored. }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-%<*LaTeX>
-\@@_msg_new:nn { amsmath~not~loaded }
-  {
-    amsmath~not~loaded.\\
-    You~can't~use~the~option~'\l_keys_key_str'~because~the~
-    package~'amsmath'~has~not~been~loaded.\\
-    If~you~go~on,~this~option~will~be~ignored~in~the~rest~
-    of~the~document.
-  }
-%</LaTeX>
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Bad~value~for~replace~brace~by }
-  {
-    Incorrect~value.\\
-    Bad~value~for~the~option~'\l_keys_key_str'.~The~value~must~begin~ 
-    with~an~extensible~left~delimiter.~The~possible~values~are:~.,
-    \token_to_str:N \{,~(,~[,~\token_to_str:N \lbrace,~
-    \token_to_str:N \lbrack,~\token_to_str:N \lgroup,~
-    \token_to_str:N \langle,~\token_to_str:N \lmoustache,~
-    \token_to_str:N \lfloor\ and~\token_to_str:N \lceil\ 
-    (and~\token_to_str:N \lvert\ and~\token_to_str:N \lVert\
-    if~amsmath~or~unicode-math~is~loaded~in~LaTeX).\\
-    \c_@@_option_ignored_str 
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { option~of~cr~negative }
-  {
-    Bad~value.\\
-    The~argument~of~the~command~\token_to_str:N\\~
-    should~be~positive~in~the~row~\int_use:N \g_@@_line_int\
-    of~your~environment~\{\l_@@_type_env_str\}.\\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-% 
-%    \begin{macrocode}
-\@@_msg_new:nn { omit~probably~used } 
-  {
-    Strange~problem.\\
-    Maybe~you~have~used~a~command~
-    \token_to_str:N\omit\ in~the~line~\int_use:N \g_@@_line_int\
-    (or~another~line)~of~your~environment~\{\l_@@_type_env_str\}.\\ 
-    You~can~go~on~but~you~may~have~others~errors.
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-%<*LaTeX>
-\@@_msg_new:nnn { newline~at~the~end }
-  { 
-    Incorrect~end.\\
-    The~environments~of~witharrows~(\{WithArrows\}~and~
-    \{DispWithArrows\})~should~not~end~by~\token_to_str:N \\.\\
-    However,~you~can~go~on~for~this~time.~No~similar~error~will~be~
-    raised~in~this~document. 
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%</LaTeX>
-%    \end{macrocode}    
-%
-%    \begin{macrocode}
-\@@_msg_new:nnn { Invalid~option~format }
-  {
-    Invalide~value.\\
-    The~key~'format'~should~contain~only~letters~r,~c~and~l~and~
-    must~not~be~empty.\\  
-    \c_@@_option_ignored_str
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nnn { invalid~key~o }
-  {
-    Invalid~use~of~a~key.\\
-    The~key~'o'~for~individual~arrows~can~be~used~only~in~mode~
-    'group'~or~in~mode~'groups'.\\
-    \c_@@_option_ignored_str 
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-% 
-% 
-%    \begin{macrocode}
-\@@_msg_new:nnn { o~arrow~with~wrap-lines }
-  { 
-    Arrow~of~type~'o'~with~'wrap-lines'. \\
-    You~can't~use~arrows~of~type~'o'~when~
-    'wrap-lines'~is~in~force.\\
-    If~you~go~on,~these~arrows~will~be~ignored.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-% 
-%    \begin{macrocode}
-\@@_msg_new:nnn { Value~for~a~key }
-  {
-    Misuse~of~a~key.\\
-    The~key~'\l_keys_key_str'~should~be~used~without~value. \\
-    However,~you~can~go~on~for~this~time.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%
-%    \begin{macrocode}          
-\@@_msg_new:nnn { Unknown~option~in~Arrow }
-  { 
-    Unknown~option.\\
-    The~key~'\l_keys_key_str'~is~unknown~for~the~command~
-    \l_@@_string_Arrow_for_msg_str\ in~the~row~
-    \int_use:N \g_@@_line_int\ of~your~environment~
-    \{\l_@@_type_env_str\}. \l_tmpa_str \\
-    \c_@@_option_ignored_str \\
-    \c_@@_available_keys_str
-  }
-  { 
-    The~available~keys~are~(in~alphabetic~order):~
-    \seq_use:Nnnn \l_@@_options_Arrow_seq {~and~} {,~} {~and~}.
-  }
-%    \end{macrocode}
-%
-%
-%    \begin{macrocode}          
-\@@_msg_new:nnn { Unknown~option~WithArrows }
-  {
-    Unknown~option.\\
-    The~key~'\l_keys_key_str'~is~unknown~in~\{\l_@@_type_env_str\}. \\
-    \c_@@_option_ignored_str \\
-    \c_@@_available_keys_str
-  }
-  {
-    The~available~keys~are~(in~alphabetic~order):~
-    \seq_use:Nnnn \l_@@_options_WithArrows_seq {~and~} {,~} {~and~}.
-  }
-%    \end{macrocode}
-%    \begin{macrocode}          
-\@@_msg_new:nnn { Unknown~option~DispWithArrows }
-  { 
-    Unknown~option.\\
-    The~key~'\l_keys_key_str'~is~unknown~in~\{\l_@@_type_env_str\}. \\
-    \c_@@_option_ignored_str \\
-    \c_@@_available_keys_str
-  }
-  {
-    The~available~keys~are~(in~alphabetic~order):~
-    \seq_use:Nnnn \l_@@_options_DispWithArrows_seq {~and~} {,~} {~and~}.
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}          
-\@@_msg_new:nnn { Unknown~option~WithArrowsOptions }
-  { 
-    Unknown~option.\\
-    The~key~'\l_keys_key_str'~is~unknown~in~
-    \token_to_str:N \WithArrowsOptions. \\
-    \c_@@_option_ignored_str \\
-    \c_@@_available_keys_str 
-  }
-  {
-    The~available~keys~are~(in~alphabetic~order):~
-    \seq_use:Nnnn \l_@@_options_WithArrowsOptions_seq {~and~} {,~} {~and~}.
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nnn { Unknown~option~Arrow~in~code-after }
-  { 
-    Unknown~option.\\
-    The~key~'\l_keys_key_str'~is~unknown~in~
-    \token_to_str:N \Arrow\ in~code-after. \\
-    \c_@@_option_ignored_str \\
-    \c_@@_available_keys_str
-  }
-  { 
-    The~available~keys~are~(in~alphabetic~order):~
-    \seq_use:Nnnn \l_@@_options_Arrow_code_after_seq {~and~} {,~} {~and~}.
-  }
-%    \end{macrocode}
-%
-%
-%    \begin{macrocode}          
-\@@_msg_new:nnn { Too~much~columns~in~WithArrows }
-  { 
-    Too~much~columns.\\
-    Your~environment~\{\l_@@_type_env_str\}~has~\int_use:N 
-    \l_@@_nb_cols_int\ columns~and~you~try~to~use~one~more.~
-    Maybe~you~have~forgotten~a~\c_backslash_str\c_backslash_str.~
-    If~you~really~want~to~use~more~columns~(after~the~arrows)~you~should~use~ 
-    the~option~'more-columns'~at~a~global~level~or~for~an~environment. \\
-    However,~you~can~go~one~for~this~time.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%
-%    \begin{macrocode}          
-\@@_msg_new:nnn { Too~much~columns~in~DispWithArrows }
-  { 
-    Too~much~columns.\\
-    Your~environment~\{\l_@@_type_env_str\}~has~\int_use:N 
-    \l_@@_nb_cols_int\ columns~and~you~try~to~use~one~more.~
-    Maybe~you~have~forgotten~a~\c_backslash_str\c_backslash_str\ 
-    at~the~end~of~row~\int_use:N \g_@@_line_int. \\
-    This~error~is~fatal.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%    
-%    \begin{macrocode}          
-\@@_msg_new:nn { Negative~jump }
-  { 
-    Incorrect~value.\\
-    You~can't~use~a~negative~value~for~the~option~'jump'~of~command~
-    \l_@@_string_Arrow_for_msg_str\
-    in~the~row~\int_use:N \g_@@_line_int\
-    of~your~environment~\{\l_@@_type_env_str\}.~
-    You~can~create~an~arrow~going~backwards~with~the~option~'<-'~of~Tikz. \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { new-group~without~groups }
-  { 
-    Misuse~of~a~key.\\
-    You~can't~use~the~option~'new-group'~for~the~command~
-    \l_@@_string_Arrow_for_msg_str\
-    because~you~are~not~in~'groups'~mode.~Try~to~use~the~option~
-    'groups'~in~your~environment~\{\l_@@_type_env_str\}. \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-%
-%
-%    \begin{macrocode}          
-\@@_msg_new:nnn          
-  { Too~few~lines~for~an~arrow }
-  { 
-    Impossible~arrow.\\
-    Line~\l_@@_input_line_str\
-    :~an~arrow~specified~in~the~row~\int_use:N \l_@@_initial_int\
-    of~your~environment~\{\l_@@_type_env_str\}~can't~be~drawn~
-    because~it~arrives~after~the~last~row~of~the~environment. \\
-    If~you~go~on,~this~arrow~will~be~ignored.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { o~arrow~with~no~arrow~under }
-  {
-    Problem~with~the~key~'o'.\\
-    Line~\l_@@_input_line_str\
-    :~there~is~no~arrow~'under'~your~arrow~of~type~'o'.\\
-    If~you~go~on,~this~arrow~won't~be~drawn.
-  }
-%    \end{macrocode}
-% 
-%    \begin{macrocode}          
-\@@_msg_new:nnn { WithArrows~outside~math~mode }
-  { 
-    You~are~outside~math~mode.\\
-    The~environment~\{\l_@@_type_env_str\}~should~be~used~only~in~math~mode~
-    like~the~environment~\{aligned\}~of~amsmath. \\
-    Nevertheless,~you~can~go~on.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%
-%    \begin{macrocode}          
-\@@_msg_new:nnn { DispWithArrows~in~math~mode }
-  { 
-    You~are~in~math~mode.\\
-    The~environment~\{\l_@@_type_env_str\}~should~be~used~only~outside~math~
-    mode~like~the~environments~\{align\}~and~\{align*\}~of~amsmath. \\ 
-    This~error~is~fatal.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Incompatible~options~in~Arrow }
-  { 
-    Incompatible~options.\\
-    You~try~to~use~the~option~'\l_keys_key_str'~but~
-    this~option~is~incompatible~or~redundant~with~the~option~
-    '\l_@@_previous_key_str'~set~in~the~same~command~
-    \l_@@_string_Arrow_for_msg_str. \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-% 
-%
-%    \begin{macrocode}          
-\@@_msg_new:nn { Incompatible~options }
-  { 
-    Incompatible~options.\\
-    You~try~to~use~the~option~'\l_keys_key_str'~but~
-    this~option~is~incompatible~or~redundant~with~the~option~
-    '\l_@@_previous_key_str'~set~in~the~same~command~
-    \bool_if:NT \l_@@_in_code_after_bool
-      { 
-        \l_@@_string_Arrow_for_msg_str\
-        in~the~code-after~of~your~environment~\{\l_@@_type_env_str\}
-      }. \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nnn { Arrow~not~in~last~column }
-  { 
-    Bad~use~of~\l_@@_string_Arrow_for_msg_str.\\
-    You~should~use~the~command~\l_@@_string_Arrow_for_msg_str\
-    only~in~the~last~column~(column~\int_use:N\l_@@_nb_cols_int)~
-    in~the~row~\int_use:N \g_@@_line_int\ 
-    of~your~environment~\{\l_@@_type_env_str\}.\\
-    However~you~can~go~on~for~this~time.
-    \@@_potential_body_i:
-  }
-  { \@@_potential_body_ii: }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Wrong~line~in~Arrow }
-  { 
-    Wrong~line.\\
-    The~specification~of~line~'#1'~you~use~in~the~command~
-    \l_@@_string_Arrow_for_msg_str\
-    in~the~'code-after'~of~\{\l_@@_type_env_str\}~doesn't~exist. \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Both~lines~are~equal }
-  {
-    Both~lines~are~equal.\\
-    In~the~'code-after'~of~\{\l_@@_type_env_str\}~you~try~to~
-    draw~an~arrow~going~to~itself~from~the~line~'#1'.~This~is~not~possible. \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-% 
-%    \begin{macrocode}
-\@@_msg_new:nn { Wrong~line~specification~in~MultiArrow }
-  { 
-    Wrong~line~specification.\\
-    The~specification~of~line~'#1'~doesn't~exist. \\
-    If~you~go~on,~it~will~be~ignored~for~\token_to_str:N \MultiArrow.
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Too~small~specification~for~MultiArrow }
-  { 
-    Too~small~specification.\\
-    The~specification~of~lines~you~gave~to~\token_to_str:N \MultiArrow\ 
-    is~too~small:~you~need~at~least~two~lines. \\
-    \c_@@_command_ignored_str
-  }
-%    \end{macrocode}
-%
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Not~allowed~in~DispWithArrows }
-  { 
-    Forbidden~command.\\
-    The~command~\token_to_str:N #1
-    is~allowed~only~in~the~last~column~
-    (column~\int_use:N\l_@@_nb_cols_int)~of~\{\l_@@_type_env_str\}. \\ 
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-% 
-%    \begin{macrocode}
-\@@_msg_new:nn { Not~allowed~in~WithArrows }
-  { 
-    Forbidden~command.\\
-    The~command~\token_to_str:N #1 is~not~allowed~in~\{\l_@@_type_env_str\}~
-    (it's~allowed~in~the~last~column~of~\{DispWithArrows\}). \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-%<*LaTeX>
-\@@_msg_new:nn { tag*~without~amsmath }
-  { 
-    amsmath~not~loaded.\\
-    We~can't~use~\token_to_str:N\tag*~because~you~haven't~loaded~amsmath~
-    (or~mathtools). \\
-    If~you~go~on,~the~command~\token_to_str:N\tag\ 
-    will~be~used~instead.
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Multiple~tags }
-  {
-    Multiple~tags.\\
-    You~can't~use~twice~the~command~\token_to_str:N\tag\ 
-    in~a~line~of~the~environment~\{\l_@@_type_env_str\}. \\
-    If~you~go~on,~the~tag~'#1'~will~be~used.
-  }
-%    \end{macrocode}
-%
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Multiple~labels }
-  { 
-    Multiple~labels.\\
-    Normally,~we~can't~use~the~command~\token_to_str:N\label\ 
-    twice~in~a~line~of~the~environment~\{\l_@@_type_env_str\}. \\
-    However,~you~can~go~on.~
-    \IfPackageLoadedT { showlabels }
-      { However,~only~the~last~label~will~be~shown~by~showlabels.~ } 
-    If~you~don't~want~to~see~this~message~again,~you~can~use~the~option~
-    'allow-multiple-labels'~at~the~global~or~environment~level.
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nn { Multiple~labels~with~cleveref }
-  {
-    Multiple~labels.\\
-    Since~you~use~cleveref,~you~can't~use~the~command~\token_to_str:N\label\ 
-    twice~in~a~line~of~the~environment~\{\l_@@_type_env_str\}. \\
-    If~you~go~on,~you~may~have~undefined~references.
-  }
-%</LaTeX>
-%    \end{macrocode}
-%
-% 
-%    \begin{macrocode}
-\@@_msg_new:nn { Inexistent~v-node }
-  {
-    There~is~a~problem.\\
-    Maybe~you~have~put~a~command~\token_to_str:N\cr\
-    instead~of~a~command~\token_to_str:N\\~at~the~end~of~
-    the~row~\l_tmpa_int\
-    of~your~environment~\{\l_@@_type_env_str\}. \\
-    This~error~is~fatal.
-  }
-%    \end{macrocode}
-%
-% \bigskip
-% The following error when the user tries to use the option |xoffset| in mode
-% |group| or |groups| (in fact, it's possible to use the option |xoffset| if
-% there is only \emph{one} arrow: of course, the option |group| and |groups| do
-% not make sense in this case but, maybe, the option was set in a
-% |\WithArrowsOptions|). 
-%    \begin{macrocode}          
-\@@_msg_new:nn { Option~xoffset~forbidden }
-  { 
-    Incorrect~key.\\
-    You~can't~use~the~option~'xoffset'~in~the~command~
-    \l_@@_string_Arrow_for_msg_str\ in~the~row~\int_use:N \g_@@_line_int\ 
-    of~your~environment~\{\l_@@_type_env_str\}~
-    because~you~are~using~the~option~
-    ' \int_compare:nNnTF { \l_@@_pos_arrow_int } = { 7 }
-        { group } 
-        { groups } '.~It's~possible~for~an~independent~arrow~or~if~there~is~
-    only~one~arrow. \\
-    \c_@@_option_ignored_str
-  }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\@@_msg_new:nnn { Duplicate~name }
-  { 
-    Duplicate~name.\\
-    The~name~'\l_keys_value_tl'~is~already~used~and~you~shouldn't~use~
-    the~same~environment~name~twice.~You~can~go~on,~but,~
-    maybe,~you~will~have~incorrect~results. \\
-    For~a~list~of~the~names~already~used,~type~H~<return>. \\ 
-    If~you~don't~want~to~see~this~message~again,~use~the~option~
-    'allow-duplicate-names'. 
-  }
-  {
-    The~names~already~defined~in~this~document~are:~
-    \seq_use:Nnnn \g_@@_names_seq { ,~ } { ,~ } { ~and~ }.
-  }
-%    \end{macrocode}
-%
-% 
-%    \begin{macrocode}
-\@@_msg_new:nn { Invalid~specification~for~MultiArrow }
-  {
-    Invalid~specification.\\
-    The~specification~of~rows~for~\token_to_str:N\MultiArrow\ 
-    (i.e.~#1)~is~invalid. \\  
-    \c_@@_command_ignored_str
-  }
-%    \end{macrocode}
 %
 %
 % \subsection{The command \textbackslash WithArrowsNewStyle}
@@ -8228,14 +7653,594 @@ version 2005/12/01 or later.
 %    \end{macrocode}
 %
 % 
+%
+% \bigskip
+% \subsection{The error messages of the package}
+%
+%    \begin{macrocode}
+\cs_new_protected:Npn \@@_err_newline_at_the_end:
+  {
+    \@@_error:n { newline~at~the~end }
+    \cs_gset:Npn \@@_err_newline_at_the_end: { }
+  }
+%    \end{macrocode}
+% 
+% \begin{macrocode}
+\cs_new_protected:Npn \@@_err_amsmath_not_loaded:
+  {
+    \@@_error:n { amsmath~not~loaded }
+    \cs_gset:Npn \@@_err_amsmath_not_loaded: { \@@_info:n { amsmath~not~loaded } }
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\bool_if:NTF \c_@@_messages_for_Overleaf_bool
+  { \str_const:Nn \c_@@_available_keys_str { } }
+  {
+    \str_const:Nn \c_@@_available_keys_str
+      { For~a~list~of~the~available~keys,~type~H~<return>. }
+  }
+%    \end{macrocode}
+%
 %    \begin{macrocode}
 \@@_msg_new:nn { calc~not~loaded }
   { 
     calc~not~loaded.\\
     You~can't~use~the~option~'\l_keys_key_str'~because~you~don't~have~loaded~the~
-    Tikz~library~'calc'.You~should~add~'\token_to_str:N\usetikzlibrary{calc}'~
+    TikZ~library~'calc'.You~should~add~'\token_to_str:N\usetikzlibrary{calc}'~
     ~in~the~preamble~of~your~document. \\
     \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\str_new:N \l_witharrows_body_str
+%    \end{macrocode}
+%
+% The following commands must \emph{not} be protected since they will be used in
+% error messages.
+%    \begin{macrocode}
+\cs_new:Npn \@@_potential_body_i:
+  {
+    \str_if_empty:NF \l_witharrows_body_str
+      { \\ If~you~want~to~see~the~body~of~the~environment,~type~H~<return>. } 
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\cs_new:Npn \@@_potential_body_ii:
+  {
+    \str_if_empty:NTF \l_witharrows_body_str
+      { No~further~help~available }
+      {
+        The~body~of~your~environment~was:\\ 
+        \l_witharrows_body_str
+      }
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { DispWithArrows~with~tagging }
+  {
+    You~can't~use~\{DispWithArrows\}~since~tagging~is~active.\\
+    That~error~is~fatal.
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\str_const:Nn \c_@@_option_ignored_str
+  { If~you~go~on,~this~option~will~be~ignored. }
+\str_const:Nn \c_@@_command_ignored_str
+  { If~you~go~on,~this~command~will~be~ignored. }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<*LaTeX>
+\@@_msg_new:nn { amsmath~not~loaded }
+  {
+    amsmath~not~loaded.\\
+    You~can't~use~the~option~'\l_keys_key_str'~because~the~
+    package~'amsmath'~has~not~been~loaded.\\
+    If~you~go~on,~this~option~will~be~ignored~in~the~rest~
+    of~the~document.
+  }
+%</LaTeX>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Bad~value~for~replace~brace~by }
+  {
+    Incorrect~value.\\
+    Bad~value~for~the~option~'\l_keys_key_str'.~The~value~must~begin~ 
+    with~an~extensible~left~delimiter.~The~possible~values~are:~.,
+    \token_to_str:N \{,~(,~[,~\token_to_str:N \lbrace,~
+    \token_to_str:N \lbrack,~\token_to_str:N \lgroup,~
+    \token_to_str:N \langle,~\token_to_str:N \lmoustache,~
+    \token_to_str:N \lfloor\ and~\token_to_str:N \lceil\ 
+    (and~\token_to_str:N \lvert\ and~\token_to_str:N \lVert\
+    if~amsmath~or~unicode-math~is~loaded~in~LaTeX).\\
+    \c_@@_option_ignored_str 
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { option~of~cr~negative }
+  {
+    Bad~value.\\
+    The~argument~of~the~command~\token_to_str:N\\~
+    should~be~positive~in~the~row~\int_use:N \g_@@_line_int\
+    of~your~environment~\{\l_@@_type_env_str\}.\\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\@@_msg_new:nn { omit~probably~used } 
+  {
+    Strange~problem.\\
+    Maybe~you~have~used~a~command~
+    \token_to_str:N\omit\ in~the~line~\int_use:N \g_@@_line_int\
+    (or~another~line)~of~your~environment~\{\l_@@_type_env_str\}.\\ 
+    You~can~go~on~but~you~may~have~others~errors.
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<*LaTeX>
+\@@_msg_new:nnn { newline~at~the~end }
+  { 
+    Incorrect~end.\\
+    The~environments~of~witharrows~(\{WithArrows\}~and~
+    \{DispWithArrows\})~should~not~end~by~\token_to_str:N \\.\\
+    However,~you~can~go~on~for~this~time.~No~similar~error~will~be~
+    raised~in~this~document. 
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%</LaTeX>
+%    \end{macrocode}    
+%
+%    \begin{macrocode}
+\@@_msg_new:nnn { Invalid~option~format }
+  {
+    Invalide~value.\\
+    The~key~'format'~should~contain~only~letters~r,~c~and~l~and~
+    must~not~be~empty.\\  
+    \c_@@_option_ignored_str
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nnn { invalid~key~o }
+  {
+    Invalid~use~of~a~key.\\
+    The~key~'o'~for~individual~arrows~can~be~used~only~in~mode~
+    'group'~or~in~mode~'groups'.\\
+    \c_@@_option_ignored_str 
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+% 
+% 
+%    \begin{macrocode}
+\@@_msg_new:nnn { o~arrow~with~wrap-lines }
+  { 
+    Arrow~of~type~'o'~with~'wrap-lines'. \\
+    You~can't~use~arrows~of~type~'o'~when~
+    'wrap-lines'~is~in~force.\\
+    If~you~go~on,~these~arrows~will~be~ignored.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\@@_msg_new:nnn { Value~for~a~key }
+  {
+    Misuse~of~a~key.\\
+    The~key~'\l_keys_key_str'~should~be~used~without~value. \\
+    However,~you~can~go~on~for~this~time.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%
+%    \begin{macrocode}          
+\@@_msg_new:nnn { Unknown~option~in~Arrow }
+  { 
+    Unknown~option.\\
+    The~key~'\l_keys_key_str'~is~unknown~for~the~command~
+    \l_@@_string_Arrow_for_msg_str\ in~the~row~
+    \int_use:N \g_@@_line_int\ of~your~environment~
+    \{\l_@@_type_env_str\}. \l_tmpa_str \\
+    \c_@@_option_ignored_str \\
+    \c_@@_available_keys_str
+  }
+  { 
+    The~available~keys~are~(in~alphabetic~order):~
+    \seq_use:Nnnn \l_@@_options_Arrow_seq {~and~} {,~} {~and~}.
+  }
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}          
+\@@_msg_new:nnn { Unknown~option~WithArrows }
+  {
+    Unknown~option.\\
+    The~key~'\l_keys_key_str'~is~unknown~in~\{\l_@@_type_env_str\}. \\
+    \c_@@_option_ignored_str \\
+    \c_@@_available_keys_str
+  }
+  {
+    The~available~keys~are~(in~alphabetic~order):~
+    \seq_use:Nnnn \l_@@_options_WithArrows_seq {~and~} {,~} {~and~}.
+  }
+%    \end{macrocode}
+%    \begin{macrocode}          
+\@@_msg_new:nnn { Unknown~option~DispWithArrows }
+  { 
+    Unknown~option.\\
+    The~key~'\l_keys_key_str'~is~unknown~in~\{\l_@@_type_env_str\}. \\
+    \c_@@_option_ignored_str \\
+    \c_@@_available_keys_str
+  }
+  {
+    The~available~keys~are~(in~alphabetic~order):~
+    \seq_use:Nnnn \l_@@_options_DispWithArrows_seq {~and~} {,~} {~and~}.
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}          
+\@@_msg_new:nnn { Unknown~option~WithArrowsOptions }
+  { 
+    Unknown~option.\\
+    The~key~'\l_keys_key_str'~is~unknown~in~
+    \token_to_str:N \WithArrowsOptions. \\
+    \c_@@_option_ignored_str \\
+    \c_@@_available_keys_str 
+  }
+  {
+    The~available~keys~are~(in~alphabetic~order):~
+    \seq_use:Nnnn \l_@@_options_WithArrowsOptions_seq {~and~} {,~} {~and~}.
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nnn { Unknown~option~Arrow~in~code-after }
+  { 
+    Unknown~option.\\
+    The~key~'\l_keys_key_str'~is~unknown~in~
+    \token_to_str:N \Arrow\ in~code-after. \\
+    \c_@@_option_ignored_str \\
+    \c_@@_available_keys_str
+  }
+  { 
+    The~available~keys~are~(in~alphabetic~order):~
+    \seq_use:Nnnn \l_@@_options_Arrow_code_after_seq {~and~} {,~} {~and~}.
+  }
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}          
+\@@_msg_new:nnn { Too~many~columns~in~WithArrows }
+  { 
+    Too~many~columns.\\
+    Your~environment~\{\l_@@_type_env_str\}~has~\int_use:N 
+    \l_@@_nb_cols_int\ columns~and~you~try~to~use~one~more.~
+    Maybe~you~have~forgotten~a~\c_backslash_str\c_backslash_str.~
+    If~you~really~want~to~use~more~columns~(after~the~arrows)~you~should~use~ 
+    the~option~'more-columns'~at~a~global~level~or~for~an~environment. \\
+    However,~you~can~go~one~for~this~time.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%
+%    \begin{macrocode}          
+\@@_msg_new:nnn { Too~many~columns~in~DispWithArrows }
+  { 
+    Too~many~columns.\\
+    Your~environment~\{\l_@@_type_env_str\}~has~\int_use:N 
+    \l_@@_nb_cols_int\ columns~and~you~try~to~use~one~more.~
+    Maybe~you~have~forgotten~a~\c_backslash_str\c_backslash_str\ 
+    at~the~end~of~row~\int_use:N \g_@@_line_int. \\
+    This~error~is~fatal.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%    
+%    \begin{macrocode}          
+\@@_msg_new:nn { Negative~jump }
+  { 
+    Incorrect~value.\\
+    You~can't~use~a~negative~value~for~the~option~'jump'~of~command~
+    \l_@@_string_Arrow_for_msg_str\
+    in~the~row~\int_use:N \g_@@_line_int\
+    of~your~environment~\{\l_@@_type_env_str\}.~
+    You~can~create~an~arrow~going~backwards~with~the~option~'<-'~of~Tikz. \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { new-group~without~groups }
+  { 
+    Misuse~of~a~key.\\
+    You~can't~use~the~option~'new-group'~for~the~command~
+    \l_@@_string_Arrow_for_msg_str\
+    because~you~are~not~in~'groups'~mode.~Try~to~use~the~option~
+    'groups'~in~your~environment~\{\l_@@_type_env_str\}. \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}          
+\@@_msg_new:nnn          
+  { Too~few~lines~for~an~arrow }
+  { 
+    Impossible~arrow.\\
+    Line~\l_@@_input_line_str\
+    :~an~arrow~specified~in~the~row~\int_use:N \l_@@_initial_int\
+    of~your~environment~\{\l_@@_type_env_str\}~can't~be~drawn~
+    because~it~arrives~after~the~last~row~of~the~environment. \\
+    If~you~go~on,~this~arrow~will~be~ignored.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { o~arrow~with~no~arrow~under }
+  {
+    Problem~with~the~key~'o'.\\
+    Line~\l_@@_input_line_str\
+    :~there~is~no~arrow~'under'~your~arrow~of~type~'o'.\\
+    If~you~go~on,~this~arrow~won't~be~drawn.
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}          
+\@@_msg_new:nnn { WithArrows~outside~math~mode }
+  { 
+    You~are~outside~math~mode.\\
+    The~environment~\{\l_@@_type_env_str\}~should~be~used~only~in~math~mode~
+    like~the~environment~\{aligned\}~of~amsmath. \\
+    Nevertheless,~you~can~go~on.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%
+%    \begin{macrocode}          
+\@@_msg_new:nnn { DispWithArrows~in~math~mode }
+  { 
+    You~are~in~math~mode.\\
+    The~environment~\{\l_@@_type_env_str\}~should~be~used~only~outside~math~
+    mode~like~the~environments~\{align\}~and~\{align*\}~of~amsmath. \\ 
+    This~error~is~fatal.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Incompatible~options~in~Arrow }
+  { 
+    Incompatible~options.\\
+    You~try~to~use~the~option~'\l_keys_key_str'~but~
+    this~option~is~incompatible~or~redundant~with~the~option~
+    '\l_@@_previous_key_str'~set~in~the~same~command~
+    \l_@@_string_Arrow_for_msg_str. \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+% 
+%
+%    \begin{macrocode}          
+\@@_msg_new:nn { Incompatible~options }
+  { 
+    Incompatible~options.\\
+    You~try~to~use~the~option~'\l_keys_key_str'~but~
+    this~option~is~incompatible~or~redundant~with~the~option~
+    '\l_@@_previous_key_str'~set~in~the~same~command~
+    \bool_if:NT \l_@@_in_code_after_bool
+      { 
+        \l_@@_string_Arrow_for_msg_str\
+        in~the~code-after~of~your~environment~\{\l_@@_type_env_str\}
+      }. \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nnn { Arrow~not~in~last~column }
+  { 
+    Bad~use~of~\l_@@_string_Arrow_for_msg_str.\\
+    You~should~use~the~command~\l_@@_string_Arrow_for_msg_str\
+    only~in~the~last~column~(column~\int_use:N\l_@@_nb_cols_int)~
+    in~the~row~\int_use:N \g_@@_line_int\ 
+    of~your~environment~\{\l_@@_type_env_str\}.\\
+    However~you~can~go~on~for~this~time.
+    \@@_potential_body_i:
+  }
+  { \@@_potential_body_ii: }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Wrong~line~in~Arrow }
+  { 
+    Wrong~line.\\
+    The~specification~of~line~'#1'~you~use~in~the~command~
+    \l_@@_string_Arrow_for_msg_str\
+    in~the~'code-after'~of~\{\l_@@_type_env_str\}~doesn't~exist. \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Both~lines~are~equal }
+  {
+    Both~lines~are~equal.\\
+    In~the~'code-after'~of~\{\l_@@_type_env_str\}~you~try~to~
+    draw~an~arrow~going~to~itself~from~the~line~'#1'.~This~is~not~possible. \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\@@_msg_new:nn { Wrong~line~specification~in~MultiArrow }
+  { 
+    Wrong~line~specification.\\
+    The~specification~of~line~'#1'~doesn't~exist. \\
+    If~you~go~on,~it~will~be~ignored~for~\token_to_str:N \MultiArrow.
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Too~small~specification~for~MultiArrow }
+  { 
+    Too~small~specification.\\
+    The~specification~of~lines~you~gave~to~\token_to_str:N \MultiArrow\ 
+    is~too~small:~you~need~at~least~two~lines. \\
+    \c_@@_command_ignored_str
+  }
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Not~allowed~in~DispWithArrows }
+  { 
+    Forbidden~command.\\
+    The~command~\token_to_str:N #1
+    is~allowed~only~in~the~last~column~
+    (column~\int_use:N\l_@@_nb_cols_int)~of~\{\l_@@_type_env_str\}. \\ 
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+% 
+%    \begin{macrocode}
+\@@_msg_new:nn { Not~allowed~in~WithArrows }
+  { 
+    Forbidden~command.\\
+    The~command~\token_to_str:N #1 is~not~allowed~in~\{\l_@@_type_env_str\}~
+    (it's~allowed~in~the~last~column~of~\{DispWithArrows\}). \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<*LaTeX>
+\@@_msg_new:nn { tag*~without~amsmath }
+  { 
+    amsmath~not~loaded.\\
+    We~can't~use~\token_to_str:N\tag*~because~you~haven't~loaded~amsmath~
+    (or~mathtools). \\
+    If~you~go~on,~the~command~\token_to_str:N\tag\ 
+    will~be~used~instead.
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Multiple~tags }
+  {
+    Multiple~tags.\\
+    You~can't~use~twice~the~command~\token_to_str:N\tag\ 
+    in~a~line~of~the~environment~\{\l_@@_type_env_str\}. \\
+    If~you~go~on,~the~tag~'#1'~will~be~used.
+  }
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Multiple~labels }
+  { 
+    Multiple~labels.\\
+    Normally,~we~can't~use~the~command~\token_to_str:N\label\ 
+    twice~in~a~line~of~the~environment~\{\l_@@_type_env_str\}. \\
+    However,~you~can~go~on.~
+    \IfPackageLoadedT { showlabels }
+      { However,~only~the~last~label~will~be~shown~by~showlabels.~ } 
+    If~you~don't~want~to~see~this~message~again,~you~can~use~the~option~
+    'allow-multiple-labels'~at~the~global~or~environment~level.
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nn { Multiple~labels~with~cleveref }
+  {
+    Multiple~labels.\\
+    Since~you~use~cleveref,~you~can't~use~the~command~\token_to_str:N\label\ 
+    twice~in~a~line~of~the~environment~\{\l_@@_type_env_str\}. \\
+    If~you~go~on,~you~may~have~undefined~references.
+  }
+%</LaTeX>
+%    \end{macrocode}
+%
+% 
+%    \begin{macrocode}
+\@@_msg_new:nn { Inexistent~v-node }
+  {
+    There~is~a~problem.\\
+    Maybe~you~have~put~a~command~\token_to_str:N\cr\
+    instead~of~a~command~\token_to_str:N\\~at~the~end~of~
+    the~row~\l_tmpa_int\
+    of~your~environment~\{\l_@@_type_env_str\}. \\
+    This~error~is~fatal.
+  }
+%    \end{macrocode}
+%
+% \bigskip
+% The following error when the user tries to use the option |xoffset| in mode
+% |group| or |groups| (in fact, it's possible to use the option |xoffset| if
+% there is only \emph{one} arrow: of course, the option |group| and |groups| do
+% not make sense in this case but, maybe, the option was set in a
+% |\WithArrowsOptions|). 
+%    \begin{macrocode}          
+\@@_msg_new:nn { Option~xoffset~forbidden }
+  { 
+    Incorrect~key.\\
+    You~can't~use~the~option~'xoffset'~in~the~command~
+    \l_@@_string_Arrow_for_msg_str\ in~the~row~\int_use:N \g_@@_line_int\ 
+    of~your~environment~\{\l_@@_type_env_str\}~
+    because~you~are~using~the~option~
+    ' \int_compare:nNnTF { \l_@@_pos_arrow_int } = { 7 }
+        { group } 
+        { groups } '.~It's~possible~for~an~independent~arrow~or~if~there~is~
+    only~one~arrow. \\
+    \c_@@_option_ignored_str
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\@@_msg_new:nnn { Duplicate~name }
+  { 
+    Duplicate~name.\\
+    The~name~'\l_keys_value_tl'~is~already~used~and~you~shouldn't~use~
+    the~same~environment~name~twice.~You~can~go~on,~but,~
+    maybe,~you~will~have~incorrect~results. \\
+    For~a~list~of~the~names~already~used,~type~H~<return>. \\ 
+    If~you~don't~want~to~see~this~message~again,~use~the~option~
+    'allow-duplicate-names'. 
+  }
+  {
+    The~names~already~defined~in~this~document~are:~
+    \seq_use:Nnnn \g_@@_names_seq { ,~ } { ,~ } { ~and~ }.
+  }
+%    \end{macrocode}
+%
+% 
+%    \begin{macrocode}
+\@@_msg_new:nn { Invalid~specification~for~MultiArrow }
+  {
+    Invalid~specification.\\
+    The~specification~of~rows~for~\token_to_str:N\MultiArrow\ 
+    (i.e.~#1)~is~invalid. \\  
+    \c_@@_command_ignored_str
   }
 %    \end{macrocode}
 %
